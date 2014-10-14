@@ -1,0 +1,25 @@
+{
+  "name": "flox",
+  "version": "0.0.0",
+  "description": "Not quite Flux.",
+  "main": "index.js",
+  "dependencies": {
+    "extend": "^2.0.0",
+    "object-omit": "^0.2.0",
+    "sublish": "^1.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pluma/flox.git"
+  },
+  "author": "Alan Plum <me@pluma.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pluma/flox/issues"
+  },
+  "homepage": "https://github.com/pluma/flox"
+}
