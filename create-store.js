@@ -12,20 +12,21 @@ module.exports = createStore;
 function createStore(spec) {
   if (!spec) spec = {};
   var init = spec.init;
-  var listenTo = spec.listenTo || [];
-  if (!Array.isArray(listenTo)) listenTo = [listenTo];
-  function Store() {
-    if (!(this instanceof Store)) return construct.apply(Store, arguments);
+  function Store(opts) {
+    if (!(this instanceof Store)) return new Store(opts);
+    if (!opts) opts = {};
+    var listenTo = opts.listenTo || [];
+    if (!Array.isArray(listenTo)) listenTo = [listenTo];
     Publisher.call(this);
-    if (init) init.apply(this, arguments);
     var self = this;
     listenTo.forEach(function (map) {
       Object.keys(map).forEach(function (key) {
-        self.listenTo(map[key], key);
+        listenerMethods.listenTo.call(self, map[key], key);
       });
     });
+    if (init) init.call(this, opts);
   }
   inherits(Store, Publisher);
-  extend(Store.prototype, listenerMethods, omit(spec, ['init', 'listenTo']));
+  extend(Store.prototype, listenerMethods, omit(spec, ['init']));
   return Store;
 }
