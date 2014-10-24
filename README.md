@@ -129,7 +129,7 @@ var Login = React.createComponent({
     this.setState({password: evt.target.value});
   },
   render() {
-    if (this.state.user) {
+    if (this.state.user.get('username')) {
       return <div>Already logged in.</div>;
     }
     return (
