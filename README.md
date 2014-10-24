@@ -32,24 +32,24 @@ npm run dist
 ## Obligatory ASCII diagram
 
 ```
-  ╔═════════╗       ╔════════╗     ╔══════════════════╗
-  ║ Actions ╟──────>║ Stores ╟────>║ Controller Views ║
-  ╚════╤════╝       ╚════════╝     ╚═════╤═══╤════════╝
+  ╔═════════╗       ╔════════╗      ╔═════════════════╗
+  ║ Actions ╟──────>║ Stores ╟─────>║ View Components ║
+  ╚════╤════╝       ╚════════╝      ╚════╤═══╤════════╝
     ^  │  ^                              │   │
     │  │  └──────────────────────────────┘   │
     │  v                                     v
   ╔═╧════════╗     ┌────────────┐   ╔═════════════════╗
-  ║ Services ╟────>│ Server API │   ║ View Components ║
+  ║ Services ╟────>│ Server API │   ║ Pure Components ║
   ╚══════════╝     └────────────┘   ╚═════════════════╝
 ```
 
 ## Definitions
 
-**Actions** are listenable functions that emit whatever data is passed to them. They provide the core building block of all interactions between *Controller Views* or *Services* and the *Stores*.
+**Actions** are listenable functions that emit whatever data is passed to them. They provide the core building block of all interactions between *View Components* or *Services* and the *Stores*.
 
 **Stores** are listenable functions that contain the application state and emit their contents whenever they are written to. In Flox, those contents are generally immutable, so modifying them requires updating the store that contains them.
 
-**Controller Views** are components that listen to *Stores* and/or invoke *Actions*. According to the philosophy of React these should usually be the outer most components in an application. They pass the (immutable) data from *Stores* as props to the underlying **View Components**, the regular self-contained React components. They may also invoke *Actions* as the result of user interaction with the components.
+**View Components** are components that listen to *Stores* and/or invoke *Actions*. According to the philosophy of React these should usually be the outer most components in an application. They pass the (immutable) data from *Stores* as props to the underlying **Pure Components**, the regular self-contained React components. They may also invoke *Actions* as the result of user interaction with the components.
 
 **Services** listen to *Actions* and connect them with each other. They are the only part of the application that communicates directly with the *Server API*. In practice, a service may simply be a function that is registered with an action as a listener and invokes a different action.
 
