@@ -1,4 +1,4 @@
-/*jshint browserify: true */
+/*jshint browserify: true, -W014 */
 'use strict';
 var axn = require('axn');
 module.exports = createStore;

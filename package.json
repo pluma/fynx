@@ -9,9 +9,11 @@
   },
   "devDependencies": {
     "dirwatch": "^1.1.0",
+    "jshint": "^2.5.6",
     "jsxjs": "^1.1.0"
   },
   "scripts": {
+    "lint": "jshint lib",
     "dist": "jsxjs --es6 src lib",
     "dist-watch": "dirwatch -c 'npm run dist' src",
     "test": "echo \"Error: no test specified\" && exit 1"
