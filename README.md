@@ -8,7 +8,7 @@ Flox: Not quite Flux.
 
 [![NPM status](https://nodei.co/npm/flox.png?compact=true)](https://npmjs.org/package/flox)
 
-[![Dependencies](https://david-dm.org/foss-haas/flox.png?theme=shields.io)](https://david-dm.org/foss-haas/flox)
+[![Build Status](https://travis-ci.org/foss-haas/flox.png?branch=master)](https://travis-ci.org/foss-haas/flox) [![Coverage Status](https://coveralls.io/repos/foss-haas/flox/badge.png?branch=master)](https://coveralls.io/r/foss-haas/flox?branch=master) [![Dependencies](https://david-dm.org/foss-haas/flox.png?theme=shields.io)](https://david-dm.org/foss-haas/flox)
 
 # Install
 

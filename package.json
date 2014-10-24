@@ -8,15 +8,21 @@
     "immutable": "~2.5.0"
   },
   "devDependencies": {
+    "coveralls": "^2.11.2",
     "dirwatch": "^1.1.0",
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.3.2",
     "jshint": "^2.5.6",
-    "jsxjs": "^1.1.0"
+    "jsxjs": "^1.1.0",
+    "mocha": "^2.0.1"
   },
   "scripts": {
-    "lint": "jshint lib",
+    "lint": "jshint lib test",
+    "test": "mocha --growl -R spec",
+    "cover": "npm run lint && istanbul cover --report lcov _mocha -- -R spec",
+    "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls ; rm -rf ./coverage",
     "dist": "jsxjs --es6 src lib",
-    "dist-watch": "dirwatch -c 'npm run dist' src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dist-watch": "dirwatch -c 'npm run dist' src"
   },
   "repository": {
     "type": "git",
