@@ -4,9 +4,11 @@ Flox: Not quite Flux.
 
 **Flox** is a framework/architecture for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.org/package/reflux) and [Fluxxor](http://fluxxor.com).
 
-[![license - MIT](http://b.repl.ca/v1/license-MIT-blue.png)](http://foss-haas.mit-license.org) [![Dependencies](https://david-dm.org/foss-haas/flox.png?theme=shields.io)](https://david-dm.org/foss-haas/flox)
+[![license - MIT](http://b.repl.ca/v1/license-MIT-blue.png)](http://foss-haas.mit-license.org) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/foss-haas/flox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 [![NPM status](https://nodei.co/npm/flox.png?compact=true)](https://npmjs.org/package/flox)
+
+[![Dependencies](https://david-dm.org/foss-haas/flox.png?theme=shields.io)](https://david-dm.org/foss-haas/flox)
 
 # Install
 
