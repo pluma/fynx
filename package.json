@@ -26,12 +26,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pluma/flox.git"
+    "url": "https://github.com/foss-haas/flox.git"
   },
   "author": "Alan Plum <me@pluma.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pluma/flox/issues"
+    "url": "https://github.com/foss-haas/flox/issues"
   },
-  "homepage": "https://github.com/pluma/flox"
+  "homepage": "https://github.com/foss-haas/flox"
 }
