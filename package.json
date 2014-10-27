@@ -1,6 +1,6 @@
 {
   "name": "flox",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Not quite Flux.",
   "main": "index.js",
   "dependencies": {
