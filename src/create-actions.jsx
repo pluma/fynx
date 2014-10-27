@@ -11,7 +11,7 @@ function createActions(specs) {
     });
   } else {
     Object.keys(specs).forEach(function (name) {
-      obj[name] = axn(obj[name]);
+      obj[name] = axn(specs[name]);
     });
   }
   return obj;

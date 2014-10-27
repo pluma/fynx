@@ -14,7 +14,9 @@
     "istanbul": "^0.3.2",
     "jshint": "^2.5.6",
     "jsxjs": "^1.1.0",
-    "mocha": "^2.0.1"
+    "mocha": "^2.0.1",
+    "rewire": "^2.1.0",
+    "sinon": "^1.11.0"
   },
   "scripts": {
     "lint": "jshint lib test",
