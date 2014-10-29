@@ -22,7 +22,7 @@
   },
   "scripts": {
     "lint": "jshint lib test",
-    "test": "mocha --growl -R spec",
+    "test": "npm run lint && mocha --growl -R spec",
     "cover": "npm run lint && istanbul cover --report lcov _mocha -- -R spec",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls ; rm -rf ./coverage",
     "dist": "jsxjs --es6 src lib",

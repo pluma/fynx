@@ -9,7 +9,7 @@ var Document = require('html-document/lib/Document').Document;
 
 describe('listenTo (in a browser)', function () {
   afterEach(function () {
-    React.unmountComponentAtNode(global.document.body)
+    React.unmountComponentAtNode(global.document.body);
   });
   before(function () {
     // Prepare the globals React expects in a browser
