@@ -17,6 +17,26 @@ describe('createRawStore', function () {
     var store = createRawStore(emptyValue);
     expect(store()).to.equal(emptyValue);
   });
+  describe('isEmpty', function () {
+    it('returns true if the store is empty', function () {
+      var emptyValue = {hello: 'world'};
+      var store = createRawStore(emptyValue);
+      expect(store.isEmpty()).to.be(true);
+    });
+    it('returns true if the store contains the emptyValue', function () {
+      var emptyValue = {hello: 'world'};
+      var store = createRawStore(emptyValue);
+      store({});
+      store(emptyValue);
+      expect(store.isEmpty()).to.be(true);
+    });
+    it('returns false if the store contains any other value', function () {
+      var emptyValue = {hello: 'world'};
+      var store = createRawStore(emptyValue);
+      store({});
+      expect(store.isEmpty()).to.be(false);
+    });
+  });
   describe('when written to', function () {
     var listeners = [];
     function listen(listenable, listener) {
@@ -85,25 +105,61 @@ describe('createRawStore', function () {
       });
       store(value);
     });
-  });
-  describe('isEmpty', function () {
-    it('returns true if the store is empty', function () {
-      var emptyValue = {hello: 'world'};
-      var store = createRawStore(emptyValue);
-      expect(store.isEmpty()).to.be(true);
-    });
-    it('returns true if the store contains the emptyValue', function () {
-      var emptyValue = {hello: 'world'};
-      var store = createRawStore(emptyValue);
-      store({});
-      store(emptyValue);
-      expect(store.isEmpty()).to.be(true);
-    });
-    it('returns false if the store contains any other value', function () {
-      var emptyValue = {hello: 'world'};
-      var store = createRawStore(emptyValue);
-      store({});
-      expect(store.isEmpty()).to.be(false);
+    describe('isEmpty', function () {
+      it('notifies listeners', function (done) {
+        var store = createRawStore(42);
+        listen(store.isEmpty, function () {
+          done();
+        });
+        store({});
+      });
+      it('does not notify listeners removed by unlisten', function () {
+        var store = createRawStore(42);
+        var fn = function () {
+          expect().fail();
+        };
+        store.isEmpty.listen(fn);
+        store.isEmpty.unlisten(fn);
+        store({});
+      });
+      it('does not notify listeners removed by callback', function () {
+        var store = createRawStore(42);
+        var cb = store.isEmpty.listen(function () {
+          expect().fail();
+        });
+        cb();
+        store({});
+      });
+      it('invokes listeners in the correct order', function (done) {
+        var called = false;
+        var store = createRawStore(42);
+        listen(store.isEmpty, function () {
+          called = true;
+        });
+        listen(store.isEmpty, function () {
+          expect(called).to.equal(true);
+          done();
+        });
+        store({});
+      });
+      it('passes true to its listeners if the new value is empty', function (done) {
+        var value = 42;
+        var store = createRawStore(42);
+        listen(store.isEmpty, function (input) {
+          expect(input).to.equal(true);
+          done();
+        });
+        store(value);
+      });
+      it('passes false to its listeners if the new value is not empty', function (done) {
+        var value = {hello: 'world'};
+        var store = createRawStore(42);
+        listen(store.isEmpty, function (input) {
+          expect(input).to.equal(false);
+          done();
+        });
+        store(value);
+      });
     });
   });
 });

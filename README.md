@@ -229,6 +229,14 @@ Removes a change listener from the store. This has the same effect as calling th
 
 Returns `true` if the store's current value is equivalent to its `emptyValue` or `false` otherwise.
 
+### store.isEmpty.listen(listener, [context]):Function
+
+Like `store.listen`, but receives a boolean value indicating whether the store is empty (i.e. the result of calling `store.isEmpty()`) instead of a cursor to the store's new content.
+
+### store.isEmpty.unlisten(listener, [context])
+
+Removes a change listener from `store.isEmpty`. This has the same effect as calling the function returned by `store.isEmpty.listen`. If the listener was registered with a context, the same context must be used.
+
 ## createRawStore(emptyValue, [prepare]):rawStore
 
 Creates a store initialized with the given `emptyValue`.

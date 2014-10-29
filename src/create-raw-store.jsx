@@ -17,8 +17,14 @@ function createRawStore(emptyValue, prepare) {
     }
     return state;
   }
+  var emptyAction = axn({
+    beforeEmit: (value) => (value === emptyValue)
+  });
+  action.listen(emptyAction);
   store.listen = action.listen.bind(action);
   store.unlisten = action.unlisten.bind(action);
   store.isEmpty = () => (state === emptyValue);
+  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
   return store;
 }
