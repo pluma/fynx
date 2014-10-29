@@ -10,15 +10,15 @@ function connect(store, name) {
     this.setState(state);
   }
   return {
-    getInitialState: function () {
+    getInitialState() {
       var state = {};
       state[name] = store();
       return state;
     },
-    componentDidMount: function () {
+    componentDidMount() {
       store.listen(update, this);
     },
-    componentWillUnmount: function () {
+    componentWillUnmount() {
       store.unlisten(update, this);
     }
   };

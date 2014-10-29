@@ -6,5 +6,6 @@ module.exports = {
   createStore: require('./lib/create-store'),
   createRawStore: require('./lib/create-raw-store'),
   listenTo: require('./lib/listento-mixin'),
-  connect: require('./lib/connect-mixin')
+  connect: require('./lib/connect-mixin'),
+  connectProp: require('./lib/connect-prop-mixin')
 };

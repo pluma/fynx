@@ -263,6 +263,14 @@ Automatically adds the store's current value to the component's initial state.
 
 Registers the listener on `componentDidMount` and unregisters it on `componentWillUnmount`.
 
+## connectProp(propName, name):Mixin
+
+Creates a React mixin that updates the component's state by setting `name` to the value of the store in the prop `propName` whenever the store's value changes.
+
+Automatically adds the store's current value to the component's initial state and reacts to prop changes.
+
+Registers the listener on `componentDidMount` and unregisters it on `componentWillUnmount`.
+
 # License
 
 The MIT/Expat license. For more information, see http://foss-haas.mit-license.org/ or the accompanying [LICENSE](https://github.com/foss-haas/flox/blob/master/LICENSE) file.
