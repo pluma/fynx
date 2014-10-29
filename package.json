@@ -11,10 +11,12 @@
     "coveralls": "^2.11.2",
     "dirwatch": "^1.1.0",
     "expect.js": "^0.3.1",
+    "html-document": "^0.3.3",
     "istanbul": "^0.3.2",
     "jshint": "^2.5.6",
     "jsxjs": "^1.1.0",
     "mocha": "^2.0.1",
+    "react": "^0.12.0",
     "rewire": "^2.1.0",
     "sinon": "^1.11.0"
   },
