@@ -66,20 +66,20 @@ describe('createStore', function () {
         prepare.called = true;
         return value2;
       }
-      var store = createStore(immutable.Map.empty(), prepare);
+      var store = createStore(immutable.Map(), prepare);
       store(value1);
       expect(prepare.called).to.equal(true);
       expect(store()).to.have.value(immutable.Map(value2));
     });
     it('notifies listeners', function (done) {
-      var store = createStore(immutable.Map.empty());
+      var store = createStore(immutable.Map());
       listen(store, function () {
         done();
       });
       store({});
     });
     it('does not notify listeners removed by unlisten', function () {
-      var store = createStore(immutable.Map.empty());
+      var store = createStore(immutable.Map());
       var fn = function () {
         expect().fail();
       };
@@ -88,7 +88,7 @@ describe('createStore', function () {
       store({});
     });
     it('does not notify listeners removed by callback', function () {
-      var store = createStore(immutable.Map.empty());
+      var store = createStore(immutable.Map());
       var cb = store.listen(function () {
         expect().fail();
       });
@@ -97,7 +97,7 @@ describe('createStore', function () {
     });
     it('invokes listeners in the correct order', function (done) {
       var called = false;
-      var store = createStore(immutable.Map.empty());
+      var store = createStore(immutable.Map());
       listen(store, function () {
         called = true;
       });
@@ -109,7 +109,7 @@ describe('createStore', function () {
     });
     it('passes the new value to its listeners', function (done) {
       var value = {hello: 'world'};
-      var store = createStore(immutable.Map.empty());
+      var store = createStore(immutable.Map());
       listen(store, function (input) {
         expect(input).to.have.value(immutable.Map(value));
         done();
@@ -118,14 +118,14 @@ describe('createStore', function () {
     });
     describe('isEmpty', function () {
       it('notifies listeners', function (done) {
-        var store = createStore(immutable.Map.empty());
+        var store = createStore(immutable.Map());
         listen(store.isEmpty, function () {
           done();
         });
         store({});
       });
       it('does not notify listeners removed by unlisten', function () {
-        var store = createStore(immutable.Map.empty());
+        var store = createStore(immutable.Map());
         var fn = function () {
           expect().fail();
         };
@@ -134,7 +134,7 @@ describe('createStore', function () {
         store({});
       });
       it('does not notify listeners removed by callback', function () {
-        var store = createStore(immutable.Map.empty());
+        var store = createStore(immutable.Map());
         var cb = store.isEmpty.listen(function () {
           expect().fail();
         });
@@ -143,7 +143,7 @@ describe('createStore', function () {
       });
       it('invokes listeners in the correct order', function (done) {
         var called = false;
-        var store = createStore(immutable.Map.empty());
+        var store = createStore(immutable.Map());
         listen(store.isEmpty, function () {
           called = true;
         });
@@ -155,7 +155,7 @@ describe('createStore', function () {
       });
       it('passes true to its listeners if the new value is empty', function (done) {
         var value = {};
-        var store = createStore(immutable.Map.empty());
+        var store = createStore(immutable.Map());
         listen(store.isEmpty, function (input) {
           expect(input).to.equal(true);
           done();
@@ -164,7 +164,7 @@ describe('createStore', function () {
       });
       it('passes false to its listeners if the new value is not empty', function (done) {
         var value = {hello: 'world'};
-        var store = createStore(immutable.Map.empty());
+        var store = createStore(immutable.Map());
         listen(store.isEmpty, function (input) {
           expect(input).to.equal(false);
           done();

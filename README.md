@@ -81,7 +81,7 @@ The application also needs a store for the user data. We're going to assume that
 
 ```js
 var immutable = require('immutable');
-var userStore = Flox.createStore(immutable.Map.empty());
+var userStore = Flox.createStore(immutable.Map());
 actions.loginComplete.listen(function (userData) {
   userStore(userData);
 });
