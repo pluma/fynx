@@ -120,7 +120,7 @@ var Login = React.createComponent({
   handleLoginFailed(errorMessage) {
     this.setState({error: errorMessage});
   },
-  handleFormSubmit() {
+  handleFormSubmit(evt) {
     evt.preventDefault();
     actions.attemptLogin(this.state.username, this.state.password);
   },
