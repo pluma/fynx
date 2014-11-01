@@ -2,11 +2,13 @@
 
 **Flox** is a framework/architecture for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.org/package/reflux) and [Fluxxor](http://fluxxor.com).
 
-[![license - MIT](https://img.shields.io/npm/l/flox.svg)](https://foss-haas.mit-license.org) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/foss-haas/flox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/foss-haas/flox)
+
+[![license - MIT](https://img.shields.io/npm/l/flox.svg)](https://foss-haas.mit-license.org) [![Dependencies](https://img.shields.io/david/foss-haas/flox.svg)](https://david-dm.org/foss-haas/flox)
 
 [![NPM status](https://nodei.co/npm/flox.png?compact=true)](https://npmjs.org/package/flox)
 
-[![Build Status](https://img.shields.io/travis/foss-haas/flox.svg)](https://travis-ci.org/foss-haas/flox) [![Coverage Status](https://img.shields.io/coveralls/foss-haas/flox.svg)](https://coveralls.io/r/foss-haas/flox?branch=master) [![Dependencies](https://img.shields.io/david/foss-haas/flox.svg)](https://david-dm.org/foss-haas/flox)
+[![Build Status](https://img.shields.io/travis/foss-haas/flox.svg)](https://travis-ci.org/foss-haas/flox) [![Coverage Status](https://img.shields.io/coveralls/foss-haas/flox.svg)](https://coveralls.io/r/foss-haas/flox?branch=master)
 
 # Install
 
