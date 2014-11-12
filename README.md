@@ -2,6 +2,8 @@
 
 **Flox** is a framework/architecture for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.org/package/reflux) and [Fluxxor](http://fluxxor.com).
 
+Flox is unrelated to [flocks.js](https://github.com/StoneCypher/flocks.js), which is another alternative architecture for React.
+
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/foss-haas/flox)
 
 [![license - MIT](https://img.shields.io/npm/l/flox.svg)](https://foss-haas.mit-license.org) [![Dependencies](https://img.shields.io/david/foss-haas/flox.svg)](https://david-dm.org/foss-haas/flox)
