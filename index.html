@@ -33,6 +33,8 @@
 
 <p><strong>Flox</strong> is a framework/architecture for <a href="http://facebook.github.io/react">React</a> loosely based on the <a href="http://facebook.github.io/flux">Flux architecture</a> and inspired by <a href="https://www.npmjs.org/package/reflux">Reflux</a> and <a href="http://fluxxor.com">Fluxxor</a>.</p>
 
+<p>Flox is unrelated to <a href="https://github.com/StoneCypher/flocks.js">flocks.js</a>, which is another alternative architecture for React.</p>
+
 <p><a href="https://gitter.im/foss-haas/flox"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a></p>
 
 <p><a href="https://foss-haas.mit-license.org"><img src="https://img.shields.io/npm/l/flox.svg" alt="license - MIT"></a> <a href="https://david-dm.org/foss-haas/flox"><img src="https://img.shields.io/david/foss-haas/flox.svg" alt="Dependencies"></a></p>
@@ -53,7 +55,7 @@
 <a id="from-source" class="anchor" href="#from-source" aria-hidden="true"><span class="octicon octicon-link"></span></a>From source</h2>
 
 <div class="highlight highlight-sh"><pre>git clone https://github.com/foss-haas/flox.git
-<span class="nf">cd</span> flox
+<span class="pl-sf">cd</span> flox
 npm install
 npm run dist</pre></div>
 
@@ -107,79 +109,79 @@ npm run dist</pre></div>
 
 <p>They don't need to do anything special, so we can just use the bulk creation method to create all three of them:</p>
 
-<div class="highlight highlight-js"><pre><span class="k">var</span> actions <span class="o">=</span> Flox.createActions([
-  <span class="s1">'attemptLogin'</span>,
-  <span class="s1">'loginComplete'</span>,
-  <span class="s1">'loginFailed'</span>
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> actions <span class="pl-ko">=</span> Flox.createActions([
+  <span class="pl-s1"><span class="pl-pds">'</span>attemptLogin<span class="pl-pds">'</span></span>,
+  <span class="pl-s1"><span class="pl-pds">'</span>loginComplete<span class="pl-pds">'</span></span>,
+  <span class="pl-s1"><span class="pl-pds">'</span>loginFailed<span class="pl-pds">'</span></span>
 ]);</pre></div>
 
 <p>The application also needs a store for the user data. We're going to assume that the user data will always be a simple mapping of keys and values (i.e. a plain object) that requires no special processing:</p>
 
-<div class="highlight highlight-js"><pre><span class="k">var</span> immutable <span class="o">=</span> <span class="nf">require</span>(<span class="s1">'immutable'</span>);
-<span class="k">var</span> userStore <span class="o">=</span> Flox.createStore(immutable.Map());
-actions.loginComplete.listen(<span class="kt">function</span> (<span class="nv">userData</span>) {
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> immutable <span class="pl-ko">=</span> <span class="pl-sf">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>immutable<span class="pl-pds">'</span></span>);
+<span class="pl-s">var</span> userStore <span class="pl-ko">=</span> Flox.createStore(immutable.Map());
+actions.loginComplete.listen(<span class="pl-s">function</span> (<span class="pl-vpf">userData</span>) {
   userStore(userData);
 });</pre></div>
 
 <p>There is only one service, which needs to react to the <code>attemptLogin</code> action and then invokes either <code>loginComplete</code> or <code>loginFailed</code> depending on the result of <code>api.login</code>:</p>
 
-<div class="highlight highlight-js"><pre>actions.attemptLogin.listen(<span class="kt">function</span> (<span class="nv">credentials</span>) {
+<div class="highlight highlight-js"><pre>actions.attemptLogin.listen(<span class="pl-s">function</span> (<span class="pl-vpf">credentials</span>) {
   api.login(credentials.username, credentials.password)
   .then(
-    <span class="kt">function</span> (<span class="nv">userData</span>) { <span class="c1">// promise resolved</span>
+    <span class="pl-s">function</span> (<span class="pl-vpf">userData</span>) { <span class="pl-c"><span class="pl-pdc">//</span> promise resolved</span>
       actions.loginComplete(userData);
     },
-    <span class="kt">function</span> (<span class="nv">errorMessage</span>) { <span class="c1">// promise rejected</span>
+    <span class="pl-s">function</span> (<span class="pl-vpf">errorMessage</span>) { <span class="pl-c"><span class="pl-pdc">//</span> promise rejected</span>
       actions.loginFailed(errorMessage);
     }
   );
-  <span class="c1">// or simply: .then(actions.loginComplete, actions.loginFailed);</span>
+  <span class="pl-c"><span class="pl-pdc">//</span> or simply: .then(actions.loginComplete, actions.loginFailed);</span>
 });</pre></div>
 
 <p>If that service looks simple that's because it is. The server API does the heavy lifting of communicating with the server, so we're only left with a little bit of glue.</p>
 
 <p>Finally, the controller view itself:</p>
 
-<div class="highlight highlight-js"><pre><span class="k">var</span> Login <span class="o">=</span> React.createComponent({
-  mixins<span class="o">:</span> [
-    Flox.connect(userStore, <span class="s1">'user'</span>),
-    Flox.listenTo(actions.loginFailed, <span class="s1">'handleLoginFailed'</span>)
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> Login <span class="pl-ko">=</span> React.createComponent({
+  mixins<span class="pl-ko">:</span> [
+    Flox.connect(userStore, <span class="pl-s1"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>),
+    Flox.listenTo(actions.loginFailed, <span class="pl-s1"><span class="pl-pds">'</span>handleLoginFailed<span class="pl-pds">'</span></span>)
   ],
   getInitialState() {
-    <span class="k">return</span> {username<span class="o">:</span> <span class="s1">''</span>, password<span class="o">:</span> <span class="s1">''</span>, error<span class="o">:</span> <span class="kc">null</span>};
+    <span class="pl-k">return</span> {username<span class="pl-ko">:</span> <span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>, password<span class="pl-ko">:</span> <span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>, error<span class="pl-ko">:</span> <span class="pl-c1">null</span>};
   },
   handleLoginFailed(errorMessage) {
-    <span class="nb">this</span>.setState({error<span class="o">:</span> errorMessage});
+    <span class="pl-v">this</span>.setState({error<span class="pl-ko">:</span> errorMessage});
   },
   handleFormSubmit(evt) {
     evt.preventDefault();
-    actions.attemptLogin(<span class="nb">this</span>.state.username, <span class="nb">this</span>.state.password);
+    actions.attemptLogin(<span class="pl-v">this</span>.state.username, <span class="pl-v">this</span>.state.password);
   },
   handleUsernameChange(evt) {
-    <span class="nb">this</span>.setState({username<span class="o">:</span> evt.<span class="no">target</span>.<span class="no">value</span>});
+    <span class="pl-v">this</span>.setState({username<span class="pl-ko">:</span> evt.target.value});
   },
   handlePasswordChange(evt) {
-    <span class="nb">this</span>.setState({password<span class="o">:</span> evt.<span class="no">target</span>.<span class="no">value</span>});
+    <span class="pl-v">this</span>.setState({password<span class="pl-ko">:</span> evt.target.value});
   },
   render() {
-    <span class="k">if</span> (<span class="nb">this</span>.state.user.get(<span class="s1">'username'</span>)) {
-      <span class="k">return</span> <span class="o">&lt;</span>div<span class="o">&gt;</span>Already logged <span class="o">in</span>.<span class="o">&lt;</span>/div<span class="o">&gt;</span>;
+    <span class="pl-k">if</span> (<span class="pl-v">this</span>.state.user.get(<span class="pl-s1"><span class="pl-pds">'</span>username<span class="pl-pds">'</span></span>)) {
+      <span class="pl-k">return</span> <span class="pl-ko">&lt;</span>div<span class="pl-ko">&gt;</span>Already logged <span class="pl-ko">in</span>.<span class="pl-ko">&lt;</span>/div<span class="pl-ko">&gt;</span>;
     }
-    <span class="k">return</span> (
-      <span class="o">&lt;</span>form <span class="nf">onSubmit</span><span class="o">=</span>{<span class="nb">this</span>.handleFormSubmit}<span class="o">&gt;</span>
-        {<span class="nb">this</span>.state<span class="nf">.error</span>}
-        <span class="o">&lt;</span>label<span class="o">&gt;</span>
-          Username<span class="o">:</span>
-          <span class="o">&lt;</span>input type<span class="o">=</span><span class="s2">"text"</span> value<span class="o">=</span>{<span class="nb">this</span>.state.username}
-            <span class="nf">onChange</span><span class="o">=</span>{<span class="nb">this</span>.handleUsernameChange}/<span class="o">&gt;</span>
-        <span class="o">&lt;</span>/label<span class="o">&gt;</span>
-        <span class="o">&lt;</span>label<span class="o">&gt;</span>
-          <span class="no">Password</span><span class="o">:</span>
-          <span class="o">&lt;</span>input type<span class="o">=</span><span class="s2">"password"</span> value<span class="o">=</span>{<span class="nb">this</span>.state.password}
-            <span class="nf">onChange</span><span class="o">=</span>{<span class="nb">this</span>.handlePasswordChange}/<span class="o">&gt;</span>
-        <span class="o">&lt;</span>/label<span class="o">&gt;</span>
-        <span class="o">&lt;</span>button<span class="o">&gt;</span>Log <span class="o">in&lt;</span>/button<span class="o">&gt;</span>
-      <span class="o">&lt;</span>/form<span class="o">&gt;</span>
+    <span class="pl-k">return</span> (
+      <span class="pl-ko">&lt;</span>form <span class="pl-sf">onSubmit</span><span class="pl-ko">=</span>{<span class="pl-v">this</span>.handleFormSubmit}<span class="pl-ko">&gt;</span>
+        {<span class="pl-v">this</span>.state<span class="pl-sf">.error</span>}
+        <span class="pl-ko">&lt;</span>label<span class="pl-ko">&gt;</span>
+          Username<span class="pl-ko">:</span>
+          <span class="pl-ko">&lt;</span>input type<span class="pl-ko">=</span><span class="pl-s1"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span> value<span class="pl-ko">=</span>{<span class="pl-v">this</span>.state.username}
+            <span class="pl-sf">onChange</span><span class="pl-ko">=</span>{<span class="pl-v">this</span>.handleUsernameChange}/<span class="pl-ko">&gt;</span>
+        <span class="pl-ko">&lt;</span>/label<span class="pl-ko">&gt;</span>
+        <span class="pl-ko">&lt;</span>label<span class="pl-ko">&gt;</span>
+          <span class="pl-sc">Password</span><span class="pl-ko">:</span>
+          <span class="pl-ko">&lt;</span>input type<span class="pl-ko">=</span><span class="pl-s1"><span class="pl-pds">"</span>password<span class="pl-pds">"</span></span> value<span class="pl-ko">=</span>{<span class="pl-v">this</span>.state.password}
+            <span class="pl-sf">onChange</span><span class="pl-ko">=</span>{<span class="pl-v">this</span>.handlePasswordChange}/<span class="pl-ko">&gt;</span>
+        <span class="pl-ko">&lt;</span>/label<span class="pl-ko">&gt;</span>
+        <span class="pl-ko">&lt;</span>button<span class="pl-ko">&gt;</span>Log <span class="pl-ko">in&lt;</span>/button<span class="pl-ko">&gt;</span>
+      <span class="pl-ko">&lt;</span>/form<span class="pl-ko">&gt;</span>
     );
   }
 });</pre></div>
