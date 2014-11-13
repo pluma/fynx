@@ -1,3 +1,5 @@
+![Fynx](https://foss-haas.github.io/fynx/fynx.png)
+
 # Synopsis
 
 **Fynx** (formerly known as Flox) is an architecture library for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.org/package/reflux) and [Fluxxor](http://fluxxor.com).
