@@ -1,8 +1,6 @@
 # Synopsis
 
-**Fynx** is an architecture library for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.org/package/reflux) and [Fluxxor](http://fluxxor.com).
-
-Fynx is not related to or affiliated with [flocks.js](https://github.com/StoneCypher/flocks.js), which aims to be an alternative architecture for React.
+**Fynx** (formerly known as Flox) is an architecture library for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.org/package/reflux) and [Fluxxor](http://fluxxor.com).
 
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/foss-haas/fynx)
 
