@@ -1,7 +1,7 @@
 {
-  "name": "flox",
-  "version": "1.2.0",
-  "description": "Not quite Flux.",
+  "name": "fynx",
+  "version": "1.3.0",
+  "description": "Formerly known as Flox. Not quite Flux.",
   "main": "index.js",
   "dependencies": {
     "axn": "^1.3.0",
@@ -28,14 +28,24 @@
     "dist": "jsxjs --es6 src lib",
     "dist-watch": "dirwatch -c 'npm run dist' src"
   },
+  "keywords": [
+    "fynx",
+    "flox",
+    "flux",
+    "react",
+    "immutable",
+    "store",
+    "action",
+    "axn"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/foss-haas/flox.git"
+    "url": "https://github.com/foss-haas/fynx.git"
   },
   "author": "Alan Plum <me@pluma.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/foss-haas/flox/issues"
+    "url": "https://github.com/foss-haas/fynx/issues"
   },
-  "homepage": "https://github.com/foss-haas/flox"
+  "homepage": "https://github.com/foss-haas/fynx"
 }

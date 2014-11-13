@@ -1,30 +1,30 @@
 # Synopsis
 
-**Flox** is a framework/architecture for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.org/package/reflux) and [Fluxxor](http://fluxxor.com).
+**Fynx** is an architecture library for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.org/package/reflux) and [Fluxxor](http://fluxxor.com).
 
-Flox is unrelated to [flocks.js](https://github.com/StoneCypher/flocks.js), which is another alternative architecture for React.
+Fynx is not related to or affiliated with [flocks.js](https://github.com/StoneCypher/flocks.js), which aims to be an alternative architecture for React.
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/foss-haas/flox)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/foss-haas/fynx)
 
-[![license - MIT](https://img.shields.io/npm/l/flox.svg)](https://foss-haas.mit-license.org) [![Dependencies](https://img.shields.io/david/foss-haas/flox.svg)](https://david-dm.org/foss-haas/flox)
+[![license - MIT](https://img.shields.io/npm/l/fynx.svg)](https://foss-haas.mit-license.org) [![Dependencies](https://img.shields.io/david/foss-haas/fynx.svg)](https://david-dm.org/foss-haas/fynx)
 
-[![NPM status](https://nodei.co/npm/flox.png?compact=true)](https://npmjs.org/package/flox)
+[![NPM status](https://nodei.co/npm/fynx.png?compact=true)](https://npmjs.org/package/fynx)
 
-[![Build Status](https://img.shields.io/travis/foss-haas/flox.svg)](https://travis-ci.org/foss-haas/flox) [![Coverage Status](https://img.shields.io/coveralls/foss-haas/flox.svg)](https://coveralls.io/r/foss-haas/flox?branch=master)
+[![Build Status](https://img.shields.io/travis/foss-haas/fynx.svg)](https://travis-ci.org/foss-haas/fynx) [![Coverage Status](https://img.shields.io/coveralls/foss-haas/fynx.svg)](https://coveralls.io/r/foss-haas/fynx?branch=master)
 
 # Install
 
 ## With NPM
 
 ```sh
-npm install flox
+npm install fynx
 ```
 
 ## From source
 
 ```sh
-git clone https://github.com/foss-haas/flox.git
-cd flox
+git clone https://github.com/foss-haas/fynx.git
+cd fynx
 npm install
 npm run dist
 ```
@@ -49,7 +49,7 @@ npm run dist
 
 **Actions** are listenable functions that emit whatever data is passed to them. They provide the core building block of all interactions between *View Components* or *Services* and the *Stores*.
 
-**Stores** are listenable functions that contain the application state and emit their contents whenever they are written to. In Flox, those contents are generally immutable, so modifying them requires updating the store that contains them.
+**Stores** are listenable functions that contain the application state and emit their contents whenever they are written to. In Fynx, those contents are generally immutable, so modifying them requires updating the store that contains them.
 
 **View Components** are components that listen to *Stores* and/or invoke *Actions*. According to the philosophy of React these should usually be the outer most components in an application. They pass the (immutable) data from *Stores* as props to the underlying **Pure Components**, the regular self-contained React components. They may also invoke *Actions* as the result of user interaction with the components.
 
@@ -72,7 +72,7 @@ The application needs at least the following actions:
 They don't need to do anything special, so we can just use the bulk creation method to create all three of them:
 
 ```js
-var actions = Flox.createActions([
+var actions = Fynx.createActions([
   'attemptLogin',
   'loginComplete',
   'loginFailed'
@@ -83,7 +83,7 @@ The application also needs a store for the user data. We're going to assume that
 
 ```js
 var immutable = require('immutable');
-var userStore = Flox.createStore(immutable.Map());
+var userStore = Fynx.createStore(immutable.Map());
 actions.loginComplete.listen(function (userData) {
   userStore(userData);
 });
@@ -113,8 +113,8 @@ Finally, the controller view itself:
 ```js
 var Login = React.createComponent({
   mixins: [
-    Flox.connect(userStore, 'user'),
-    Flox.listenTo(actions.loginFailed, 'handleLoginFailed')
+    Fynx.connect(userStore, 'user'),
+    Fynx.listenTo(actions.loginFailed, 'handleLoginFailed')
   ],
   getInitialState() {
     return {username: '', password: '', error: null};
@@ -162,13 +162,13 @@ As you may have noticed, we're listening to `loginFailed` directly in our contro
 
 You may find it useful to create additional abstractions like the `loginErrorStore` in your real-world applications, but unless your login logic is going to become relatively complex, the benefits of the additional degrees of conceptual purity likely would not outweigh their costs.
 
-Flox tries to be as unopinionated as it can while remaining useful. The architecture recommended by this document is intended as a guideline, not a law. You may deviate from it as much as you like.
+Fynx tries to be as unopinionated as it can while remaining useful. The architecture recommended by this document is intended as a guideline, not a law. You may deviate from it as much as you like.
 
 ## But what about waitFor?
 
-Flux has `waitFor`, Flox does not. Because Flux's dispatcher is entirely replaced by Flox's services and you're encouraged to create as many different actions as your application needs, you'll rarely run into situations where stores actually depend on each other in a way that can't be solved with a few event listeners.
+Flux has `waitFor`, Fynx does not. Because Flux's dispatcher is entirely replaced by Fynx's services and you're encouraged to create as many different actions as your application needs, you'll rarely run into situations where stores actually depend on each other in a way that can't be solved with a few event listeners.
 
-If you run into a real-world scenario you can't solve with additional actions or services, feel free to [report an issue on GitHub](https://github.com/foss-haas/flox/issues) or [discuss it on Gitter](https://gitter.im/foss-haas/flox). Otherwise, just stick to the Flox mantra: *If in doubt, use more duct tape!*
+If you run into a real-world scenario you can't solve with additional actions or services, feel free to [report an issue on GitHub](https://github.com/foss-haas/fynx/issues) or [discuss it on Gitter](https://gitter.im/foss-haas/fynx). Otherwise, just stick to the Fynx mantra: *If in doubt, use more duct tape!*
 
 # API
 
@@ -275,4 +275,4 @@ Registers the listener on `componentDidMount` and unregisters it on `componentWi
 
 # License
 
-The MIT/Expat license. For more information, see http://foss-haas.mit-license.org/ or the accompanying [LICENSE](https://github.com/foss-haas/flox/blob/master/LICENSE) file.
+The MIT/Expat license. For more information, see http://foss-haas.mit-license.org/ or the accompanying [LICENSE](https://github.com/foss-haas/fynx/blob/master/LICENSE) file.
