@@ -13,15 +13,15 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <title>Flox by foss-haas</title>
+    <title>Fynx by foss-haas</title>
   </head>
 
   <body>
     <header>
       <div class="inner">
-        <h1>Flox</h1>
-        <h2>yet another Flux-like for React</h2>
-        <a href="https://github.com/foss-haas/flox" class="button"><small>View project on</small> GitHub</a>
+        <h1>Fynx</h1>
+        <h2>formerly known as Flox</h2>
+        <a href="https://github.com/foss-haas/fynx" class="button"><small>View project on</small> GitHub</a>
       </div>
     </header>
 
@@ -31,17 +31,15 @@
           <h1>
 <a id="synopsis" class="anchor" href="#synopsis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Synopsis</h1>
 
-<p><strong>Flox</strong> is a framework/architecture for <a href="http://facebook.github.io/react">React</a> loosely based on the <a href="http://facebook.github.io/flux">Flux architecture</a> and inspired by <a href="https://www.npmjs.org/package/reflux">Reflux</a> and <a href="http://fluxxor.com">Fluxxor</a>.</p>
+<p><strong>Fynx</strong> (formerly known as Flox) is an architecture library for <a href="http://facebook.github.io/react">React</a> loosely based on the <a href="http://facebook.github.io/flux">Flux architecture</a> and inspired by <a href="https://www.npmjs.org/package/reflux">Reflux</a> and <a href="http://fluxxor.com">Fluxxor</a>.</p>
 
-<p>Flox is unrelated to <a href="https://github.com/StoneCypher/flocks.js">flocks.js</a>, which is another alternative architecture for React.</p>
+<p><a href="https://gitter.im/foss-haas/fynx"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a></p>
 
-<p><a href="https://gitter.im/foss-haas/flox"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a></p>
+<p><a href="https://foss-haas.mit-license.org"><img src="https://img.shields.io/npm/l/fynx.svg" alt="license - MIT"></a> <a href="https://david-dm.org/foss-haas/fynx"><img src="https://img.shields.io/david/foss-haas/fynx.svg" alt="Dependencies"></a></p>
 
-<p><a href="https://foss-haas.mit-license.org"><img src="https://img.shields.io/npm/l/flox.svg" alt="license - MIT"></a> <a href="https://david-dm.org/foss-haas/flox"><img src="https://img.shields.io/david/foss-haas/flox.svg" alt="Dependencies"></a></p>
+<p><a href="https://npmjs.org/package/fynx"><img src="https://nodei.co/npm/fynx.png?compact=true" alt="NPM status"></a></p>
 
-<p><a href="https://npmjs.org/package/flox"><img src="https://nodei.co/npm/flox.png?compact=true" alt="NPM status"></a></p>
-
-<p><a href="https://travis-ci.org/foss-haas/flox"><img src="https://img.shields.io/travis/foss-haas/flox.svg" alt="Build Status"></a> <a href="https://coveralls.io/r/foss-haas/flox?branch=master"><img src="https://img.shields.io/coveralls/foss-haas/flox.svg" alt="Coverage Status"></a></p>
+<p><a href="https://travis-ci.org/foss-haas/fynx"><img src="https://img.shields.io/travis/foss-haas/fynx.svg" alt="Build Status"></a> <a href="https://coveralls.io/r/foss-haas/fynx?branch=master"><img src="https://img.shields.io/coveralls/foss-haas/fynx.svg" alt="Coverage Status"></a></p>
 
 <h1>
 <a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h1>
@@ -49,13 +47,13 @@
 <h2>
 <a id="with-npm" class="anchor" href="#with-npm" aria-hidden="true"><span class="octicon octicon-link"></span></a>With NPM</h2>
 
-<div class="highlight highlight-sh"><pre>npm install flox</pre></div>
+<div class="highlight highlight-sh"><pre>npm install fynx</pre></div>
 
 <h2>
 <a id="from-source" class="anchor" href="#from-source" aria-hidden="true"><span class="octicon octicon-link"></span></a>From source</h2>
 
-<div class="highlight highlight-sh"><pre>git clone https://github.com/foss-haas/flox.git
-<span class="pl-sf">cd</span> flox
+<div class="highlight highlight-sh"><pre>git clone https://github.com/foss-haas/fynx.git
+<span class="pl-sf">cd</span> fynx
 npm install
 npm run dist</pre></div>
 
@@ -81,7 +79,7 @@ npm run dist</pre></div>
 
 <p><strong>Actions</strong> are listenable functions that emit whatever data is passed to them. They provide the core building block of all interactions between <em>View Components</em> or <em>Services</em> and the <em>Stores</em>.</p>
 
-<p><strong>Stores</strong> are listenable functions that contain the application state and emit their contents whenever they are written to. In Flox, those contents are generally immutable, so modifying them requires updating the store that contains them.</p>
+<p><strong>Stores</strong> are listenable functions that contain the application state and emit their contents whenever they are written to. In Fynx, those contents are generally immutable, so modifying them requires updating the store that contains them.</p>
 
 <p><strong>View Components</strong> are components that listen to <em>Stores</em> and/or invoke <em>Actions</em>. According to the philosophy of React these should usually be the outer most components in an application. They pass the (immutable) data from <em>Stores</em> as props to the underlying <strong>Pure Components</strong>, the regular self-contained React components. They may also invoke <em>Actions</em> as the result of user interaction with the components.</p>
 
@@ -109,7 +107,7 @@ npm run dist</pre></div>
 
 <p>They don't need to do anything special, so we can just use the bulk creation method to create all three of them:</p>
 
-<div class="highlight highlight-js"><pre><span class="pl-s">var</span> actions <span class="pl-ko">=</span> Flox.createActions([
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> actions <span class="pl-ko">=</span> Fynx.createActions([
   <span class="pl-s1"><span class="pl-pds">'</span>attemptLogin<span class="pl-pds">'</span></span>,
   <span class="pl-s1"><span class="pl-pds">'</span>loginComplete<span class="pl-pds">'</span></span>,
   <span class="pl-s1"><span class="pl-pds">'</span>loginFailed<span class="pl-pds">'</span></span>
@@ -118,7 +116,7 @@ npm run dist</pre></div>
 <p>The application also needs a store for the user data. We're going to assume that the user data will always be a simple mapping of keys and values (i.e. a plain object) that requires no special processing:</p>
 
 <div class="highlight highlight-js"><pre><span class="pl-s">var</span> immutable <span class="pl-ko">=</span> <span class="pl-sf">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>immutable<span class="pl-pds">'</span></span>);
-<span class="pl-s">var</span> userStore <span class="pl-ko">=</span> Flox.createStore(immutable.Map());
+<span class="pl-s">var</span> userStore <span class="pl-ko">=</span> Fynx.createStore(immutable.Map());
 actions.loginComplete.listen(<span class="pl-s">function</span> (<span class="pl-vpf">userData</span>) {
   userStore(userData);
 });</pre></div>
@@ -144,8 +142,8 @@ actions.loginComplete.listen(<span class="pl-s">function</span> (<span class="pl
 
 <div class="highlight highlight-js"><pre><span class="pl-s">var</span> Login <span class="pl-ko">=</span> React.createComponent({
   mixins<span class="pl-ko">:</span> [
-    Flox.connect(userStore, <span class="pl-s1"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>),
-    Flox.listenTo(actions.loginFailed, <span class="pl-s1"><span class="pl-pds">'</span>handleLoginFailed<span class="pl-pds">'</span></span>)
+    Fynx.connect(userStore, <span class="pl-s1"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>),
+    Fynx.listenTo(actions.loginFailed, <span class="pl-s1"><span class="pl-pds">'</span>handleLoginFailed<span class="pl-pds">'</span></span>)
   ],
   getInitialState() {
     <span class="pl-k">return</span> {username<span class="pl-ko">:</span> <span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>, password<span class="pl-ko">:</span> <span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>, error<span class="pl-ko">:</span> <span class="pl-c1">null</span>};
@@ -193,14 +191,14 @@ actions.loginComplete.listen(<span class="pl-s">function</span> (<span class="pl
 
 <p>You may find it useful to create additional abstractions like the <code>loginErrorStore</code> in your real-world applications, but unless your login logic is going to become relatively complex, the benefits of the additional degrees of conceptual purity likely would not outweigh their costs.</p>
 
-<p>Flox tries to be as unopinionated as it can while remaining useful. The architecture recommended by this document is intended as a guideline, not a law. You may deviate from it as much as you like.</p>
+<p>Fynx tries to be as unopinionated as it can while remaining useful. The architecture recommended by this document is intended as a guideline, not a law. You may deviate from it as much as you like.</p>
 
 <h2>
 <a id="but-what-about-waitfor" class="anchor" href="#but-what-about-waitfor" aria-hidden="true"><span class="octicon octicon-link"></span></a>But what about waitFor?</h2>
 
-<p>Flux has <code>waitFor</code>, Flox does not. Because Flux's dispatcher is entirely replaced by Flox's services and you're encouraged to create as many different actions as your application needs, you'll rarely run into situations where stores actually depend on each other in a way that can't be solved with a few event listeners.</p>
+<p>Flux has <code>waitFor</code>, Fynx does not. Because Flux's dispatcher is entirely replaced by Fynx's services and you're encouraged to create as many different actions as your application needs, you'll rarely run into situations where stores actually depend on each other in a way that can't be solved with a few event listeners.</p>
 
-<p>If you run into a real-world scenario you can't solve with additional actions or services, feel free to <a href="https://github.com/foss-haas/flox/issues">report an issue on GitHub</a> or <a href="https://gitter.im/foss-haas/flox">discuss it on Gitter</a>. Otherwise, just stick to the Flox mantra: <em>If in doubt, use more duct tape!</em></p>
+<p>If you run into a real-world scenario you can't solve with additional actions or services, feel free to <a href="https://github.com/foss-haas/fynx/issues">report an issue on GitHub</a> or <a href="https://gitter.im/foss-haas/fynx">discuss it on Gitter</a>. Otherwise, just stick to the Fynx mantra: <em>If in doubt, use more duct tape!</em></p>
 
 <h1>
 <a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h1>
@@ -329,20 +327,20 @@ actions.loginComplete.listen(<span class="pl-s">function</span> (<span class="pl
 <h1>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h1>
 
-<p>The MIT/Expat license. For more information, see <a href="http://foss-haas.mit-license.org/">http://foss-haas.mit-license.org/</a> or the accompanying <a href="https://github.com/foss-haas/flox/blob/master/LICENSE">LICENSE</a> file.</p>
+<p>The MIT/Expat license. For more information, see <a href="http://foss-haas.mit-license.org/">http://foss-haas.mit-license.org/</a> or the accompanying <a href="https://github.com/foss-haas/fynx/blob/master/LICENSE">LICENSE</a> file.</p>
         </section>
 
         <aside id="sidebar">
-          <a href="https://github.com/foss-haas/flox/zipball/master" class="button">
+          <a href="https://github.com/foss-haas/fynx/zipball/master" class="button">
             <small>Download</small>
             .zip file
           </a>
-          <a href="https://github.com/foss-haas/flox/tarball/master" class="button">
+          <a href="https://github.com/foss-haas/fynx/tarball/master" class="button">
             <small>Download</small>
             .tar.gz file
           </a>
 
-          <p class="repo-owner"><a href="https://github.com/foss-haas/flox"></a> is maintained by <a href="https://github.com/foss-haas">foss-haas</a>.</p>
+          <p class="repo-owner"><a href="https://github.com/foss-haas/fynx"></a> is maintained by <a href="https://github.com/foss-haas">foss-haas</a>.</p>
 
           <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
         </aside>
