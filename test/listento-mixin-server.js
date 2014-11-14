@@ -10,6 +10,7 @@ describe('listenTo (on the server)', function () {
     expect(global.document).to.be(undefined);
   });
   it('has no effect', function () {
+    var called = false;
     var listenable = {
       listen: fail,
       unlisten: fail
@@ -19,9 +20,11 @@ describe('listenTo (on the server)', function () {
         listenTo(listenable, fail)
       ],
       render: function () {
+        called = true;
         return React.createElement('div');
       }
     });
     React.renderToString(React.createElement(Component));
+    expect(called).to.be(true);
   });
 });
