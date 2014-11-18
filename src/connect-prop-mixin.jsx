@@ -12,23 +12,31 @@ function connectProp(prop, name) {
   return {
     getInitialState() {
       var state = {};
-      state[name] = this.props[prop]();
+      if (this.props[prop]) {
+        state[name] = this.props[prop]();
+      }
       return state;
     },
     componentWillReceiveProps(nextProps) {
-      if (!nextProps || !nextProps[prop]) return;
-      if (this.props && nextProps[prop] === this.props[prop]) return;
-      nextProps[prop].listen(update, this);
-      update(nextProps[prop]());
-      if (!this.props || !this.props[prop]) return;
-      this.props[prop].unlisten(update, this);
+      if (nextProps[prop]) {
+        if (nextProps[prop] === this.props[prop]) return;
+        nextProps[prop].listen(update, this);
+        update.call(this, nextProps[prop]());
+        if (this.props[prop]) {
+          this.props[prop].unlisten(update, this);
+        }
+      } else {
+        if (!this.props[prop]) return;
+        update.call(this, undefined);
+        this.props[prop].unlisten(update, this);
+      }
     },
     componentDidMount() {
-      if (!this.props || !this.props[prop]) return;
+      if (!this.props[prop]) return;
       this.props[prop].listen(update, this);
     },
     componentWillUnmount() {
-      if (!this.props || !this.props[prop]) return;
+      if (!this.props[prop]) return;
       this.props[prop].unlisten(update, this);
     }
   };
