@@ -47,6 +47,17 @@ describe('createRawStore', function () {
     afterEach(function () {
       listeners.splice(0).forEach(invoke);
     });
+    it('replaces "null" with the emptyValue', function (done) {
+      var emptyValue = 'potato';
+      var store = createRawStore(emptyValue);
+      store({x: 'y'});
+      expect(store()).not.to.equal(emptyValue);
+      listen(store, function (value) {
+        expect(value).to.equal(emptyValue);
+        done();
+      });
+      store(null);
+    });
     it('applies the prepare function', function () {
       var value1 = {hello: 'world'};
       var value2 = {foo: 'bar'};

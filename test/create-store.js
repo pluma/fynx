@@ -58,6 +58,17 @@ describe('createStore', function () {
     afterEach(function () {
       listeners.splice(0).forEach(invoke);
     });
+    it('replaces "null" with the emptyValue', function (done) {
+      var emptyValue = immutable.Map();
+      var store = createStore(emptyValue);
+      store({x: 'y'});
+      expect(store()).not.to.have.value(emptyValue);
+      listen(store, function (value) {
+        expect(value).to.have.value(emptyValue);
+        done();
+      });
+      store(null);
+    });
     it('applies the prepare function', function () {
       var value1 = {hello: 'world'};
       var value2 = {foo: 'bar'};
