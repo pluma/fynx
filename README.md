@@ -257,6 +257,16 @@ If `listener` is a string, the component's method with the given name will be us
 
 Registers the listener on `componentDidMount` and unregisters it on `componentWillUnmount`.
 
+## listenToProp(propName, listener):Mixin
+
+Creates a React mixin that registers the given listener function with the store or action (or anything that has methods `listen(fn, ctx)` and `unlisten(fn, ctx)`) in the prop `propName`. The listener will be invoked with its context set to the React component.
+
+Automatically reacts to prop changes.
+
+If `listener` is a string, the component's method with the given name will be used.
+
+Registers the listener on `componentDidMount` and unregisters it on `componentWillUnmount`.
+
 ## connect(store, name):Mixin
 
 Creates a React mixin that updates the component's state by setting `name` to the store's value whenever the store's value changes.
@@ -275,7 +285,7 @@ Registers the listener on `componentDidMount` and unregisters it on `componentWi
 
 ## connectVia(stores, fn):Mixin
 
-Creates a React mixin that updates the component's state by passing the current value of each store in `stores` to the given function `fn` whenever any of the stores changes.
+Creates a React mixin that updates the component's state by passing the current value of each store in `stores` to the given function `fn` whenever any of the stores changes. The function will be invoked with its context set to the React component.
 
 Automatically adds the result of invoking the function with the current value of each store to the component's initial state.
 
