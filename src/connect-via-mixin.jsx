@@ -18,10 +18,10 @@ function connectVia(stores, fn) {
       return getStateFromStores(this);
     },
     componentDidMount() {
-      store.listen(update, this);
+      stores.map(store => store.listen(update, this));
     },
     componentWillUnmount() {
-      store.unlisten(update, this);
+      stores.map(store => store.unlisten(update, this));
     }
   };
 }
