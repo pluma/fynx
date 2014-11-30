@@ -273,6 +273,36 @@ Automatically adds the store's current value to the component's initial state an
 
 Registers the listener on `componentDidMount` and unregisters it on `componentWillUnmount`.
 
+## connectVia(stores, fn):Mixin
+
+Creates a React mixin that updates the component's state by passing the current value of each store in `stores` to the given function `fn` whenever any of the stores changes.
+
+Automatically adds the result of invoking the function with the current value of each store to the component's initial state.
+
+If `fn` is a string, the component's method with the given name will be used.
+
+If `stores` is not an array, it will be wrapped in an array automatically.
+
+Registers the listener on `componentDidMount` and unregisters it on `componentWillUnmount`.
+
+Example:
+
+```js
+React.createClass({
+  mixins: [
+    connectVia([aStore, bStore], 'update')
+  ],
+  update: function (aVal, bVal) { // invoked whenever either of the stores changes
+    return {
+      a: aVal,
+      b: bVal.get(this.props.qux), // `this` works as usual
+      c: aVal.get(bVal.get('foo')) // this.state.c depends on both stores
+    };
+  },
+  // ...
+});
+```
+
 # License
 
 The MIT/Expat license. For more information, see http://foss-haas.mit-license.org/ or the accompanying [LICENSE](https://github.com/foss-haas/fynx/blob/master/LICENSE) file.
