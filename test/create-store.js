@@ -82,6 +82,11 @@ describe('createStore', function () {
       expect(prepare.called).to.equal(true);
       expect(store()).to.have.value(immutable.Map(value2));
     });
+    it('doesnt immute already immutable data', function () {
+      var value1 = immutable.Map({foo: 'bar'});
+      var store = createStore(value1);
+      expect(store()).to.have.value(value1);
+    });
     it('notifies listeners', function (done) {
       var store = createStore(immutable.Map());
       listen(store, function () {
