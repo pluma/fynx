@@ -6,7 +6,7 @@
 
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/foss-haas/fynx)
 
-[![license - MIT](https://img.shields.io/npm/l/fynx.svg)](https://foss-haas.mit-license.org) [![Dependencies](https://img.shields.io/david/foss-haas/fynx.svg)](https://david-dm.org/foss-haas/fynx)
+[![license - MIT](https://img.shields.io/npm/l/fynx.svg)](http://foss-haas.mit-license.org) [![Dependencies](https://img.shields.io/david/foss-haas/fynx.svg)](https://david-dm.org/foss-haas/fynx)
 
 [![NPM status](https://nodei.co/npm/fynx.png?compact=true)](https://npmjs.org/package/fynx)
 
