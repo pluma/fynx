@@ -86,8 +86,8 @@ describe('createStore', function () {
       var value1 = immutable.Map({hello: 'world'});
       var value2 = immutable.Map({foo: 'bar'});
       var store = createStore(immutable.Map());
-      store(store().set('1', value1));
-      store(store().set('2', value2));
+      store().set('1', value1);
+      store().set('2', value2);
       expect(store().get('1')).to.have.value(value1);
       expect(store().get('2')).to.have.value(value2);
     });
