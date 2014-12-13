@@ -1,6 +1,6 @@
 {
   "name": "fynx",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Formerly known as Flox. Not quite Flux.",
   "main": "index.js",
   "dependencies": {
