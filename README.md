@@ -10,7 +10,7 @@
 
 [![NPM status](https://nodei.co/npm/fynx.png?compact=true)](https://npmjs.org/package/fynx)
 
-[![Build Status](https://img.shields.io/travis/foss-haas/fynx.svg)](https://travis-ci.org/foss-haas/fynx) [![Coverage Status](https://img.shields.io/coveralls/foss-haas/fynx.svg)](https://coveralls.io/r/foss-haas/fynx?branch=master)
+[![Build status](https://img.shields.io/travis/foss-haas/fynx.svg)](https://travis-ci.org/foss-haas/fynx) [![Coverage status](https://img.shields.io/coveralls/foss-haas/fynx.svg)](https://coveralls.io/r/foss-haas/fynx?branch=master) [![Codacy rating](https://img.shields.io/codacy/6f19c1455aa04fd08d77445fb5b9fc91.svg)](https://www.codacy.com/public/me_4/fynx)
 
 # Install
 
