@@ -1,7 +1,7 @@
+/*jshint node: true */
 /*global global, describe, it, afterEach, before, after */
 'use strict';
 var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
 var expect = require('expect.js');
 var connectProp = require('../').connectProp;
 var noop = function () {};
@@ -182,7 +182,7 @@ describe('connectProp (in a browser)', function () {
         mixins: [
           connectProp('meh', 'foo')
         ],
-        componentWillUpdate: function (props, state) {
+        componentWillUpdate: function () {
           expect(called).to.be(true);
           done();
         },
@@ -197,7 +197,6 @@ describe('connectProp (in a browser)', function () {
     });
     it('registers a new listener', function (done) {
       var called = false;
-      var listener = null;
       var store1 = function () {};
       store1.unlisten = noop;
       store1.listen = noop;
@@ -216,7 +215,7 @@ describe('connectProp (in a browser)', function () {
         mixins: [
           connectProp('meh', 'foo')
         ],
-        componentWillUpdate: function (props, state) {
+        componentWillUpdate: function () {
           expect(called).to.be(true);
           done();
         },
@@ -246,7 +245,7 @@ describe('connectProp (in a browser)', function () {
           mixins: [
             connectProp('meh', 'foo')
           ],
-          componentWillUpdate: function (props, state) {
+          componentWillUpdate: function () {
             expect(called).to.be(false);
             done();
           },
@@ -342,7 +341,6 @@ describe('connectProp (in a browser)', function () {
       });
       it('registers a listener', function (done) {
         var called = false;
-        var listener = null;
         var store = function () {};
         store.listen = function (fn, ctx) {
           expect(fn).to.be.a('function');
@@ -358,7 +356,7 @@ describe('connectProp (in a browser)', function () {
           mixins: [
             connectProp('meh', 'foo')
           ],
-          componentWillUpdate: function (props, state) {
+          componentWillUpdate: function () {
             expect(called).to.be(true);
             done();
           },
@@ -373,7 +371,6 @@ describe('connectProp (in a browser)', function () {
       });
       describe('if the prop is still missing', function () {
         it('does nothing', function (done) {
-          var called = false;
           var rerender = function () {
             rerender = noop;
             React.render(React.createElement(Component, {x: 'y'}), global.document.body);

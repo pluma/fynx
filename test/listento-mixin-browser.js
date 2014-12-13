@@ -1,7 +1,7 @@
+/*jshint node: true */
 /*global global, describe, it, afterEach, before, after */
 'use strict';
 var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
 var expect = require('expect.js');
 var listenTo = require('../').listenTo;
 var noop = function () {};

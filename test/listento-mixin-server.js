@@ -1,3 +1,4 @@
+/*jshint node: true */
 /*global global, describe, it, before */
 'use strict';
 var React = require('react');
