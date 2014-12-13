@@ -79,7 +79,7 @@ describe('connectProp (in a browser)', function () {
   });
   it('sets the initial state from the store', function () {
     var called = false;
-    var value = "potato";
+    var value = 'potato';
     var store = function () {return value;};
     store.listen = noop;
     store.unlisten = noop;
@@ -97,8 +97,8 @@ describe('connectProp (in a browser)', function () {
     expect(called).to.be(true);
   });
   it('updates the state when the store emits', function (done) {
-    var value = "potato";
-    var newValue = "tomato";
+    var value = 'potato';
+    var newValue = 'tomato';
     var listeners = [];
     var store = function () {return value;};
     store.unlisten = noop;
@@ -128,8 +128,8 @@ describe('connectProp (in a browser)', function () {
   });
   describe('when the prop changes', function () {
     it('updates the state', function (done) {
-      var value = "potato";
-      var newValue = "tomato";
+      var value = 'potato';
+      var newValue = 'tomato';
       var store1 = function () {return value;};
       store1.unlisten = noop;
       store1.listen = noop;
@@ -232,7 +232,7 @@ describe('connectProp (in a browser)', function () {
     describe('when the prop is identical', function () {
       it('does nothing', function (done) {
         var called = false;
-        var value = "potato";
+        var value = 'potato';
         var store = function () {return value;};
         store.listen = noop;
         store.unlisten = function () {
@@ -262,7 +262,7 @@ describe('connectProp (in a browser)', function () {
     });
     describe('when the new prop is missing', function () {
       it('clears the state', function (done) {
-        var value = "potato";
+        var value = 'potato';
         var store = function () {return value;};
         store.unlisten = noop;
         store.listen = noop;
@@ -314,7 +314,7 @@ describe('connectProp (in a browser)', function () {
     });
     describe('when the prop changes', function () {
       it('updates the state', function (done) {
-        var value = "potato";
+        var value = 'potato';
         var store = function () {return value;};
         store.unlisten = noop;
         store.listen = noop;

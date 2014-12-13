@@ -44,7 +44,7 @@ describe('connectProp (on the server)', function () {
   });
   it('sets the initial state from the store', function () {
     var called = false;
-    var value = "potato";
+    var value = 'potato';
     var store = function () {return value;};
     var Component = React.createClass({
       mixins: [

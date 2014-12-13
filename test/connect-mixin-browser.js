@@ -79,7 +79,7 @@ describe('connect (in a browser)', function () {
   });
   it('sets the initial state from the store', function () {
     var called = false;
-    var value = "potato";
+    var value = 'potato';
     var store = function () {return value;};
     store.listen = noop;
     store.unlisten = noop;
@@ -97,8 +97,8 @@ describe('connect (in a browser)', function () {
     expect(called).to.be(true);
   });
   it('updates the state when the store emits', function (done) {
-    var value = "potato";
-    var newValue = "tomato";
+    var value = 'potato';
+    var newValue = 'tomato';
     var listeners = [];
     var store = function () {return value;};
     store.unlisten = noop;
