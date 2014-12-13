@@ -1,4 +1,5 @@
 /*global global, describe, it, before */
+'use strict';
 var React = require('react');
 var expect = require('expect.js');
 var listenTo = require('../').listenTo;

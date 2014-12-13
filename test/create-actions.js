@@ -1,4 +1,5 @@
 /*global describe, it, after */
+'use strict';
 var expect = require('expect.js');
 var rewire = require('rewire');
 var sinon = require('sinon');
