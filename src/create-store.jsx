@@ -21,7 +21,7 @@ function createStore(emptyValue, prepare) {
       state.update(() => (
         data === null
         ? emptyValue
-        : immutable.fromJS(prepare ? prepare(data) : data)
+        : castToImmutable(prepare ? prepare(data) : data)
       ));
     }
     return state;
@@ -36,4 +36,26 @@ function createStore(emptyValue, prepare) {
   store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
   store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
   return store;
+}
+
+function castToImmutable(struct) {
+  return isImmutableStructure(struct)
+    ? struct
+    : immutable.fromJS(struct);
+}
+
+// Check if passed structure is existing immutable structure.
+// From https://github.com/facebook/immutable-js/wiki/Upgrading-to-Immutable-v3#additional-changes
+function isImmutableStructure (data) {
+  return immutableSafeCheck('Iterable', 'isIterable', data) ||
+          immutableSafeCheck('Seq', 'isSeq', data) ||
+          immutableSafeCheck('Map', 'isMap', data) ||
+          immutableSafeCheck('OrderedMap', 'isOrderedMap', data) ||
+          immutableSafeCheck('List', 'isList', data) ||
+          immutableSafeCheck('Stack', 'isStack', data) ||
+          immutableSafeCheck('Set', 'isSet', data);
+}
+
+function immutableSafeCheck (ns, method, data) {
+  return immutable[ns] && immutable[ns][method] && immutable[ns][method](data);
 }
