@@ -92,8 +92,8 @@ actions.loginComplete.listen(function (userData) {
 There is only one service, which needs to react to the `attemptLogin` action and then invokes either `loginComplete` or `loginFailed` depending on the result of `api.login`:
 
 ```js
-actions.attemptLogin.listen(function (credentials) {
-  api.login(credentials.username, credentials.password)
+actions.attemptLogin.listen(function (username, password) {
+  api.login(username, password)
   .then(
     function (userData) { // promise resolved
       actions.loginComplete(userData);
@@ -111,25 +111,29 @@ If that service looks simple that's because it is. The server API does the heavy
 Finally, the controller view itself:
 
 ```js
-var Login = React.createComponent({
+var Login = React.createClass({
   mixins: [
     Fynx.connect(userStore, 'user'),
-    Fynx.listenTo(actions.loginFailed, 'handleLoginFailed')
+    Fynx.listenTo(actions.loginFailed, 'handleLoginFailed'),
+    Fynx.listenTo(actions.loginComplete, 'handleLoginComplete')
   ],
-  getInitialState() {
+  getInitialState: function() {
     return {username: '', password: '', error: null};
   },
-  handleLoginFailed(errorMessage) {
+  handleLoginComplete: function() {
+    this.setState({error: null});
+  },
+  handleLoginFailed: function(errorMessage) {
     this.setState({error: errorMessage});
   },
-  handleFormSubmit(evt) {
+  handleFormSubmit: function(evt) {
     evt.preventDefault();
     actions.attemptLogin(this.state.username, this.state.password);
   },
-  handleUsernameChange(evt) {
+  handleUsernameChange: function(evt) {
     this.setState({username: evt.target.value});
   },
-  handlePasswordChange(evt) {
+  handlePasswordChange: function(evt) {
     this.setState({password: evt.target.value});
   },
   render() {
