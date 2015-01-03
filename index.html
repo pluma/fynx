@@ -13,7 +13,7 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <title>Fynx by Foss & Haas</title>
+    <title>Fynx by foss-haas</title>
   </head>
 
   <body>
@@ -33,15 +33,15 @@
 <h1>
 <a id="synopsis" class="anchor" href="#synopsis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Synopsis</h1>
 
-<p><strong>Fynx</strong> (formerly known as Flox) is an architecture library for <a href="http://facebook.github.io/react">React</a> loosely based on the <a href="http://facebook.github.io/flux">Flux architecture</a> and inspired by <a href="https://www.npmjs.org/package/reflux">Reflux</a> and <a href="http://fluxxor.com">Fluxxor</a>.</p>
+<p><strong>Fynx</strong> (formerly known as Flox) is an architecture library for <a href="http://facebook.github.io/react">React</a> loosely based on the <a href="http://facebook.github.io/flux">Flux architecture</a> and inspired by <a href="https://www.npmjs.com/package/reflux">Reflux</a> and <a href="http://fluxxor.com">Fluxxor</a>.</p>
 
 <p><a href="https://gitter.im/foss-haas/fynx"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a></p>
 
-<p><a href="https://foss-haas.mit-license.org"><img src="https://img.shields.io/npm/l/fynx.svg" alt="license - MIT"></a> <a href="https://david-dm.org/foss-haas/fynx"><img src="https://img.shields.io/david/foss-haas/fynx.svg" alt="Dependencies"></a></p>
+<p><a href="http://foss-haas.mit-license.org"><img src="https://img.shields.io/npm/l/fynx.svg" alt="license - MIT"></a> <a href="https://david-dm.org/foss-haas/fynx"><img src="https://img.shields.io/david/foss-haas/fynx.svg" alt="Dependencies"></a></p>
 
-<p><a href="https://npmjs.org/package/fynx"><img src="https://nodei.co/npm/fynx.png?compact=true" alt="NPM status"></a></p>
+<p><a href="https://www.npmjs.com/package/fynx"><img src="https://nodei.co/npm/fynx.png?compact=true" alt="NPM status"></a></p>
 
-<p><a href="https://travis-ci.org/foss-haas/fynx"><img src="https://img.shields.io/travis/foss-haas/fynx.svg" alt="Build Status"></a> <a href="https://coveralls.io/r/foss-haas/fynx?branch=master"><img src="https://img.shields.io/coveralls/foss-haas/fynx.svg" alt="Coverage Status"></a></p>
+<p><a href="https://travis-ci.org/foss-haas/fynx"><img src="https://img.shields.io/travis/foss-haas/fynx.svg" alt="Build status"></a> <a href="https://coveralls.io/r/foss-haas/fynx?branch=master"><img src="https://img.shields.io/coveralls/foss-haas/fynx.svg" alt="Coverage status"></a> <a href="https://www.codacy.com/public/me_4/fynx"><img src="https://img.shields.io/codacy/6f19c1455aa04fd08d77445fb5b9fc91.svg" alt="Codacy rating"></a></p>
 
 <h1>
 <a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h1>
@@ -65,97 +65,107 @@ npm run dist</pre></div>
 <h2>
 <a id="obligatory-ascii-diagram" class="anchor" href="#obligatory-ascii-diagram" aria-hidden="true"><span class="octicon octicon-link"></span></a>Obligatory ASCII diagram</h2>
 
-<pre><code>  ╔═════════╗       ╔════════╗      ╔═════════════════╗
-  ║ Actions ╟──────&gt;║ Stores ╟─────&gt;║ View Components ║
-  ╚════╤════╝       ╚════════╝      ╚══════╤═══╤══════╝
-    ^  │  ^                                │   │
-    │  │  └────────────────────────────────┘   │
-    │  v                                       v
-  ╔═╧════════╗     ┌────────────┐   ╔═════════════════╗
-  ║ Services ╟────&gt;│ Server API │   ║ Pure Components ║
-  ╚══════════╝     └────────────┘   ╚═════════════════╝
+<pre><code>  ╔═════════════════╗     ╔════════╗   ┌────────────┐
+  ║ View Components ║&lt;────╢ Stores ║   │ Server API │
+  ╚═══╤════╤════════╝     ╚════════╝   └────────────┘
+      │    │                   ^                ^
+      │    └────────────────┐  └────────────┐   │
+      v                     v               │   │
+  ╔═════════════════╗   ╔═════════╗     ┌───┴───┴───┐
+  ║ Pure Components ║   ║ Actions ║&lt;═══&gt;│ Listeners │
+  ╚═════════════════╝   ╚═════════╝     └───────────┘
 </code></pre>
 
 <h2>
 <a id="definitions" class="anchor" href="#definitions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Definitions</h2>
 
-<p><strong>Actions</strong> are listenable functions that emit whatever data is passed to them. They provide the core building block of all interactions between <em>View Components</em> or <em>Services</em> and the <em>Stores</em>.</p>
+<p><strong>View Components</strong> are components that listen to <em>Stores</em> and/or invoke <em>Actions</em>. According to the philosophy of React, these should usually be the outer most components in an application. They pass (immutable) data from <em>Stores</em> as props to the underlying <strong>Pure Components</strong>, the regular self-contained React components. They may also invoke <em>Actions</em> as the result of user interaction with those components.</p>
 
-<p><strong>Stores</strong> are listenable functions that contain the application state and emit their contents whenever they are written to. In Fynx, those contents are generally immutable, so modifying them requires updating the store that contains them.</p>
+<p><strong>Stores</strong> are listenable functions that contain the application state and emit their contents whenenever they are written to. In Fynx, these contents are generally immutable, so modifying them requires updating the store that contains them.</p>
 
-<p><strong>View Components</strong> are components that listen to <em>Stores</em> and/or invoke <em>Actions</em>. According to the philosophy of React these should usually be the outer most components in an application. They pass the (immutable) data from <em>Stores</em> as props to the underlying <strong>Pure Components</strong>, the regular self-contained React components. They may also invoke <em>Actions</em> as the result of user interaction with the components.</p>
+<p><strong>Actions</strong> are listenable functions that emit to <em>Listeners</em> whatever data is passed to them. They provide the core building block of all interactions between <em>View Components</em> and <em>Stores</em> or the <em>Server API</em>.</p>
 
-<p><strong>Services</strong> listen to <em>Actions</em> and connect them with each other. They are the only part of the application that communicates directly with the <em>Server API</em>. In practice, a service may simply be a function that is registered with an action as a listener and invokes a different action.</p>
+<p><strong>Listeners</strong> are arbitrary functions that listen to <em>Actions</em> and connect them with each other. They are the only part of the application that communicates directly with the <em>Server API</em> or writes to <em>Stores</em>. Listeners may also invoke other actions.</p>
 
 <p>The <strong>Server API</strong> is the code that directly communicates with the remote server or persistence layer of the application. Its implementation should be entirely orthogonal to the rest of the application. For example, a thin wrapper around <code>XMLHttpRequest</code> that takes arguments and a callback or returns a promise.</p>
 
 <h2>
 <a id="example-login-view" class="anchor" href="#example-login-view" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example: Login view</h2>
 
+<p>For brevity, we'll use JSX with the harmony flag enabled throughout this example. This allows us to use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">arrow functions</a> and the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions">method shorthand syntax</a> introduced in ECMAScript 6. Also, if you want to give the example a try yourself, please make sure the <code>Promise</code> function is available globally. If you are using a modern evergreen browser like Chrome or Firefox, this should already be the case.</p>
+
 <p>We're going to assume the Server API is an object that provides a single method with the following signature that returns a promise which resolves to the user data or is rejected with a descriptive error message that can be presented to the user:</p>
 
 <p><code>api.login(username:String, password:String):Promise</code></p>
 
-<p>The application needs at least the following actions:</p>
+<p>We'll need at least two actions:</p>
 
 <ul>
 <li>
-<code>attemptLogin</code> for when a user attempts a login.</li>
+<code>loginAttempt</code> to perform the login via the Server API.</li>
 <li>
-<code>loginComplete</code> for when the server has acknowledged a login.</li>
-<li>
-<code>loginFailed</code> for when the server has denied a login attempt.</li>
+<code>loginComplete</code> to react to successful login attempts throughout the app.</li>
 </ul>
 
-<p>They don't need to do anything special, so we can just use the bulk creation method to create all three of them:</p>
+<p>For simplicity, we'll make both of them asynchronous and just use the bulk creation method Fynx provides:</p>
 
-<div class="highlight highlight-js"><pre><span class="pl-s">var</span> actions <span class="pl-k">=</span> Fynx.createActions([
-  <span class="pl-s1"><span class="pl-pds">'</span>attemptLogin<span class="pl-pds">'</span></span>,
-  <span class="pl-s1"><span class="pl-pds">'</span>loginComplete<span class="pl-pds">'</span></span>,
-  <span class="pl-s1"><span class="pl-pds">'</span>loginFailed<span class="pl-pds">'</span></span>
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> actions <span class="pl-k">=</span> Fynx.createAsyncActions([
+  <span class="pl-s1"><span class="pl-pds">'</span>loginAttempt<span class="pl-pds">'</span></span>,
+  <span class="pl-s1"><span class="pl-pds">'</span>loginComplete<span class="pl-pds">'</span></span>
 ]);</pre></div>
 
 <p>The application also needs a store for the user data. We're going to assume that the user data will always be a simple mapping of keys and values (i.e. a plain object) that requires no special processing:</p>
 
 <div class="highlight highlight-js"><pre><span class="pl-s">var</span> immutable <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>immutable<span class="pl-pds">'</span></span>);
-<span class="pl-s">var</span> userStore <span class="pl-k">=</span> Fynx.createStore(immutable.Map());
-actions.loginComplete.listen(<span class="pl-st">function</span> (<span class="pl-vpf">userData</span>) {
-  userStore(userData);
-});</pre></div>
+<span class="pl-s">var</span> userStore <span class="pl-k">=</span> Fynx.createSimpleStore(immutable.Map());</pre></div>
 
-<p>There is only one service, which needs to react to the <code>attemptLogin</code> action and then invokes either <code>loginComplete</code> or <code>loginFailed</code> depending on the result of <code>api.login</code>:</p>
+<p>Next we need to make sure successful login attempts result in the user object provided by the server being updated in the store:</p>
 
-<div class="highlight highlight-js"><pre>actions.attemptLogin.listen(<span class="pl-st">function</span> (<span class="pl-vpf">credentials</span>) {
-  api.login(credentials.username, credentials.password)
-  .then(
-    <span class="pl-st">function</span> (<span class="pl-vpf">userData</span>) { <span class="pl-c">// promise resolved</span>
-      actions.loginComplete(userData);
-    },
-    <span class="pl-st">function</span> (<span class="pl-vpf">errorMessage</span>) { <span class="pl-c">// promise rejected</span>
-      actions.loginFailed(errorMessage);
-    }
-  );
-  <span class="pl-c">// or simply: .then(actions.loginComplete, actions.loginFailed);</span>
-});</pre></div>
+<div class="highlight highlight-js"><pre>actions.loginComplete.listen((userData) <span class="pl-k">=&gt;</span> userStore(userData));</pre></div>
 
-<p>If that service looks simple that's because it is. The server API does the heavy lifting of communicating with the server, so we're only left with a little bit of glue.</p>
+<p>We also need a listener that makes the actual server request. Notice that we could simply combine the two actions into one, but keeping them separate allows us to re-use them throughout the application:</p>
+
+<div class="highlight highlight-js"><pre>actions.loginAttempt.listen(
+  (credentials) <span class="pl-k">=&gt;</span> api.login(credentials.username, credentials.password)
+  .then((userData) <span class="pl-k">=&gt;</span> actions.loginComplete(userData))
+);</pre></div>
+
+<p>The server API does the heavy lifting of communicating with the server, so we're only left with a little bit of glue.</p>
 
 <p>Finally, the controller view itself:</p>
 
-<div class="highlight highlight-js"><pre><span class="pl-s">var</span> Login <span class="pl-k">=</span> React.createComponent({
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> Login <span class="pl-k">=</span> React.createClass({
   mixins<span class="pl-k">:</span> [
-    Fynx.connect(userStore, <span class="pl-s1"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>),
-    Fynx.listenTo(actions.loginFailed, <span class="pl-s1"><span class="pl-pds">'</span>handleLoginFailed<span class="pl-pds">'</span></span>)
+    <span class="pl-c">// Make sure the "user" state is updated whenever the store changes.</span>
+    Fynx.connect(userStore, <span class="pl-s1"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>)
   ],
   getInitialState() {
-    <span class="pl-k">return</span> {username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>, password<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>, error<span class="pl-k">:</span> <span class="pl-c1">null</span>};
-  },
-  handleLoginFailed(errorMessage) {
-    <span class="pl-v">this</span>.setState({error<span class="pl-k">:</span> errorMessage});
+    <span class="pl-k">return</span> {
+      username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>,
+      password<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>,
+      error<span class="pl-k">:</span> <span class="pl-c1">null</span>,
+      promise<span class="pl-k">:</span> <span class="pl-c1">null</span>
+    };
   },
   handleFormSubmit(evt) {
     evt.preventDefault();
-    actions.attemptLogin(<span class="pl-v">this</span>.state.username, <span class="pl-v">this</span>.state.password);
+    <span class="pl-c">// If a login attempt has already been made, cancel it.</span>
+    <span class="pl-k">if</span> (<span class="pl-v">this</span>.state.promise) <span class="pl-v">this</span>.state.promise.cancel();
+    <span class="pl-s">var</span> promise <span class="pl-k">=</span> actions.attemptLogin({
+      username<span class="pl-k">:</span> <span class="pl-v">this</span>.state.username,
+      password<span class="pl-k">:</span> <span class="pl-v">this</span>.state.password
+    });
+    <span class="pl-c">// If the login attempt fails, show the error message.</span>
+    promise.then(<span class="pl-c1">null</span>, (reason) <span class="pl-k">=&gt;</span> {
+      <span class="pl-c">// If it failed because it was cancelled, ignore it.</span>
+      <span class="pl-k">if</span> (promise.cancelled()) <span class="pl-k">return</span>;
+      <span class="pl-v">this</span>.setState({error<span class="pl-k">:</span> reason});
+    });
+    <span class="pl-c">// Finally clear the previous error message.</span>
+    <span class="pl-v">this</span>.setState({
+      error<span class="pl-k">:</span> <span class="pl-c1">null</span>,
+      promise<span class="pl-k">:</span> promise
+    });
   },
   handleUsernameChange(evt) {
     <span class="pl-v">this</span>.setState({username<span class="pl-k">:</span> evt.<span class="pl-sc">target</span>.<span class="pl-sc">value</span>});
@@ -163,7 +173,13 @@ actions.loginComplete.listen(<span class="pl-st">function</span> (<span class="p
   handlePasswordChange(evt) {
     <span class="pl-v">this</span>.setState({password<span class="pl-k">:</span> evt.<span class="pl-sc">target</span>.<span class="pl-sc">value</span>});
   },
+  componentWillUnmount() {
+    <span class="pl-c">// If the component is being unmounted, old promises can only do harm.</span>
+    <span class="pl-c">// So we need to make sure the component does not react to it.</span>
+    <span class="pl-k">if</span> (<span class="pl-v">this</span>.state.promise) <span class="pl-v">this</span>.state.promise.cancel();
+  },
   render() {
+    <span class="pl-c">// Don't show the form if the user is already logged in.</span>
     <span class="pl-k">if</span> (<span class="pl-v">this</span>.state.user.get(<span class="pl-s1"><span class="pl-pds">'</span>username<span class="pl-pds">'</span></span>)) {
       <span class="pl-k">return</span> <span class="pl-k">&lt;</span>div<span class="pl-k">&gt;</span>Already logged <span class="pl-k">in</span>.<span class="pl-k">&lt;</span>/div<span class="pl-k">&gt;</span>;
     }
@@ -186,19 +202,10 @@ actions.loginComplete.listen(<span class="pl-st">function</span> (<span class="p
   }
 });</pre></div>
 
-<h3>
-<a id="pragmatism-beats-purity" class="anchor" href="#pragmatism-beats-purity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pragmatism beats purity</h3>
-
-<p>As you may have noticed, we're listening to <code>loginFailed</code> directly in our controller view. If we followed the initial definitions religiously we would have had to introduce a <code>loginErrorStore</code> to connect the controller view with the action.</p>
-
-<p>You may find it useful to create additional abstractions like the <code>loginErrorStore</code> in your real-world applications, but unless your login logic is going to become relatively complex, the benefits of the additional degrees of conceptual purity likely would not outweigh their costs.</p>
-
-<p>Fynx tries to be as unopinionated as it can while remaining useful. The architecture recommended by this document is intended as a guideline, not a law. You may deviate from it as much as you like.</p>
-
 <h2>
 <a id="but-what-about-waitfor" class="anchor" href="#but-what-about-waitfor" aria-hidden="true"><span class="octicon octicon-link"></span></a>But what about waitFor?</h2>
 
-<p>Flux has <code>waitFor</code>, Fynx does not. Because Flux's dispatcher is entirely replaced by Fynx's services and you're encouraged to create as many different actions as your application needs, you'll rarely run into situations where stores actually depend on each other in a way that can't be solved with a few event listeners.</p>
+<p>Flux has <code>waitFor</code>, Fynx does not. Because Flux's dispatcher is entirely replaced by Fynx's actions and listeners and you're encouraged to create as many different actions as your application needs, you'll rarely run into situations where stores actually depend on each other in a way that can't be solved with a few event listeners.</p>
 
 <p>If you run into a real-world scenario you can't solve with additional actions or services, feel free to <a href="https://github.com/foss-haas/fynx/issues">report an issue on GitHub</a> or <a href="https://gitter.im/foss-haas/fynx">discuss it on Gitter</a>. Otherwise, just stick to the Fynx mantra: <em>If in doubt, use more duct tape!</em></p>
 
@@ -210,25 +217,9 @@ actions.loginComplete.listen(<span class="pl-st">function</span> (<span class="p
 
 <p>Creates an action optionally extended with the given <code>spec</code>.</p>
 
-<p>Returns a function that will pass its argument to all of its listeners.</p>
+<p>Returns a function that will pass its argument to all of its listeners in sequence and return the result.</p>
 
-<p>If <code>spec</code> has a method <code>beforeEmit</code>, values will be pre-processed by passing them to that method first and using its return value.</p>
-
-<p>If <code>spec</code> has a method <code>shouldEmit</code>, the action will only call its listeners if the result of passing the (pre-processed) value to that method is truthy.</p>
-
-<h3>
-<a id="actionlistenlistener-contextfunction" class="anchor" href="#actionlistenlistener-contextfunction" aria-hidden="true"><span class="octicon octicon-link"></span></a>action.listen(listener, [context]):Function</h3>
-
-<p>Registers a listener with the action. The listener will be invoked whenever the action emits a value.</p>
-
-<p>The listener will be bound to the given <code>context</code>.</p>
-
-<p>Returns a function that will remove the listener from the action when called.</p>
-
-<h3>
-<a id="actionunlistenlistener-context" class="anchor" href="#actionunlistenlistener-context" aria-hidden="true"><span class="octicon octicon-link"></span></a>action.unlisten(listener, [context])</h3>
-
-<p>Removes a listener from the action. This has the same effect as calling the function returned by <code>action.listen</code>. If the listener was registered with a context, the same context must be used.</p>
+<p>For a full documentation of this function, see <a href="https://github.com/pluma/axn#axnspecfunction">the documentation of <code>axn</code></a>.</p>
 
 <h2>
 <a id="createactionsspecsobject" class="anchor" href="#createactionsspecsobject" aria-hidden="true"><span class="octicon octicon-link"></span></a>createActions(specs):Object</h2>
@@ -240,26 +231,48 @@ actions.loginComplete.listen(<span class="pl-st">function</span> (<span class="p
 <p>If <code>specs</code> is an object, returns an object mapping the object's keys to the result of calling <code>createAction</code> with the object's values.</p>
 
 <h2>
-<a id="createstoreemptyvalue-preparestore" class="anchor" href="#createstoreemptyvalue-preparestore" aria-hidden="true"><span class="octicon octicon-link"></span></a>createStore(emptyValue, [prepare]):store</h2>
+<a id="createasyncactionspecasyncaction" class="anchor" href="#createasyncactionspecasyncaction" aria-hidden="true"><span class="octicon octicon-link"></span></a>createAsyncAction([spec]):asyncAction</h2>
+
+<p>Creates an asynchronous action optionally extended with the given <code>spec</code>.</p>
+
+<p>Returns a function that will pass its argument to all of its listeners in sequence and return a cancellable promise.</p>
+
+<p>If you want to use async actions in your app, make sure the global <code>Promise</code> function is available. If you want to use async actions in environments where this is not the case (such as node and older browsers), make sure to include a polyfill like <a href="https://www.npmjs.com/package/es6-promise">es6-promise</a> before the async actions are invoked.</p>
+
+<p>Note that <code>React.renderToString</code> does not support asynchronous actions, so there is no need to use a polyfill to pre-render your app in node if all your asynchronous actions are only invoked in browser code.</p>
+
+<p>For a full documentation of this function, see <a href="https://github.com/pluma/axn#axnasyncspecfunction">the documentation of <code>axn.async</code></a>.</p>
+
+<h2>
+<a id="createasyncactionsspecsobject" class="anchor" href="#createasyncactionsspecsobject" aria-hidden="true"><span class="octicon octicon-link"></span></a>createAsyncActions(specs):Object</h2>
+
+<p>Creates asynchronous actions for the given <code>specs</code>. Convenience wrapper around <code>createAction</code> for bulk creation of actions.</p>
+
+<p>If <code>specs</code> is an array of strings, returns an object mapping the strings to async actions.</p>
+
+<p>If <code>specs</code> is an object, returns an object mapping the object's keys to the result of calling <code>createAsyncAction</code> with the object's values.</p>
+
+<h2>
+<a id="createsimplestoreemptyvalue-preparesimplestore" class="anchor" href="#createsimplestoreemptyvalue-preparesimplestore" aria-hidden="true"><span class="octicon octicon-link"></span></a>createSimpleStore(emptyValue, [prepare]):simpleStore</h2>
 
 <p>Creates a store for immutable data initialized with the given <code>emptyValue</code>.</p>
 
 <p>Returns a function with the following behaviour:</p>
 
 <ul>
-<li>when called without arguments, returns an immutable cursor for the store's content.</li>
+<li>when called without arguments, returns the store's content.</li>
 <li>when called with <code>null</code>, resets the store's value to <code>emptyValue</code>.</li>
 <li>when called with any other defined value, sets the store's value to the result of passing that value to <code>immutable.fromJS</code>.</li>
 </ul>
 
 <p>If <code>prepare</code> is a function, values other than <code>null</code> and <code>undefined</code> passed to the store will be preprocessed using that function.</p>
 
-<p>Whenever the store's value changes, an immutable cursor for the store's content will be passed to its listeners.</p>
+<p>Whenever the store's value changes, the store's content will be passed to its listeners.</p>
 
 <h3>
 <a id="storelistenlistener-contextfunction" class="anchor" href="#storelistenlistener-contextfunction" aria-hidden="true"><span class="octicon octicon-link"></span></a>store.listen(listener, [context]):Function</h3>
 
-<p>Registers a change listener with the store. The listener will be invoked with an immutable cursor for the store's new content whenever it is written to.</p>
+<p>Registers a change listener with the store. The listener will be invoked with the store's new content whenever it is written to.</p>
 
 <p>The listener will be bound to the given <code>context</code>.</p>
 
@@ -278,7 +291,7 @@ actions.loginComplete.listen(<span class="pl-st">function</span> (<span class="p
 <h3>
 <a id="storeisemptylistenlistener-contextfunction" class="anchor" href="#storeisemptylistenlistener-contextfunction" aria-hidden="true"><span class="octicon octicon-link"></span></a>store.isEmpty.listen(listener, [context]):Function</h3>
 
-<p>Like <code>store.listen</code>, but receives a boolean value indicating whether the store is empty (i.e. the result of calling <code>store.isEmpty()</code>) instead of a cursor to the store's new content.</p>
+<p>Like <code>store.listen</code>, but receives a boolean value indicating whether the store is empty (i.e. the result of calling <code>store.isEmpty()</code>) instead of the store's new content.</p>
 
 <h3>
 <a id="storeisemptyunlistenlistener-context" class="anchor" href="#storeisemptyunlistenlistener-context" aria-hidden="true"><span class="octicon octicon-link"></span></a>store.isEmpty.unlisten(listener, [context])</h3>
@@ -286,16 +299,20 @@ actions.loginComplete.listen(<span class="pl-st">function</span> (<span class="p
 <p>Removes a change listener from <code>store.isEmpty</code>. This has the same effect as calling the function returned by <code>store.isEmpty.listen</code>. If the listener was registered with a context, the same context must be used.</p>
 
 <h2>
+<a id="createcursorstoreemptyvalue-preparecursorstore" class="anchor" href="#createcursorstoreemptyvalue-preparecursorstore" aria-hidden="true"><span class="octicon octicon-link"></span></a>createCursorStore(emptyValue, [prepare]):cursorStore</h2>
+
+<p>Creates a store initialized with the given <code>emptyValue</code>.</p>
+
+<p>Behaves like <code>createSimpleStore</code> with the difference that wherever simple stores would pass an immutable value, an immutable cursor to that value is passed instead.</p>
+
+<p>Changes to the cursor will result in the changes being propagated to the store as well.</p>
+
+<h2>
 <a id="createrawstoreemptyvalue-preparerawstore" class="anchor" href="#createrawstoreemptyvalue-preparerawstore" aria-hidden="true"><span class="octicon octicon-link"></span></a>createRawStore(emptyValue, [prepare]):rawStore</h2>
 
 <p>Creates a store initialized with the given <code>emptyValue</code>.</p>
 
-<p>Behaves like <code>createStore</code> with the following differences:</p>
-
-<ul>
-<li>values are not passed to <code>immutable.fromJS</code>.</li>
-<li>always returns the raw (prepared) value where a regular store would return an immutable cursor.</li>
-</ul>
+<p>Behaves like <code>createSimpleStore</code> with the difference that values are not passed to <code>immutable.fromJS</code>.</p>
 
 <p>Raw stores can be useful if you want to store data that can't be meaningfully represented by <code>immutable</code>'s data structures.</p>
 
@@ -382,7 +399,7 @@ actions.loginComplete.listen(<span class="pl-st">function</span> (<span class="p
             .tar.gz file
           </a>
 
-          <p class="repo-owner"><a href="https://github.com/foss-haas/fynx"></a> is maintained by <a href="https://github.com/foss-haas">Foss & Haas</a>.</p>
+          <p class="repo-owner"><a href="https://github.com/foss-haas/fynx"></a> is maintained by <a href="https://github.com/foss-haas">foss-haas</a>.</p>
 
           <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
         </aside>
