@@ -124,7 +124,10 @@ var Login = React.createComponent({
   },
   handleFormSubmit(evt) {
     evt.preventDefault();
-    actions.attemptLogin(this.state.username, this.state.password);
+    actions.attemptLogin({
+      username: this.state.username,
+      password: this.state.password
+    });
   },
   handleUsernameChange(evt) {
     this.setState({username: evt.target.value});
