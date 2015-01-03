@@ -1,9 +1,10 @@
 /*jshint browserify: true, -W014 */
 'use strict';
 var axn = require('axn');
-module.exports = createRawStore;
+var immutable = require('immutable');
+module.exports = createSimpleStore;
 
-function createRawStore(emptyValue, prepare) {
+function createSimpleStore(emptyValue, prepare) {
   emptyValue = emptyValue === undefined ? null : emptyValue;
   var action = axn();
   var state = emptyValue;
@@ -12,19 +13,19 @@ function createRawStore(emptyValue, prepare) {
       state = (
         value === null
         ? emptyValue
-        : (prepare ? prepare(value) : value)
+        : immutable.fromJS(prepare ? prepare(value) : value)
       );
       action(state);
     }
     return state;
   }
   var emptyAction = axn({
-    beforeEmit: (value) => (value === emptyValue)
+    beforeEmit: (value) => immutable.is(value, emptyValue)
   });
   action.listen(emptyAction);
   store.listen = action.listen.bind(action);
   store.unlisten = action.unlisten.bind(action);
-  store.isEmpty = () => (state === emptyValue);
+  store.isEmpty = () => immutable.is(state, emptyValue);
   store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
   store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
   return store;

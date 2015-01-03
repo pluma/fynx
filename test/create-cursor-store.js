@@ -3,7 +3,7 @@
 'use strict';
 var expect = require('expect.js');
 var immutable = require('immutable');
-var createStore = require('../').createStore;
+var createCursorStore = require('../').createCursorStore;
 var invoke = function (fn) {return fn();};
 
 expect.Assertion.prototype.value = function (obj) {
@@ -15,35 +15,35 @@ expect.Assertion.prototype.value = function (obj) {
   );
 };
 
-describe('createStore', function () {
+describe('createCursorStore', function () {
   it('is a function', function () {
-    expect(createStore).to.be.a('function');
+    expect(createCursorStore).to.be.a('function');
   });
   it('returns a function', function () {
-    expect(createStore()).to.be.a('function');
+    expect(createCursorStore()).to.be.a('function');
   });
   it('stores the emptyValue', function () {
     var emptyValue = immutable.Map({o: 'hi'});
     expect(emptyValue.get('o')).to.equal('hi');
-    var store = createStore(emptyValue);
+    var store = createCursorStore(emptyValue);
     expect(store()).to.have.value(emptyValue);
   });
   describe('isEmpty', function () {
     it('returns true if the store is empty', function () {
       var emptyValue = immutable.Map({hello: 'world'});
-      var store = createStore(emptyValue);
+      var store = createCursorStore(emptyValue);
       expect(store.isEmpty()).to.be(true);
     });
     it('returns true if the store contains the emptyValue', function () {
       var emptyValue = immutable.Map({hello: 'world'});
-      var store = createStore(emptyValue);
+      var store = createCursorStore(emptyValue);
       store({});
       store(emptyValue);
       expect(store.isEmpty()).to.be(true);
     });
     it('returns false if the store contains any other value', function () {
       var emptyValue = immutable.Map({hello: 'world'});
-      var store = createStore(emptyValue);
+      var store = createCursorStore(emptyValue);
       store({});
       expect(store.isEmpty()).to.be(false);
     });
@@ -60,7 +60,7 @@ describe('createStore', function () {
     });
     it('replaces "null" with the emptyValue', function (done) {
       var emptyValue = immutable.Map();
-      var store = createStore(emptyValue);
+      var store = createCursorStore(emptyValue);
       store({x: 'y'});
       expect(store()).not.to.have.value(emptyValue);
       listen(store, function (value) {
@@ -77,20 +77,20 @@ describe('createStore', function () {
         prepare.called = true;
         return value2;
       }
-      var store = createStore(immutable.Map(), prepare);
+      var store = createCursorStore(immutable.Map(), prepare);
       store(value1);
       expect(prepare.called).to.equal(true);
       expect(store()).to.have.value(immutable.Map(value2));
     });
     it('notifies listeners', function (done) {
-      var store = createStore(immutable.Map());
+      var store = createCursorStore(immutable.Map());
       listen(store, function () {
         done();
       });
       store({});
     });
     it('does not notify listeners removed by unlisten', function () {
-      var store = createStore(immutable.Map());
+      var store = createCursorStore(immutable.Map());
       var fn = function () {
         expect().fail();
       };
@@ -99,7 +99,7 @@ describe('createStore', function () {
       store({});
     });
     it('does not notify listeners removed by callback', function () {
-      var store = createStore(immutable.Map());
+      var store = createCursorStore(immutable.Map());
       var cb = store.listen(function () {
         expect().fail();
       });
@@ -108,7 +108,7 @@ describe('createStore', function () {
     });
     it('invokes listeners in the correct order', function (done) {
       var called = false;
-      var store = createStore(immutable.Map());
+      var store = createCursorStore(immutable.Map());
       listen(store, function () {
         called = true;
       });
@@ -120,7 +120,7 @@ describe('createStore', function () {
     });
     it('passes the new value to its listeners', function (done) {
       var value = {hello: 'world'};
-      var store = createStore(immutable.Map());
+      var store = createCursorStore(immutable.Map());
       listen(store, function (input) {
         expect(input).to.have.value(immutable.Map(value));
         done();
@@ -129,14 +129,14 @@ describe('createStore', function () {
     });
     describe('isEmpty', function () {
       it('notifies listeners', function (done) {
-        var store = createStore(immutable.Map());
+        var store = createCursorStore(immutable.Map());
         listen(store.isEmpty, function () {
           done();
         });
         store({});
       });
       it('does not notify listeners removed by unlisten', function () {
-        var store = createStore(immutable.Map());
+        var store = createCursorStore(immutable.Map());
         var fn = function () {
           expect().fail();
         };
@@ -145,7 +145,7 @@ describe('createStore', function () {
         store({});
       });
       it('does not notify listeners removed by callback', function () {
-        var store = createStore(immutable.Map());
+        var store = createCursorStore(immutable.Map());
         var cb = store.isEmpty.listen(function () {
           expect().fail();
         });
@@ -154,7 +154,7 @@ describe('createStore', function () {
       });
       it('invokes listeners in the correct order', function (done) {
         var called = false;
-        var store = createStore(immutable.Map());
+        var store = createCursorStore(immutable.Map());
         listen(store.isEmpty, function () {
           called = true;
         });
@@ -166,7 +166,7 @@ describe('createStore', function () {
       });
       it('passes true to its listeners if the new value is empty', function (done) {
         var value = {};
-        var store = createStore(immutable.Map());
+        var store = createCursorStore(immutable.Map());
         listen(store.isEmpty, function (input) {
           expect(input).to.equal(true);
           done();
@@ -175,7 +175,7 @@ describe('createStore', function () {
       });
       it('passes false to its listeners if the new value is not empty', function (done) {
         var value = {hello: 'world'};
-        var store = createStore(immutable.Map());
+        var store = createCursorStore(immutable.Map());
         listen(store.isEmpty, function (input) {
           expect(input).to.equal(false);
           done();

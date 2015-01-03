@@ -83,7 +83,7 @@ The application also needs a store for the user data. We're going to assume that
 
 ```js
 var immutable = require('immutable');
-var userStore = Fynx.createStore(immutable.Map());
+var userStore = Fynx.createCursorStore(immutable.Map());
 actions.loginComplete.listen(function (userData) {
   userStore(userData);
 });
@@ -207,22 +207,22 @@ If `specs` is an array of strings, returns an object mapping the strings to asyn
 
 If `specs` is an object, returns an object mapping the object's keys to the result of calling `createAsyncAction` with the object's values.
 
-## createStore(emptyValue, [prepare]):store
+## createSimpleStore(emptyValue, [prepare]):simpleStore
 
 Creates a store for immutable data initialized with the given `emptyValue`.
 
 Returns a function with the following behaviour:
-* when called without arguments, returns an immutable cursor for the store's content.
+* when called without arguments, returns the store's content.
 * when called with `null`, resets the store's value to `emptyValue`.
 * when called with any other defined value, sets the store's value to the result of passing that value to `immutable.fromJS`.
 
 If `prepare` is a function, values other than `null` and `undefined` passed to the store will be preprocessed using that function.
 
-Whenever the store's value changes, an immutable cursor for the store's content will be passed to its listeners.
+Whenever the store's value changes, the store's content will be passed to its listeners.
 
 ### store.listen(listener, [context]):Function
 
-Registers a change listener with the store. The listener will be invoked with an immutable cursor for the store's new content whenever it is written to.
+Registers a change listener with the store. The listener will be invoked with the store's new content whenever it is written to.
 
 The listener will be bound to the given `context`.
 
@@ -238,19 +238,25 @@ Returns `true` if the store's current value is equivalent to its `emptyValue` or
 
 ### store.isEmpty.listen(listener, [context]):Function
 
-Like `store.listen`, but receives a boolean value indicating whether the store is empty (i.e. the result of calling `store.isEmpty()`) instead of a cursor to the store's new content.
+Like `store.listen`, but receives a boolean value indicating whether the store is empty (i.e. the result of calling `store.isEmpty()`) instead of the store's new content.
 
 ### store.isEmpty.unlisten(listener, [context])
 
 Removes a change listener from `store.isEmpty`. This has the same effect as calling the function returned by `store.isEmpty.listen`. If the listener was registered with a context, the same context must be used.
 
+## createCursorStore(emptyValue, [prepare]):cursorStore
+
+Creates a store initialized with the given `emptyValue`.
+
+Behaves like `createSimpleStore` with the difference that wherever simple stores would pass an immutable value, an immutable cursor to that value is passed instead.
+
+Changes to the cursor will result in the changes being propagated to the store as well.
+
 ## createRawStore(emptyValue, [prepare]):rawStore
 
 Creates a store initialized with the given `emptyValue`.
 
-Behaves like `createStore` with the following differences:
-* values are not passed to `immutable.fromJS`.
-* always returns the raw (prepared) value where a regular store would return an immutable cursor.
+Behaves like `createSimpleStore` with the difference that values are not passed to `immutable.fromJS`.
 
 Raw stores can be useful if you want to store data that can't be meaningfully represented by `immutable`'s data structures.
 

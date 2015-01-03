@@ -3,9 +3,9 @@
 var immutable = require('immutable');
 var Cursor = require('immutable/contrib/cursor');
 var axn = require('axn');
-module.exports = createStore;
+module.exports = createCursorStore;
 
-function createStore(emptyValue, prepare) {
+function createCursorStore(emptyValue, prepare) {
   var action = axn();
   var state = (function (value) {
     function cursor(data) {
