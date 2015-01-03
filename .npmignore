@@ -1,6 +1,0 @@
-coverage/
-src/
-test/
-.gitignore
-.travis.yml
-npm-debug.log
