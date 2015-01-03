@@ -52,7 +52,7 @@
     "sinon": "^1.11.0"
   },
   "dependencies": {
-    "axn": "^1.3.0",
+    "axn": "^1.6.0",
     "immutable": "^3.0.1"
   }
 }

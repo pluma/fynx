@@ -179,23 +179,9 @@ If you run into a real-world scenario you can't solve with additional actions or
 
 Creates an action optionally extended with the given `spec`.
 
-Returns a function that will pass its argument to all of its listeners.
+Returns a function that will pass its argument to all of its listeners in sequence and return the result.
 
-If `spec` has a method `beforeEmit`, values will be pre-processed by passing them to that method first and using its return value.
-
-If `spec` has a method `shouldEmit`, the action will only call its listeners if the result of passing the (pre-processed) value to that method is truthy.
-
-### action.listen(listener, [context]):Function
-
-Registers a listener with the action. The listener will be invoked whenever the action emits a value.
-
-The listener will be bound to the given `context`.
-
-Returns a function that will remove the listener from the action when called.
-
-### action.unlisten(listener, [context])
-
-Removes a listener from the action. This has the same effect as calling the function returned by `action.listen`. If the listener was registered with a context, the same context must be used.
+For a full documentation of this function, see [the documentation of `axn`](https://github.com/pluma/axn#axnspecfunction).
 
 ## createActions(specs):Object
 
@@ -204,6 +190,22 @@ Creates actions for the given `specs`. Convenience wrapper around `createAction`
 If `specs` is an array of strings, returns an object mapping the strings to actions.
 
 If `specs` is an object, returns an object mapping the object's keys to the result of calling `createAction` with the object's values.
+
+## createAsyncAction([spec]):asyncAction
+
+Creates an asynchronous action optionally extended with the given `spec`.
+
+Returns a function that will pass its argument to all of its listeners in sequence and return a cancellable promise.
+
+For a full documentation of this function, see [the documentation of `axn.async`](https://github.com/pluma/axn#axnasyncspecfunction).
+
+## createAsyncActions(specs):Object
+
+Creates asynchronous actions for the given `specs`. Convenience wrapper around `createAction` for bulk creation of actions.
+
+If `specs` is an array of strings, returns an object mapping the strings to async actions.
+
+If `specs` is an object, returns an object mapping the object's keys to the result of calling `createAsyncAction` with the object's values.
 
 ## createStore(emptyValue, [prepare]):store
 
