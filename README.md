@@ -2,13 +2,13 @@
 
 # Synopsis
 
-**Fynx** (formerly known as Flox) is an architecture library for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.org/package/reflux) and [Fluxxor](http://fluxxor.com).
+**Fynx** (formerly known as Flox) is an architecture library for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.com/package/reflux) and [Fluxxor](http://fluxxor.com).
 
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/foss-haas/fynx)
 
 [![license - MIT](https://img.shields.io/npm/l/fynx.svg)](http://foss-haas.mit-license.org) [![Dependencies](https://img.shields.io/david/foss-haas/fynx.svg)](https://david-dm.org/foss-haas/fynx)
 
-[![NPM status](https://nodei.co/npm/fynx.png?compact=true)](https://npmjs.org/package/fynx)
+[![NPM status](https://nodei.co/npm/fynx.png?compact=true)](https://www.npmjs.com/package/fynx)
 
 [![Build status](https://img.shields.io/travis/foss-haas/fynx.svg)](https://travis-ci.org/foss-haas/fynx) [![Coverage status](https://img.shields.io/coveralls/foss-haas/fynx.svg)](https://coveralls.io/r/foss-haas/fynx?branch=master) [![Codacy rating](https://img.shields.io/codacy/6f19c1455aa04fd08d77445fb5b9fc91.svg)](https://www.codacy.com/public/me_4/fynx)
 
@@ -34,48 +34,48 @@ npm run dist
 ## Obligatory ASCII diagram
 
 ```
-  ╔═════════╗       ╔════════╗      ╔═════════════════╗
-  ║ Actions ╟──────>║ Stores ╟─────>║ View Components ║
-  ╚════╤════╝       ╚════════╝      ╚══════╤═══╤══════╝
-    ^  │  ^                                │   │
-    │  │  └────────────────────────────────┘   │
-    │  v                                       v
-  ╔═╧════════╗     ┌────────────┐   ╔═════════════════╗
-  ║ Services ╟────>│ Server API │   ║ Pure Components ║
-  ╚══════════╝     └────────────┘   ╚═════════════════╝
+  ╔═════════════════╗     ╔════════╗   ┌────────────┐
+  ║ View Components ║<────╢ Stores ║   │ Server API │
+  ╚═══╤════╤════════╝     ╚════════╝   └────────────┘
+      │    │                   ^                ^
+      │    └────────────────┐  └────────────┐   │
+      v                     v               │   │
+  ╔═════════════════╗   ╔═════════╗     ┌───┴───┴───┐
+  ║ Pure Components ║   ║ Actions ║<═══>│ Listeners │
+  ╚═════════════════╝   ╚═════════╝     └───────────┘
 ```
 
 ## Definitions
 
-**Actions** are listenable functions that emit whatever data is passed to them. They provide the core building block of all interactions between *View Components* or *Services* and the *Stores*.
+**View Components** are components that listen to *Stores* and/or invoke *Actions*. According to the philosophy of React, these should usually be the outer most components in an application. They pass (immutable) data from *Stores* as props to the underlying **Pure Components**, the regular self-contained React components. They may also invoke *Actions* as the result of user interaction with those components.
 
-**Stores** are listenable functions that contain the application state and emit their contents whenever they are written to. In Fynx, those contents are generally immutable, so modifying them requires updating the store that contains them.
+**Stores** are listenable functions that contain the application state and emit their contents whenenever they are written to. In Fynx, these contents are generally immutable, so modifying them requires updating the store that contains them.
 
-**View Components** are components that listen to *Stores* and/or invoke *Actions*. According to the philosophy of React these should usually be the outer most components in an application. They pass the (immutable) data from *Stores* as props to the underlying **Pure Components**, the regular self-contained React components. They may also invoke *Actions* as the result of user interaction with the components.
+**Actions** are listenable functions that emit to *Listeners* whatever data is passed to them. They provide the core building block of all interactions between *View Components* and *Stores* or the *Server API*.
 
-**Services** listen to *Actions* and connect them with each other. They are the only part of the application that communicates directly with the *Server API*. In practice, a service may simply be a function that is registered with an action as a listener and invokes a different action.
+**Listeners** are arbitrary functions that listen to *Actions* and connect them with each other. They are the only part of the application that communicates directly with the *Server API* or writes to *Stores*. Listeners may also invoke other actions.
 
 The **Server API** is the code that directly communicates with the remote server or persistence layer of the application. Its implementation should be entirely orthogonal to the rest of the application. For example, a thin wrapper around `XMLHttpRequest` that takes arguments and a callback or returns a promise.
 
 ## Example: Login view
 
+For brevity, we'll use JSX with the harmony flag enabled throughout this example. This allows us to use [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) and the [method shorthand syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions) introduced in ECMAScript 6. Also, if you want to give the example a try yourself, please make sure the `Promise` function is available globally. If you are using a modern evergreen browser like Chrome or Firefox, this should already be the case.
+
 We're going to assume the Server API is an object that provides a single method with the following signature that returns a promise which resolves to the user data or is rejected with a descriptive error message that can be presented to the user:
 
 `api.login(username:String, password:String):Promise`
 
-The application needs at least the following actions:
+We'll need at least two actions:
 
-* `attemptLogin` for when a user attempts a login.
-* `loginComplete` for when the server has acknowledged a login.
-* `loginFailed` for when the server has denied a login attempt.
+* `loginAttempt` to perform the login via the Server API.
+* `loginComplete` to react to successful login attempts throughout the app.
 
-They don't need to do anything special, so we can just use the bulk creation method to create all three of them:
+For simplicity, we'll make both of them asynchronous and just use the bulk creation method Fynx provides:
 
 ```js
-var actions = Fynx.createActions([
-  'attemptLogin',
-  'loginComplete',
-  'loginFailed'
+var actions = Fynx.createAsyncActions([
+  'loginAttempt',
+  'loginComplete'
 ]);
 ```
 
@@ -83,50 +83,60 @@ The application also needs a store for the user data. We're going to assume that
 
 ```js
 var immutable = require('immutable');
-var userStore = Fynx.createCursorStore(immutable.Map());
-actions.loginComplete.listen(function (userData) {
-  userStore(userData);
-});
+var userStore = Fynx.createSimpleStore(immutable.Map());
 ```
 
-There is only one service, which needs to react to the `attemptLogin` action and then invokes either `loginComplete` or `loginFailed` depending on the result of `api.login`:
+Next we need to make sure successful login attempts result in the user object provided by the server being updated in the store:
 
 ```js
-actions.attemptLogin.listen(function (credentials) {
-  api.login(credentials.username, credentials.password)
-  .then(
-    function (userData) { // promise resolved
-      actions.loginComplete(userData);
-    },
-    function (errorMessage) { // promise rejected
-      actions.loginFailed(errorMessage);
-    }
-  );
-  // or simply: .then(actions.loginComplete, actions.loginFailed);
-});
+actions.loginComplete.listen((userData) => userStore(userData));
 ```
 
-If that service looks simple that's because it is. The server API does the heavy lifting of communicating with the server, so we're only left with a little bit of glue.
+We also need a listener that makes the actual server request. Notice that we could simply combine the two actions into one, but keeping them separate allows us to re-use them throughout the application:
+
+```js
+actions.loginAttempt.listen(
+  (credentials) => api.login(credentials.username, credentials.password)
+  .then((userData) => actions.loginComplete(userData))
+);
+```
+
+The server API does the heavy lifting of communicating with the server, so we're only left with a little bit of glue.
 
 Finally, the controller view itself:
 
 ```js
 var Login = React.createClass({
   mixins: [
-    Fynx.connect(userStore, 'user'),
-    Fynx.listenTo(actions.loginFailed, 'handleLoginFailed')
+    // Make sure the "user" state is updated whenever the store changes.
+    Fynx.connect(userStore, 'user')
   ],
   getInitialState() {
-    return {username: '', password: '', error: null};
-  },
-  handleLoginFailed(errorMessage) {
-    this.setState({error: errorMessage});
+    return {
+      username: '',
+      password: '',
+      error: null,
+      promise: null
+    };
   },
   handleFormSubmit(evt) {
     evt.preventDefault();
-    actions.attemptLogin({
+    // If a login attempt has already been made, cancel it.
+    if (this.state.promise) this.state.promise.cancel();
+    var promise = actions.attemptLogin({
       username: this.state.username,
       password: this.state.password
+    });
+    // If the login attempt fails, show the error message.
+    promise.then(null, (reason) => {
+      // If it failed because it was cancelled, ignore it.
+      if (promise.cancelled()) return;
+      this.setState({error: reason});
+    });
+    // Finally clear the previous error message.
+    this.setState({
+      error: null,
+      promise: promise
     });
   },
   handleUsernameChange(evt) {
@@ -135,7 +145,13 @@ var Login = React.createClass({
   handlePasswordChange(evt) {
     this.setState({password: evt.target.value});
   },
+  componentWillUnmount() {
+    // If the component is being unmounted, old promises can only do harm.
+    // So we need to make sure the component does not react to it.
+    if (this.state.promise) this.state.promise.cancel();
+  },
   render() {
+    // Don't show the form if the user is already logged in.
     if (this.state.user.get('username')) {
       return <div>Already logged in.</div>;
     }
@@ -159,17 +175,9 @@ var Login = React.createClass({
 });
 ```
 
-### Pragmatism beats purity
-
-As you may have noticed, we're listening to `loginFailed` directly in our controller view. If we followed the initial definitions religiously we would have had to introduce a `loginErrorStore` to connect the controller view with the action.
-
-You may find it useful to create additional abstractions like the `loginErrorStore` in your real-world applications, but unless your login logic is going to become relatively complex, the benefits of the additional degrees of conceptual purity likely would not outweigh their costs.
-
-Fynx tries to be as unopinionated as it can while remaining useful. The architecture recommended by this document is intended as a guideline, not a law. You may deviate from it as much as you like.
-
 ## But what about waitFor?
 
-Flux has `waitFor`, Fynx does not. Because Flux's dispatcher is entirely replaced by Fynx's services and you're encouraged to create as many different actions as your application needs, you'll rarely run into situations where stores actually depend on each other in a way that can't be solved with a few event listeners.
+Flux has `waitFor`, Fynx does not. Because Flux's dispatcher is entirely replaced by Fynx's actions and listeners and you're encouraged to create as many different actions as your application needs, you'll rarely run into situations where stores actually depend on each other in a way that can't be solved with a few event listeners.
 
 If you run into a real-world scenario you can't solve with additional actions or services, feel free to [report an issue on GitHub](https://github.com/foss-haas/fynx/issues) or [discuss it on Gitter](https://gitter.im/foss-haas/fynx). Otherwise, just stick to the Fynx mantra: *If in doubt, use more duct tape!*
 
@@ -196,6 +204,10 @@ If `specs` is an object, returns an object mapping the object's keys to the resu
 Creates an asynchronous action optionally extended with the given `spec`.
 
 Returns a function that will pass its argument to all of its listeners in sequence and return a cancellable promise.
+
+If you want to use async actions in your app, make sure the global `Promise` function is available. If you want to use async actions in environments where this is not the case (such as node and older browsers), make sure to include a polyfill like [es6-promise](https://www.npmjs.com/package/es6-promise) before the async actions are invoked.
+
+Note that `React.renderToString` does not support asynchronous actions, so there is no need to use a polyfill to pre-render your app in node if all your asynchronous actions are only invoked in browser code.
 
 For a full documentation of this function, see [the documentation of `axn.async`](https://github.com/pluma/axn#axnasyncspecfunction).
 
