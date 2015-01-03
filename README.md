@@ -111,7 +111,7 @@ If that service looks simple that's because it is. The server API does the heavy
 Finally, the controller view itself:
 
 ```js
-var Login = React.createComponent({
+var Login = React.createClass({
   mixins: [
     Fynx.connect(userStore, 'user'),
     Fynx.listenTo(actions.loginFailed, 'handleLoginFailed')
