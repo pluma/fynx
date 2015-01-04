@@ -123,7 +123,7 @@ var Login = React.createClass({
     evt.preventDefault();
     // If a login attempt has already been made, cancel it.
     if (this.state.promise) this.state.promise.cancel();
-    var promise = actions.attemptLogin({
+    var promise = actions.loginAttempt({
       username: this.state.username,
       password: this.state.password
     });
