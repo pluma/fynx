@@ -61,6 +61,8 @@ The **Server API** is the code that directly communicates with the remote server
 
 For brevity, we'll use JSX with the harmony flag enabled throughout this example. This allows us to use [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) and the [method shorthand syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions) introduced in ECMAScript 6. Also, if you want to give the example a try yourself, please make sure the `Promise` function is available globally. If you are using a modern evergreen browser like Chrome or Firefox, this should already be the case.
 
+For a usable implementation based on this example [see bevanhunt's login demo app](https://github.com/bevanhunt/react-fynx-login-demo).
+
 We're going to assume the Server API is an object that provides a single method with the following signature that returns a promise which resolves to the user data or is rejected with a descriptive error message that can be presented to the user:
 
 `api.login(username:String, password:String):Promise`
