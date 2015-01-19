@@ -1,7 +1,7 @@
 /*jshint browserify: true, -W014 */
 'use strict';
 var axn = require('axn');
-var immutable = require('immutable');
+var immutable = typeof Immutable === 'undefined' ? require('immutable') : Immutable;
 module.exports = createSimpleStore;
 
 function createSimpleStore(emptyValue, prepare) {
