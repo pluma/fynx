@@ -25,7 +25,7 @@
     "test": "npm run lint && mocha --growl -R spec",
     "cover": "npm run lint && istanbul cover --report lcov _mocha -- -R spec",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls ; rm -rf ./coverage",
-    "dist": "jsxjs --es6 src lib",
+    "dist": "jsxjs --es6 src lib && browserify index --standalone Fynx --ignore immutable --ignore immutable/contrib/cursor > lib/fynx.js",
     "dist-watch": "dirwatch -c 'npm run dist' src"
   },
   "repository": {
@@ -39,6 +39,7 @@
   },
   "homepage": "https://github.com/foss-haas/fynx",
   "devDependencies": {
+    "browserify": "^7.0.0",
     "coveralls": "^2.11.2",
     "dirwatch": "^1.1.0",
     "expect.js": "^0.3.1",
