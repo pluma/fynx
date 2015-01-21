@@ -20,6 +20,12 @@
 npm install fynx
 ```
 
+## With Bower
+
+```sh
+bower install fynx
+```
+
 ## From source
 
 ```sh
