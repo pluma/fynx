@@ -25,7 +25,8 @@
     "test": "npm run lint && mocha --growl -R spec",
     "cover": "npm run lint && istanbul cover --report lcov _mocha -- -R spec",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls ; rm -rf ./coverage",
-    "dist": "jsxjs --es6 src lib && NODE_ENV=production webpack index.js dist/fynx.js && NODE_ENV=production COMPRESS=1 webpack index.js dist/fynx.min.js",
+    "jsx": "jsxjs --es6 src lib",
+    "dist": "npm run jsx && NODE_ENV=production webpack index.js dist/fynx.js && NODE_ENV=production COMPRESS=1 webpack index.js dist/fynx.min.js",
     "dist-watch": "dirwatch -c 'npm run dist' src"
   },
   "repository": {
