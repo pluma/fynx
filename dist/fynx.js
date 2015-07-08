@@ -2,41 +2,41 @@ var Fynx =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
+
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-/******/
+
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/
+
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-/******/
+
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
+
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-/******/
+
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
-/******/
+
+
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-/******/
+
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
+
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-/******/
+
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
@@ -47,357 +47,28 @@ var Fynx =
 
 	/*jshint browserify: true */
 	'use strict';
-	var axn = __webpack_require__(11);
-	var createCursorStore = __webpack_require__(1);
+	var axn = __webpack_require__(1);
+	var createCursorStore = __webpack_require__(2);
 	module.exports = {
 	  createAction: axn,
-	  createActions: __webpack_require__(2),
+	  createActions: __webpack_require__(5),
 	  createAsyncAction: axn.async,
-	  createAsyncActions: __webpack_require__(3),
+	  createAsyncActions: __webpack_require__(6),
 	  createStore: createCursorStore,
-	  createSimpleStore: __webpack_require__(4),
+	  createSimpleStore: __webpack_require__(7),
 	  createCursorStore: createCursorStore,
-	  createRawStore: __webpack_require__(5),
-	  listenTo: __webpack_require__(6),
-	  listenToProp: __webpack_require__(7),
-	  connect: __webpack_require__(8),
-	  connectProp: __webpack_require__(9),
-	  connectVia: __webpack_require__(10)
+	  createRawStore: __webpack_require__(8),
+	  listenTo: __webpack_require__(9),
+	  listenToProp: __webpack_require__(10),
+	  connect: __webpack_require__(11),
+	  connectProp: __webpack_require__(12),
+	  connectVia: __webpack_require__(13)
 	};
 
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true, -W014 */
-	'use strict';
-	var immutable = __webpack_require__(12);
-	var Cursor = __webpack_require__(13);
-	var axn = __webpack_require__(11);
-	module.exports = createCursorStore;
-
-	function createCursorStore(emptyValue, prepare) {
-	  var action = axn();
-	  var state = (function (value) {
-	    function cursor(data) {
-	      return Cursor.from(data, function (newData) {
-	        state = cursor(newData);
-	        action(state);
-	      });
-	    }
-	    return cursor(value);
-	  }(emptyValue || immutable.Map()));
-	  function store(data) {
-	    if (data !== undefined) {
-	      state.update(function()  
-	        {return data === null
-	        ? emptyValue
-	        : immutable.fromJS(prepare ? prepare(data) : data);}
-	      );
-	    }
-	    return state;
-	  }
-	  var emptyAction = axn({
-	    beforeEmit: function(value)  {return immutable.is(value, emptyValue);}
-	  });
-	  action.listen(emptyAction);
-	  store.listen = action.listen.bind(action);
-	  store.unlisten = action.unlisten.bind(action);
-	  store.isEmpty = function()  {return immutable.is(state, emptyValue);};
-	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
-	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
-	  return store;
-	}
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true */
-	'use strict';
-	var axn = __webpack_require__(11);
-	module.exports = createActions;
-
-	function createActions(specs) {
-	  var obj = {};
-	  if (Array.isArray(specs)) {
-	    specs.forEach(function (name) {
-	      obj[name] = axn();
-	    });
-	  } else {
-	    Object.keys(specs).forEach(function (name) {
-	      obj[name] = axn(specs[name]);
-	    });
-	  }
-	  return obj;
-	}
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true */
-	'use strict';
-	var axn = __webpack_require__(11);
-	module.exports = createActions;
-
-	function createActions(specs) {
-	  var obj = {};
-	  if (Array.isArray(specs)) {
-	    specs.forEach(function (name) {
-	      obj[name] = axn.async();
-	    });
-	  } else {
-	    Object.keys(specs).forEach(function (name) {
-	      obj[name] = axn.async(specs[name]);
-	    });
-	  }
-	  return obj;
-	}
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true, -W014 */
-	'use strict';
-	var axn = __webpack_require__(11);
-	var immutable = __webpack_require__(12);
-	module.exports = createSimpleStore;
-
-	function createSimpleStore(emptyValue, prepare) {
-	  emptyValue = emptyValue === undefined ? null : emptyValue;
-	  var action = axn();
-	  var state = emptyValue;
-	  function store(value) {
-	    if (value !== undefined) {
-	      state = (
-	        value === null
-	        ? emptyValue
-	        : immutable.fromJS(prepare ? prepare(value) : value)
-	      );
-	      action(state);
-	    }
-	    return state;
-	  }
-	  var emptyAction = axn({
-	    beforeEmit: function(value)  {return immutable.is(value, emptyValue);}
-	  });
-	  action.listen(emptyAction);
-	  store.listen = action.listen.bind(action);
-	  store.unlisten = action.unlisten.bind(action);
-	  store.isEmpty = function()  {return immutable.is(state, emptyValue);};
-	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
-	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
-	  return store;
-	}
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true, -W014 */
-	'use strict';
-	var axn = __webpack_require__(11);
-	module.exports = createRawStore;
-
-	function createRawStore(emptyValue, prepare) {
-	  emptyValue = emptyValue === undefined ? null : emptyValue;
-	  var action = axn();
-	  var state = emptyValue;
-	  function store(value) {
-	    if (value !== undefined) {
-	      state = (
-	        value === null
-	        ? emptyValue
-	        : (prepare ? prepare(value) : value)
-	      );
-	      action(state);
-	    }
-	    return state;
-	  }
-	  var emptyAction = axn({
-	    beforeEmit: function(value)  {return value === emptyValue;}
-	  });
-	  action.listen(emptyAction);
-	  store.listen = action.listen.bind(action);
-	  store.unlisten = action.unlisten.bind(action);
-	  store.isEmpty = function()  {return state === emptyValue;};
-	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
-	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
-	  return store;
-	}
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true */
-	'use strict';
-	module.exports = listenTo;
-
-	function listenTo(store, fn) {
-	  return {
-	    componentDidMount:function() {
-	      store.listen(typeof fn === 'function' ? fn : this[fn], this);
-	    },
-	    componentWillUnmount:function() {
-	      store.unlisten(typeof fn === 'function' ? fn : this[fn], this);
-	    }
-	  };
-	}
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true */
-	'use strict';
-	module.exports = listenToProp;
-
-	function listenToProp(prop, fn) {
-	  return {
-	    componentWillReceiveProps:function(nextProps) {
-	      var func = typeof fn === 'function' ? fn : this[fn];
-	      if (nextProps[prop]) {
-	        if (nextProps[prop] === this.props[prop]) return;
-	        nextProps[prop].listen(func, this);
-	        if (this.props[prop]) {
-	          this.props[prop].unlisten(func, this);
-	        }
-	      } else {
-	        if (!this.props[prop]) return;
-	        this.props[prop].unlisten(func, this);
-	      }
-	    },
-	    componentDidMount:function() {
-	      if (!this.props[prop]) return;
-	      var func = typeof fn === 'function' ? fn : this[fn];
-	      this.props[prop].listen(func, this);
-	    },
-	    componentWillUnmount:function() {
-	      if (!this.props[prop]) return;
-	      var func = typeof fn === 'function' ? fn : this[fn];
-	      this.props[prop].unlisten(func, this);
-	    }
-	  };
-	}
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true */
-	'use strict';
-	module.exports = connect;
-
-	function connect(store, name) {
-	  function update(value) {
-	    /*jshint validthis: true */
-	    var state = {};
-	    state[name] = value;
-	    this.setState(state);
-	  }
-	  return {
-	    getInitialState:function() {
-	      var state = {};
-	      state[name] = store();
-	      return state;
-	    },
-	    componentDidMount:function() {
-	      store.listen(update, this);
-	    },
-	    componentWillUnmount:function() {
-	      store.unlisten(update, this);
-	    }
-	  };
-	}
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true */
-	'use strict';
-	module.exports = connectProp;
-
-	function connectProp(prop, name) {
-	  function update(value) {
-	    /*jshint validthis: true */
-	    var state = {};
-	    state[name] = value;
-	    this.setState(state);
-	  }
-	  return {
-	    getInitialState:function() {
-	      var state = {};
-	      if (this.props[prop]) {
-	        state[name] = this.props[prop]();
-	      }
-	      return state;
-	    },
-	    componentWillReceiveProps:function(nextProps) {
-	      if (nextProps[prop]) {
-	        if (nextProps[prop] === this.props[prop]) return;
-	        nextProps[prop].listen(update, this);
-	        update.call(this, nextProps[prop]());
-	        if (this.props[prop]) {
-	          this.props[prop].unlisten(update, this);
-	        }
-	      } else {
-	        if (!this.props[prop]) return;
-	        update.call(this, undefined);
-	        this.props[prop].unlisten(update, this);
-	      }
-	    },
-	    componentDidMount:function() {
-	      if (!this.props[prop]) return;
-	      this.props[prop].listen(update, this);
-	    },
-	    componentWillUnmount:function() {
-	      if (!this.props[prop]) return;
-	      this.props[prop].unlisten(update, this);
-	    }
-	  };
-	}
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true */
-	'use strict';
-	module.exports = connectVia;
-
-	function connectVia(stores, fn) {
-	  if (!Array.isArray(stores)) stores = [stores];
-	  function getStateFromStores(self) {
-	    var values = stores.map(function(store)  {return store();});
-	    var func = typeof fn === 'function' ? fn : self[fn];
-	    return func.apply(self, values);
-	  }
-	  function update() {
-	    /*jshint validthis: true */
-	    this.setState(getStateFromStores(this));
-	  }
-	  return {
-	    getInitialState:function() {
-	      return getStateFromStores(this);
-	    },
-	    componentDidMount:function() {
-	      stores.map(function(store)  {return store.listen(update, this);}.bind(this));
-	    },
-	    componentWillUnmount:function() {
-	      stores.map(function(store)  {return store.unlisten(update, this);}.bind(this));
-	    }
-	  };
-	}
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/*jshint es3: true */
 	/*global module, Promise */
@@ -529,17 +200,63 @@ var Fynx =
 	module.exports = axn;
 
 /***/ },
-/* 12 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
+
+	/*jshint browserify: true, -W014 */
+	'use strict';
+	var immutable = __webpack_require__(3);
+	var Cursor = __webpack_require__(4);
+	var axn = __webpack_require__(1);
+	module.exports = createCursorStore;
+
+	function createCursorStore(emptyValue, prepare) {
+	  var action = axn();
+	  var state = (function (value) {
+	    function cursor(data) {
+	      return Cursor.from(data, function (rawData) {
+	        var newData = (
+	          rawData === null
+	          ? emptyValue
+	          : immutable.fromJS(prepare ? prepare(rawData) : rawData)
+	        );
+	        state = cursor(newData);
+	        action(state);
+	        return newData;
+	      });
+	    }
+	    return cursor(value);
+	  }(emptyValue || immutable.Map()));
+	  function store(data) {
+	    if (data !== undefined) {
+	      state.update(function()  {return data;});
+	    }
+	    return state;
+	  }
+	  var emptyAction = axn({
+	    beforeEmit: function(value)  {return immutable.is(value, emptyValue);}
+	  });
+	  action.listen(emptyAction);
+	  store.listen = action.listen.bind(action);
+	  store.unlisten = action.unlisten.bind(action);
+	  store.isEmpty = function()  {return immutable.is(state, emptyValue);};
+	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+	  return store;
+	}
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
 
 	module.exports = Immutable;
 
 /***/ },
-/* 13 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 *  Copyright (c) 2014, Facebook, Inc.
+	 *  Copyright (c) 2014-2015, Facebook, Inc.
 	 *  All rights reserved.
 	 *
 	 *  This source code is licensed under the BSD-style license found in the
@@ -555,11 +272,12 @@ var Fynx =
 	 * If you wish to use it in the browser, please check out Browserify or WebPack!
 	 */
 
-	var Immutable = __webpack_require__(12);
+	var Immutable = __webpack_require__(3);
 	var Iterable = Immutable.Iterable;
 	var Iterator = Iterable.Iterator;
 	var Seq = Immutable.Seq;
 	var Map = Immutable.Map;
+	var Record = Immutable.Record;
 
 
 	function cursorFrom(rootData, keyPath, onChange) {
@@ -626,6 +344,32 @@ var Fynx =
 	IndexedCursorPrototype.set =
 	KeyedCursorPrototype.set = function(key, value) {
 	  return updateCursor(this, function (m) { return m.set(key, value); }, [key]);
+	}
+
+	IndexedCursorPrototype.push = function(/* values */) {
+	  var args = arguments;
+	  return updateCursor(this, function (m) {
+	    return m.push.apply(m, args);
+	  });
+	}
+
+	IndexedCursorPrototype.pop = function() {
+	  return updateCursor(this, function (m) {
+	    return m.pop();
+	  });
+	}
+
+	IndexedCursorPrototype.unshift = function(/* values */) {
+	  var args = arguments;
+	  return updateCursor(this, function (m) {
+	    return m.unshift.apply(m, args);
+	  });
+	}
+
+	IndexedCursorPrototype.shift = function() {
+	  return updateCursor(this, function (m) {
+	    return m.shift();
+	  });
 	}
 
 	IndexedCursorPrototype.setIn =
@@ -765,7 +509,34 @@ var Fynx =
 	  }
 	  var size = value && value.size;
 	  var CursorClass = Iterable.isIndexed(value) ? IndexedCursor : KeyedCursor;
-	  return new CursorClass(rootData, keyPath, onChange, size);
+	  var cursor = new CursorClass(rootData, keyPath, onChange, size);
+
+	  if (value instanceof Record) {
+	    defineRecordProperties(cursor, value);
+	  }
+
+	  return cursor;
+	}
+
+	function defineRecordProperties(cursor, value) {
+	  try {
+	    value._keys.forEach(setProp.bind(undefined, cursor));
+	  } catch (error) {
+	    // Object.defineProperty failed. Probably IE8.
+	  }
+	}
+
+	function setProp(prototype, name) {
+	  Object.defineProperty(prototype, name, {
+	    get: function() {
+	      return this.get(name);
+	    },
+	    set: function(value) {
+	      if (!this.__ownerID) {
+	        throw new Error('Cannot set on an immutable record.');
+	      }
+	    }
+	  });
 	}
 
 	function wrappedValue(cursor, keyPath, value) {
@@ -773,6 +544,13 @@ var Fynx =
 	}
 
 	function subCursor(cursor, keyPath, value) {
+	  if (arguments.length < 3) {
+	    return makeCursor( // call without value
+	      cursor._rootData,
+	      newKeyPath(cursor._keyPath, keyPath),
+	      cursor._onChange
+	    );
+	  }
 	  return makeCursor(
 	    cursor._rootData,
 	    newKeyPath(cursor._keyPath, keyPath),
@@ -818,5 +596,290 @@ var Fynx =
 	exports.from = cursorFrom;
 
 
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*jshint browserify: true */
+	'use strict';
+	var axn = __webpack_require__(1);
+	module.exports = createActions;
+
+	function createActions(specs) {
+	  var obj = {};
+	  if (Array.isArray(specs)) {
+	    specs.forEach(function (name) {
+	      obj[name] = axn();
+	    });
+	  } else {
+	    Object.keys(specs).forEach(function (name) {
+	      obj[name] = axn(specs[name]);
+	    });
+	  }
+	  return obj;
+	}
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*jshint browserify: true */
+	'use strict';
+	var axn = __webpack_require__(1);
+	module.exports = createActions;
+
+	function createActions(specs) {
+	  var obj = {};
+	  if (Array.isArray(specs)) {
+	    specs.forEach(function (name) {
+	      obj[name] = axn.async();
+	    });
+	  } else {
+	    Object.keys(specs).forEach(function (name) {
+	      obj[name] = axn.async(specs[name]);
+	    });
+	  }
+	  return obj;
+	}
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*jshint browserify: true, -W014 */
+	'use strict';
+	var axn = __webpack_require__(1);
+	var immutable = __webpack_require__(3);
+	module.exports = createSimpleStore;
+
+	function createSimpleStore(emptyValue, prepare) {
+	  emptyValue = emptyValue === undefined ? null : emptyValue;
+	  var action = axn();
+	  var state = emptyValue;
+	  function store(value) {
+	    if (value !== undefined) {
+	      state = (
+	        value === null
+	        ? emptyValue
+	        : immutable.fromJS(prepare ? prepare(value) : value)
+	      );
+	      action(state);
+	    }
+	    return state;
+	  }
+	  var emptyAction = axn({
+	    beforeEmit: function(value)  {return immutable.is(value, emptyValue);}
+	  });
+	  action.listen(emptyAction);
+	  store.listen = action.listen.bind(action);
+	  store.unlisten = action.unlisten.bind(action);
+	  store.isEmpty = function()  {return immutable.is(state, emptyValue);};
+	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+	  return store;
+	}
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*jshint browserify: true, -W014 */
+	'use strict';
+	var axn = __webpack_require__(1);
+	module.exports = createRawStore;
+
+	function createRawStore(emptyValue, prepare) {
+	  emptyValue = emptyValue === undefined ? null : emptyValue;
+	  var action = axn();
+	  var state = emptyValue;
+	  function store(value) {
+	    if (value !== undefined) {
+	      state = (
+	        value === null
+	        ? emptyValue
+	        : (prepare ? prepare(value) : value)
+	      );
+	      action(state);
+	    }
+	    return state;
+	  }
+	  var emptyAction = axn({
+	    beforeEmit: function(value)  {return value === emptyValue;}
+	  });
+	  action.listen(emptyAction);
+	  store.listen = action.listen.bind(action);
+	  store.unlisten = action.unlisten.bind(action);
+	  store.isEmpty = function()  {return state === emptyValue;};
+	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+	  return store;
+	}
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	/*jshint browserify: true */
+	'use strict';
+	module.exports = listenTo;
+
+	function listenTo(store, fn) {
+	  return {
+	    componentDidMount:function() {
+	      store.listen(typeof fn === 'function' ? fn : this[fn], this);
+	    },
+	    componentWillUnmount:function() {
+	      store.unlisten(typeof fn === 'function' ? fn : this[fn], this);
+	    }
+	  };
+	}
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	/*jshint browserify: true */
+	'use strict';
+	module.exports = listenToProp;
+
+	function listenToProp(prop, fn) {
+	  return {
+	    componentWillReceiveProps:function(nextProps) {
+	      var func = typeof fn === 'function' ? fn : this[fn];
+	      if (nextProps[prop]) {
+	        if (nextProps[prop] === this.props[prop]) return;
+	        nextProps[prop].listen(func, this);
+	        if (this.props[prop]) {
+	          this.props[prop].unlisten(func, this);
+	        }
+	      } else {
+	        if (!this.props[prop]) return;
+	        this.props[prop].unlisten(func, this);
+	      }
+	    },
+	    componentDidMount:function() {
+	      if (!this.props[prop]) return;
+	      var func = typeof fn === 'function' ? fn : this[fn];
+	      this.props[prop].listen(func, this);
+	    },
+	    componentWillUnmount:function() {
+	      if (!this.props[prop]) return;
+	      var func = typeof fn === 'function' ? fn : this[fn];
+	      this.props[prop].unlisten(func, this);
+	    }
+	  };
+	}
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	/*jshint browserify: true */
+	'use strict';
+	module.exports = connect;
+
+	function connect(store, name) {
+	  function update(value) {
+	    /*jshint validthis: true */
+	    var state = {};
+	    state[name] = value;
+	    this.setState(state);
+	  }
+	  return {
+	    getInitialState:function() {
+	      var state = {};
+	      state[name] = store();
+	      return state;
+	    },
+	    componentDidMount:function() {
+	      store.listen(update, this);
+	    },
+	    componentWillUnmount:function() {
+	      store.unlisten(update, this);
+	    }
+	  };
+	}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	/*jshint browserify: true */
+	'use strict';
+	module.exports = connectProp;
+
+	function connectProp(prop, name) {
+	  function update(value) {
+	    /*jshint validthis: true */
+	    var state = {};
+	    state[name] = value;
+	    this.setState(state);
+	  }
+	  return {
+	    getInitialState:function() {
+	      var state = {};
+	      if (this.props[prop]) {
+	        state[name] = this.props[prop]();
+	      }
+	      return state;
+	    },
+	    componentWillReceiveProps:function(nextProps) {
+	      if (nextProps[prop]) {
+	        if (nextProps[prop] === this.props[prop]) return;
+	        nextProps[prop].listen(update, this);
+	        update.call(this, nextProps[prop]());
+	        if (this.props[prop]) {
+	          this.props[prop].unlisten(update, this);
+	        }
+	      } else {
+	        if (!this.props[prop]) return;
+	        update.call(this, undefined);
+	        this.props[prop].unlisten(update, this);
+	      }
+	    },
+	    componentDidMount:function() {
+	      if (!this.props[prop]) return;
+	      this.props[prop].listen(update, this);
+	    },
+	    componentWillUnmount:function() {
+	      if (!this.props[prop]) return;
+	      this.props[prop].unlisten(update, this);
+	    }
+	  };
+	}
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	/*jshint browserify: true */
+	'use strict';
+	module.exports = connectVia;
+
+	function connectVia(stores, fn) {
+	  if (!Array.isArray(stores)) stores = [stores];
+	  function getStateFromStores(self) {
+	    var values = stores.map(function(store)  {return store();});
+	    var func = typeof fn === 'function' ? fn : self[fn];
+	    return func.apply(self, values);
+	  }
+	  function update() {
+	    /*jshint validthis: true */
+	    this.setState(getStateFromStores(this));
+	  }
+	  return {
+	    getInitialState:function() {
+	      return getStateFromStores(this);
+	    },
+	    componentDidMount:function() {
+	      stores.map(function(store)  {return store.listen(update, this);}.bind(this));
+	    },
+	    componentWillUnmount:function() {
+	      stores.map(function(store)  {return store.unlisten(update, this);}.bind(this));
+	    }
+	  };
+	}
+
 /***/ }
-/******/ ])
+/******/ ]);

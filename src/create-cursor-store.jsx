@@ -9,20 +9,22 @@ function createCursorStore(emptyValue, prepare) {
   var action = axn();
   var state = (function (value) {
     function cursor(data) {
-      return Cursor.from(data, function (newData) {
+      return Cursor.from(data, function (rawData) {
+        var newData = (
+          rawData === null
+          ? emptyValue
+          : immutable.fromJS(prepare ? prepare(rawData) : rawData)
+        );
         state = cursor(newData);
         action(state);
+        return newData;
       });
     }
     return cursor(value);
   }(emptyValue || immutable.Map()));
   function store(data) {
     if (data !== undefined) {
-      state.update(() => (
-        data === null
-        ? emptyValue
-        : immutable.fromJS(prepare ? prepare(data) : data)
-      ));
+      state.update(() => data);
     }
     return state;
   }
