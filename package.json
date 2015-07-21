@@ -1,6 +1,6 @@
 {
   "name": "fynx",
-  "version": "1.7.1",
+  "version": "2.0.0-dev",
   "description": "Formerly known as Flox. Not quite Flux.",
   "main": "lib/index.js",
   "keywords": [
@@ -25,7 +25,7 @@
     "test-only": "mocha --growl -R spec",
     "cover": "npm run lint && istanbul cover --report lcov _mocha -- -R spec",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls ; rm -rf ./coverage",
-    "babel": "babel -d lib src",
+    "babel": "babel -d lib --optional es7.functionBind src",
     "dist": "npm run babel && NODE_ENV=production webpack lib/index.js dist/fynx.js && NODE_ENV=production COMPRESS=1 webpack lib/index.js dist/fynx.min.js",
     "dist-watch": "watch 'npm run dist' src"
   },

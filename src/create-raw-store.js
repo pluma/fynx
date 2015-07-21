@@ -1,31 +1,28 @@
 /*jshint browserify: true, -W014 */
 'use strict';
 var axn = require('axn');
-module.exports = createRawStore;
 
-function createRawStore(emptyValue, prepare) {
-  emptyValue = emptyValue === undefined ? null : emptyValue;
+module.exports = function createRawStore(
+  emptyValue=null,
+  prepare=(v => v),
+  isEmpty=((v, emptyValue) => v === emptyValue)
+) {
   var action = axn();
+  var emptyAction = axn();
   var state = emptyValue;
   function store(value) {
     if (value !== undefined) {
-      state = (
-        value === null
-        ? emptyValue
-        : (prepare ? prepare(value) : value)
-      );
+      state = value === null ? emptyValue : prepare(value);
       action(state);
+      emptyAction(isEmpty(state, emptyValue));
     }
     return state;
   }
-  var emptyAction = axn({
-    beforeEmit: (value) => (value === emptyValue)
-  });
-  action.listen(emptyAction);
-  store.listen = action.listen.bind(action);
-  store.unlisten = action.unlisten.bind(action);
-  store.isEmpty = () => (state === emptyValue);
-  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
-  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+  store.listen = ::action.listen;
+  store.unlisten = ::action.unlisten;
+  store.isEmpty = () => isEmpty(state, emptyValue);
+  store.isEmpty.listen = ::emptyAction.listen;
+  store.isEmpty.unlisten = ::emptyAction.unlisten;
+  store.toJSON = () => state && state.toJSON ? state.toJSON() : state;
   return store;
-}
+};
