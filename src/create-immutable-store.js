@@ -1,11 +1,10 @@
-/*jshint browserify: true, -W014 */
 'use strict';
-var immutable = require('immutable');
-var createRawStore = require('./create-raw-store');
+import immutable from 'immutable';
+import createRawStore from './create-raw-store';
 
-module.exports = function createImmutableStore(
-  emptyValue=null,
-  prepare=(v => v)
+export default function createImmutableStore(
+  emptyValue = null,
+  prepare = v => v
 ) {
   return createRawStore(
     emptyValue,

@@ -1,10 +1,10 @@
-/*jshint node: true */
-/*global describe, it, after */
 'use strict';
-var expect = require('expect.js');
-var rewire = require('rewire');
-var sinon = require('sinon');
-var createActions = rewire('../lib/create-actions');
+require('core-js');
+import expect from 'expect.js';
+import rewire from 'rewire';
+import sinon from 'sinon';
+import {describe, it, after} from 'mocha';
+var createActions = rewire('../src/create-actions');
 
 describe('createActions', function () {
   after(function () {

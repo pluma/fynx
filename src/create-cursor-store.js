@@ -1,11 +1,9 @@
-/*jshint browserify: true, -W014 */
 'use strict';
-var immutable = require('immutable');
-var Cursor = require('immutable/contrib/cursor');
-var axn = require('axn');
-module.exports = createCursorStore;
+import immutable from 'immutable';
+import Cursor from 'immutable/contrib/cursor';
+import axn from 'axn';
 
-function createCursorStore(emptyValue, prepare) {
+export default function createCursorStore(emptyValue, prepare) {
   var action = axn();
   var state = (function (value) {
     function cursor(data) {
@@ -39,4 +37,4 @@ function createCursorStore(emptyValue, prepare) {
   store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
   store.toJSON = () => state && state.toJSON ? state.toJSON() : state;
   return store;
-}
+};

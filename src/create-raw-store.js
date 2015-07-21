@@ -1,11 +1,10 @@
-/*jshint browserify: true, -W014 */
 'use strict';
-var axn = require('axn');
+import axn from 'axn';
 
-module.exports = function createRawStore(
-  emptyValue=null,
-  prepare=(v => v),
-  isEmpty=((v, emptyValue) => v === emptyValue)
+export default function createRawStore(
+  emptyValue = null,
+  prepare = v => v,
+  isEmpty = (v, emptyValue) => v === emptyValue
 ) {
   var action = axn();
   var emptyAction = axn();

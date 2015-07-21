@@ -1,17 +1,16 @@
-/*jshint node: true */
-/*global describe, it, afterEach */
 'use strict';
-var expect = require('expect.js');
-var immutable = require('immutable');
-var createCursorStore = require('../').createCursorStore;
-var invoke = function (fn) {return fn();};
+require('core-js');
+import expect from 'expect.js';
+import immutable from 'immutable';
+import {describe, it, afterEach} from 'mocha';
+import {createCursorStore} from '../src';
 
 expect.Assertion.prototype.value = function (obj) {
   var i = expect.stringify;
   this.assert(
     immutable.is(this.obj, obj),
-    function () {return 'expected ' + i(this.obj) + ' to have value ' + i(obj);},
-    function () {return 'expected ' + i(this.obj) + ' not to have value ' + i(obj);}
+    () => `expected ${i(this.obj)} to have value ${i(obj)}`,
+    () => `expected ${i(this.obj)} not to have value ${i(obj)}`
   );
 };
 
@@ -56,7 +55,7 @@ describe('createCursorStore', function () {
       return cb;
     }
     afterEach(function () {
-      listeners.splice(0).forEach(invoke);
+      listeners.splice(0).forEach(fn => fn());
     });
     it('replaces "null" with the emptyValue', function (done) {
       var emptyValue = immutable.Map();

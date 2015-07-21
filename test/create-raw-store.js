@@ -1,9 +1,8 @@
-/*jshint node: true */
-/*global describe, it, afterEach */
 'use strict';
-var expect = require('expect.js');
-var createRawStore = require('../').createRawStore;
-var invoke = function (fn) {return fn();};
+require('core-js');
+import expect from 'expect.js';
+import {describe, it, afterEach} from 'mocha';
+import {createRawStore} from '../src';
 
 describe('createRawStore', function () {
   it('is a function', function () {
@@ -45,7 +44,7 @@ describe('createRawStore', function () {
       return cb;
     }
     afterEach(function () {
-      listeners.splice(0).forEach(invoke);
+      listeners.splice(0).forEach(fn => fn());
     });
     it('replaces "null" with the emptyValue', function (done) {
       var emptyValue = 'potato';
