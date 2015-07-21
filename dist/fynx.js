@@ -262,17 +262,17 @@ var Fynx =
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var axn = __webpack_require__(1);
+	var aaxn = __webpack_require__(1).async;
 
 	module.exports = function createActions(specs) {
 	  var obj = {};
 	  if (Array.isArray(specs)) {
 	    specs.forEach(function (name) {
-	      obj[name] = axn.async();
+	      obj[name] = aaxn();
 	    });
 	  } else {
 	    Object.keys(specs).forEach(function (name) {
-	      obj[name] = axn.async(specs[name]);
+	      obj[name] = aaxn(specs[name]);
 	    });
 	  }
 	  return obj;
