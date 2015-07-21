@@ -45,6 +45,7 @@ var Fynx =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	
 	'use strict';
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
@@ -52,58 +53,78 @@ var Fynx =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _axn = __webpack_require__(1);
+	var _axn = __webpack_require__(2);
 
 	var _axn2 = _interopRequireDefault(_axn);
 
 	var createAction = _axn2['default'];
 	exports.createAction = createAction;
 	var createAsyncAction = _axn2['default'].async;
-
 	exports.createAsyncAction = createAsyncAction;
-
-	var _createActions2 = __webpack_require__(2);
-
-	var _createActions3 = _interopRequireDefault(_createActions2);
-
-	exports.createActions = _createActions3['default'];
-
-	var _createAsyncActions2 = __webpack_require__(3);
-
-	var _createAsyncActions3 = _interopRequireDefault(_createAsyncActions2);
-
-	exports.createAsyncActions = _createAsyncActions3['default'];
-
-	var _createRawStore2 = __webpack_require__(4);
-
-	var _createRawStore3 = _interopRequireDefault(_createRawStore2);
-
-	exports.createStore = _createRawStore3['default'];
-
-	var _createRawStore4 = _interopRequireDefault(_createRawStore2);
-
-	exports.createRawStore = _createRawStore4['default'];
-
-	var _createImmutableStore2 = __webpack_require__(5);
-
-	var _createImmutableStore3 = _interopRequireDefault(_createImmutableStore2);
-
-	exports.createImmutableStore = _createImmutableStore3['default'];
-
-	var _createKeyedStore2 = __webpack_require__(7);
-
-	var _createKeyedStore3 = _interopRequireDefault(_createKeyedStore2);
-
-	exports.createKeyedStore = _createKeyedStore3['default'];
-
-	var _createCursorStore2 = __webpack_require__(8);
-
-	var _createCursorStore3 = _interopRequireDefault(_createCursorStore2);
-
-	exports.createCursorStore = _createCursorStore3['default'];
+	var createActions = __webpack_require__(3);
+	exports.createActions = createActions;
+	var createAsyncActions = __webpack_require__(4);
+	exports.createAsyncActions = createAsyncActions;
+	var createStore = __webpack_require__(1);
+	exports.createStore = createStore;
+	var createRawStore = __webpack_require__(1);
+	exports.createRawStore = createRawStore;
+	var createImmutableStore = __webpack_require__(5);
+	exports.createImmutableStore = createImmutableStore;
+	var createKeyedStore = __webpack_require__(7);
+	exports.createKeyedStore = createKeyedStore;
+	var createCursorStore = __webpack_require__(8);
+	exports.createCursorStore = createCursorStore;
 
 /***/ },
 /* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	'use strict';
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _axn = __webpack_require__(2);
+
+	var _axn2 = _interopRequireDefault(_axn);
+
+	module.exports = function createRawStore() {
+	  var emptyValue = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+	  var prepare = arguments.length <= 1 || arguments[1] === undefined ? function (v) {
+	    return v;
+	  } : arguments[1];
+	  var isEmpty = arguments.length <= 2 || arguments[2] === undefined ? function (v, emptyValue) {
+	    return v === emptyValue;
+	  } : arguments[2];
+	  return (function () {
+	    var action = (0, _axn2['default'])();
+	    var emptyAction = (0, _axn2['default'])();
+	    var state = emptyValue;
+	    function store(value) {
+	      if (value !== undefined) {
+	        state = value === null ? emptyValue : prepare(value);
+	        action(state);
+	        emptyAction(isEmpty(state, emptyValue));
+	      }
+	      return state;
+	    }
+	    store.listen = action.listen.bind(action);
+	    store.unlisten = action.unlisten.bind(action);
+	    store.isEmpty = function () {
+	      return isEmpty(state, emptyValue);
+	    };
+	    store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+	    store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+	    store.toJSON = function () {
+	      return state && state.toJSON ? state.toJSON() : state;
+	    };
+	    return store;
+	  })();
+	};
+
+/***/ },
+/* 2 */
 /***/ function(module, exports) {
 
 	/*jshint es3: true */
@@ -237,11 +258,12 @@ var Fynx =
 	module.exports = axn;
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
+	
 	'use strict';
-	var axn = __webpack_require__(1);
+	var axn = __webpack_require__(2);
 
 	module.exports = function createActions(specs) {
 	  var obj = {};
@@ -258,11 +280,12 @@ var Fynx =
 	};
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
+	
 	'use strict';
-	var axn = __webpack_require__(1);
+	var axn = __webpack_require__(2);
 
 	module.exports = function createActions(specs) {
 	  var obj = {};
@@ -279,67 +302,11 @@ var Fynx =
 	};
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports['default'] = createRawStore;
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _axn = __webpack_require__(1);
-
-	var _axn2 = _interopRequireDefault(_axn);
-
-	function createRawStore() {
-	  var emptyValue = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
-	  var prepare = arguments.length <= 1 || arguments[1] === undefined ? function (v) {
-	    return v;
-	  } : arguments[1];
-	  var isEmpty = arguments.length <= 2 || arguments[2] === undefined ? function (v, emptyValue) {
-	    return v === emptyValue;
-	  } : arguments[2];
-	  return (function () {
-	    var action = (0, _axn2['default'])();
-	    var emptyAction = (0, _axn2['default'])();
-	    var state = emptyValue;
-	    function store(value) {
-	      if (value !== undefined) {
-	        state = value === null ? emptyValue : prepare(value);
-	        action(state);
-	        emptyAction(isEmpty(state, emptyValue));
-	      }
-	      return state;
-	    }
-	    store.listen = action.listen.bind(action);
-	    store.unlisten = action.unlisten.bind(action);
-	    store.isEmpty = function () {
-	      return isEmpty(state, emptyValue);
-	    };
-	    store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
-	    store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
-	    store.toJSON = function () {
-	      return state && state.toJSON ? state.toJSON() : state;
-	    };
-	    return store;
-	  })();
-	}
-
-	;
-	module.exports = exports['default'];
-
-/***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
+	
 	'use strict';
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports['default'] = createImmutableStore;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -347,11 +314,11 @@ var Fynx =
 
 	var _immutable2 = _interopRequireDefault(_immutable);
 
-	var _createRawStore = __webpack_require__(4);
+	var _createRawStore = __webpack_require__(1);
 
 	var _createRawStore2 = _interopRequireDefault(_createRawStore);
 
-	function createImmutableStore() {
+	module.exports = function createImmutableStore() {
 	  var emptyValue = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
 	  var prepare = arguments.length <= 1 || arguments[1] === undefined ? function (v) {
 	    return v;
@@ -360,10 +327,7 @@ var Fynx =
 	  return (0, _createRawStore2['default'])(emptyValue, function (v) {
 	    return _immutable2['default'].fromJS(prepare(v));
 	  }, _immutable2['default'].is);
-	}
-
-	;
-	module.exports = exports['default'];
+	};
 
 /***/ },
 /* 6 */
@@ -375,14 +339,10 @@ var Fynx =
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
+	
 	'use strict';
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
 
 	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
-
-	exports['default'] = createKeyedStore;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -390,7 +350,7 @@ var Fynx =
 
 	var _immutable2 = _interopRequireDefault(_immutable);
 
-	var _createRawStore = __webpack_require__(4);
+	var _createRawStore = __webpack_require__(1);
 
 	var _createRawStore2 = _interopRequireDefault(_createRawStore);
 
@@ -562,27 +522,21 @@ var Fynx =
 	  return store;
 	}
 
-	function createKeyedStore() {
+	module.exports = function createKeyedStore() {
 	  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 	    args[_key2] = arguments[_key2];
 	  }
 
 	  return createKeyedStoreOf.apply(undefined, [_createRawStore2['default']].concat(args));
-	}
-
-	;
-	var of = createKeyedStoreOf;
-	exports.of = of;
+	};
+	module.exports.of = createKeyedStoreOf;
 
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
+	
 	'use strict';
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports['default'] = createCursorStore;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -594,11 +548,11 @@ var Fynx =
 
 	var _immutableContribCursor2 = _interopRequireDefault(_immutableContribCursor);
 
-	var _axn = __webpack_require__(1);
+	var _axn = __webpack_require__(2);
 
 	var _axn2 = _interopRequireDefault(_axn);
 
-	function createCursorStore(emptyValue, prepare) {
+	module.exports = function createCursorStore(emptyValue, prepare) {
 	  var action = (0, _axn2['default'])();
 	  var state = (function (value) {
 	    function cursor(data) {
@@ -636,10 +590,7 @@ var Fynx =
 	    return state && state.toJSON ? state.toJSON() : state;
 	  };
 	  return store;
-	}
-
-	;
-	module.exports = exports['default'];
+	};
 
 /***/ },
 /* 9 */
