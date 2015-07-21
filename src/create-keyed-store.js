@@ -37,16 +37,13 @@ function createKeyedStoreOf(createStore, ...args) {
     }
     return state;
   }
-  store.at = key => map.get(key);
-  store.has = key => map.has(key) && !map.get(key).isEmpty();
-  store.get = key => {
+  store.at = key => {
     if (!map.has(key)) map.set(key, createStore(...args));
-    return map.get(key)();
+    return map.get(key);
   };
-  store.set = (key, value) => {
-    if (!map.has(key)) map.set(key, createStore(...args));
-    return map.get(key)(value);
-  };
+  store.has = key => Boolean(map.has(key) && !map.get(key).isEmpty());
+  store.get = key => store.at(key)();
+  store.set = (key, value) => store.at(key)(value);
   store.toJSON = () => _map(
     map.entries(),
     ([key, store]) => [key, store.toJSON()]
