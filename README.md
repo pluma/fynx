@@ -61,132 +61,6 @@ npm run dist
 
 The **Server API** is the code that directly communicates with the remote server or persistence layer of the application. Its implementation should be entirely orthogonal to the rest of the application. For example, a thin wrapper around `XMLHttpRequest` that takes arguments and a callback or returns a promise.
 
-## Example: Login view
-
-For brevity, we'll use JSX with the harmony flag enabled throughout this example. This allows us to use [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) and the [method shorthand syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions) introduced in ECMAScript 6. Also, if you want to give the example a try yourself, please make sure the `Promise` function is available globally. If you are using a modern evergreen browser like Chrome or Firefox, this should already be the case.
-
-For a usable implementation based on this example [see bevanhunt's login demo app](https://github.com/bevanhunt/react-fynx-login-demo).
-
-We're going to assume the Server API is an object that provides a single method with the following signature that returns a promise which resolves to the user data or is rejected with a descriptive error message that can be presented to the user:
-
-`api.login(username: string, password: string): Promise`
-
-We'll need at least two actions:
-
-* `loginAttempt` to perform the login via the Server API.
-* `loginComplete` to react to successful login attempts throughout the app.
-
-For simplicity, we'll make both of them asynchronous and just use the bulk creation method Fynx provides:
-
-```js
-var actions = Fynx.createAsyncActions([
-  'loginAttempt',
-  'loginComplete'
-]);
-```
-
-The application also needs a store for the user data. We're going to assume that the user data will always be a simple mapping of keys and values (i.e. a plain object) that requires no special processing:
-
-```js
-var immutable = require('immutable');
-var userStore = Fynx.createSimpleStore(immutable.Map());
-```
-
-Next we need to make sure successful login attempts result in the user object provided by the server being updated in the store:
-
-```js
-actions.loginComplete.listen((userData) => userStore(userData));
-```
-
-We also need a listener that makes the actual server request. Notice that we could simply combine the two actions into one, but keeping them separate allows us to re-use them throughout the application:
-
-```js
-actions.loginAttempt.listen(
-  (credentials) => api.login(credentials.username, credentials.password)
-  .then((userData) => actions.loginComplete(userData))
-);
-```
-
-The server API does the heavy lifting of communicating with the server, so we're only left with a little bit of glue.
-
-Finally, the controller view itself:
-
-```js
-var Login = React.createClass({
-  mixins: [
-    // Make sure the "user" state is updated whenever the store changes.
-    Fynx.connect(userStore, 'user')
-  ],
-  getInitialState() {
-    return {
-      username: '',
-      password: '',
-      error: null,
-      promise: null
-    };
-  },
-  handleFormSubmit(evt) {
-    evt.preventDefault();
-    // If a login attempt has already been made, cancel it.
-    if (this.state.promise) this.state.promise.cancel();
-    var promise = actions.loginAttempt({
-      username: this.state.username,
-      password: this.state.password
-    });
-    // If the login attempt fails, show the error message.
-    promise.then(null, (reason) => {
-      // If it failed because it was cancelled, ignore it.
-      if (promise.cancelled()) return;
-      this.setState({error: reason});
-    });
-    // Finally clear the previous error message.
-    this.setState({
-      error: null,
-      promise: promise
-    });
-  },
-  handleUsernameChange(evt) {
-    this.setState({username: evt.target.value});
-  },
-  handlePasswordChange(evt) {
-    this.setState({password: evt.target.value});
-  },
-  componentWillUnmount() {
-    // If the component is being unmounted, old promises can only do harm.
-    // So we need to make sure the component does not react to it.
-    if (this.state.promise) this.state.promise.cancel();
-  },
-  render() {
-    // Don't show the form if the user is already logged in.
-    if (this.state.user.get('username')) {
-      return <div>Already logged in.</div>;
-    }
-    return (
-      <form onSubmit={this.handleFormSubmit}>
-        {this.state.error}
-        <label>
-          Username:
-          <input type="text" value={this.state.username}
-            onChange={this.handleUsernameChange}/>
-        </label>
-        <label>
-          Password:
-          <input type="password" value={this.state.password}
-            onChange={this.handlePasswordChange}/>
-        </label>
-        <button>Log in</button>
-      </form>
-    );
-  }
-});
-```
-
-## But what about waitFor?
-
-Flux has `waitFor`, Fynx does not. Because Flux's dispatcher is entirely replaced by Fynx's actions and listeners and you're encouraged to create as many different actions as your application needs, you'll rarely run into situations where stores actually depend on each other in a way that can't be solved with a few event listeners.
-
-If you run into a real-world scenario you can't solve with additional actions or services, feel free to [report an issue on GitHub](https://github.com/foss-haas/fynx/issues) or [discuss it on Gitter](https://gitter.im/foss-haas/fynx). Otherwise, just stick to the Fynx mantra: *If in doubt, use more duct tape!*
-
 # API
 
 ## createAction
@@ -201,6 +75,10 @@ For a full documentation of this function, see [the documentation of `axn`](http
 
   The `axn` spec for this action.
 
+**Examples**
+
+*TODO*
+
 ## createActions
 
 Creates an object providing multiple actions. Convenience wrapper around `createAction` for bulk creation of actions.
@@ -212,6 +90,10 @@ Creates an object providing multiple actions. Convenience wrapper around `create
   An array of action names to create on the returned object.
 
   If `specs` is an object instead, an action will be created for each property with the action name corresponding to the property name and the property value being used as the `axn` spec for the action.
+
+**Examples**
+
+*TODO*
 
 ## createAsyncAction
 
@@ -227,6 +109,10 @@ For a full documentation of this function, see [the documentation of `axn.async`
 
   The `axn` spec for this asynchronous action.
 
+**Examples**
+
+*TODO*
+
 ## createAsyncActions
 
 Creates an object providing multiple asynchronous actions. Convenience wrapper around `createAsyncAction` for bulk creation of asynchronous actions.
@@ -238,6 +124,10 @@ Creates an object providing multiple asynchronous actions. Convenience wrapper a
   An array of action names to create on the returned object.
 
   If `specs` is an object instead, an asynchronous action will be created for each property with the action name corresponding to the property name and the property value being used as the `axn` spec for the action.
+
+**Examples**
+
+*TODO*
 
 ## createRawStore
 
@@ -264,6 +154,10 @@ Whenever the store's value changes, the store's content will be passed to its li
 
   This function will be used to determine whether the store is currently empty. The function is passed exactly two arguments: the store's current value and the store's initial value. A return value that evaluates to the boolean value `true` indicates that the store should be considered empty.
 
+**Examples**
+
+*TODO*
+
 ### store.listen
 
 Registers a change listener with the store. The listener will be invoked with the store's new content whenever it is written to.
@@ -282,6 +176,10 @@ Returns a function that will remove the listener from the store when called.
 
   *TODO*
 
+**Examples**
+
+*TODO*
+
 ### store.unlisten
 
 Removes a change listener from the store. This has the same effect as calling the function returned by `store.listen`. If the listener was registered with a context, the same context must be used.
@@ -296,9 +194,17 @@ Removes a change listener from the store. This has the same effect as calling th
 
   *TODO*
 
+**Examples**
+
+*TODO*
+
 ### store.isEmpty
 
 Returns `true` if the store's current value is equivalent to its `emptyValue` or `false` otherwise. This function takes no arguments.
+
+**Examples**
+
+*TODO*
 
 ### store.isEmpty.listen
 
@@ -314,6 +220,10 @@ Like `store.listen`, but receives a boolean value indicating whether the store i
 
   *TODO*
 
+**Examples**
+
+*TODO*
+
 ### store.isEmpty
 
 Removes a change listener from `store.isEmpty`. This has the same effect as calling the function returned by `store.isEmpty.listen`. If the listener was registered with a context, the same context must be used.
@@ -327,6 +237,18 @@ Removes a change listener from `store.isEmpty`. This has the same effect as call
 * **context**: *any* (optional)
 
   *TODO*
+
+**Examples**
+
+*TODO*
+
+### store.toJSON
+
+*TODO*
+
+**Examples**
+
+*TODO*
 
 ## createImmutableStore
 
@@ -342,6 +264,10 @@ Creates a store for immutable data. The store behaves identically to a raw store
 
   If provided, values other than `null` will be passed through this function before being passed on to `immutable.fromJS`.
 
+**Examples**
+
+*TODO*
+
 ## createCursorStore
 
 Creates an immutable cursor store. The store behaves identically to an immutable store except it passes immutable cursors wherever the immutable store would pass an immutable value. Changes to the cursor will result in the changes being propagated to the store as well.
@@ -356,45 +282,141 @@ Creates an immutable cursor store. The store behaves identically to an immutable
 
   *TODO*
 
-## createKeyedStore
+**Examples**
 
 *TODO*
+
+## createKeyedStore
+
+Creates a keyed store. Keyed scores can not be listened to directly and represent a collection of stores sharing the same definitions.
+
+Passing a value to a keyed store will populate or modify the keyed store's store values for each key. A keyed store can be cleared by passing `null` into it. Keyed stores always return an `immutable.OrderedMap` representing the keys and contents of all non-empty stores in the keyed store.
+
+This function is a convenience wrapper around `createKeyedStore.of` that uses `createRawStore` to create its stores.
 
 **Arguments**
 
 * **emptyValue**: *any* (optional)
 
-  *TODO*
+  Stores created by the keyed store will be initialized to this value.
 
 * **prepare**: *function* (optional)
 
-  *TODO*
+  The *prepare* function that will be used to create the stores.
 
 * **isEmpty**: *function* (optional)
 
-  *TODO*
+  The *isEmpty* function that will be used to create the stores.
+
+**Examples**
+
+*TODO*
+
+### keyedStore.get
+
+Returns the current value of the store at the given key. Creates the store if it does not exist yet.
+
+**Arguments**
+
+* **key**: *string*
+
+  The key identifying the store within the keyed store.
+
+**Examples**
+
+*TODO*
+
+### keyedStore.set
+
+Sets the value of the store at the given key to the given value. Creates the store if it does not exist yet. Returns the store's return value.
+
+**Arguments**
+
+* **key**: *string*
+
+  The key identifying the store within the keyed store.
+
+* **value**: *any*
+
+  The value to pass to the store. Passing `null` will set the store to its initial value. Passing `undefined` will not modify the store.
+
+**Examples**
+
+*TODO*
+
+### keyedStore.has
+
+Returns `true` if a store exists at the given key and that store is not empty, or `false` otherwise.
+
+**Arguments**
+
+* **key**: *string*
+
+  The key identifying the store within the keyed store.
+
+**Examples**
+
+*TODO*
+
+### keyedStore.at
+
+Returns the store at the given key. Creates the store if it does not exist yet.
+
+**Arguments**
+
+* **key**: *string*
+
+  The key identifying the store within the keyed store.
+
+**Examples**
+
+*TODO*
+
+### keyedStore.toJSON
+
+Returns a plain object representation of the keyed store with each property name and value representing each key and store value.
+
+**Examples**
+
+*TODO*
 
 ## createKeyedStore.of
 
-*TODO*
+Behaves exactly like `createKeyedStore` but takes a store factory function as additional argument.
+
+Note that all stores of the keyed store will be created using the same function and arguments.
 
 **Arguments**
 
 * **createStore**: *function*
 
-  *TODO*
+  Function that will be used to create the stores at the keyed store's keys, e.g. `createRawStore`.
 
 * **emptyValue**: *any* (optional)
 
-  *TODO*
+  Stores created by the keyed store will be initialized to this value.
 
 * **prepare**: *function* (optional)
 
-  *TODO*
+  The *prepare* function that will be used to create the stores.
 
 * **isEmpty**: *function* (optional)
 
-  *TODO*
+  The *isEmpty* function that will be used to create the stores. This argument is not supported by all store types.
+
+**Examples**
+
+```js
+// Keyed stores can be used with any type of store
+let keyedStore = creatKeyedStore.of(createImmutableStore);
+let value = keyedStore.set('x', {a: [1, 2]});
+console.log(value); // -> "Map { "a": List [ 1, 2 ] }"
+
+// Keyed stores can even be nested!
+let keyedStore = createKeyedStore.of(createKeyedStore);
+let subStore = keyedStore.at('a'); // a keyed store created by createKeyedStore.of
+let subSubStore = subStore.at('b'); // a raw store created by createKeyedStore
+```
 
 # License
 
