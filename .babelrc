@@ -1,0 +1,6 @@
+{
+  "optional": [
+    "es7.functionBind",
+    "es7.exportExtensions"
+  ]
+}

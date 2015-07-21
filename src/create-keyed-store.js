@@ -1,4 +1,3 @@
-/* @flow */
 'use strict';
 import immutable from 'immutable';
 import createRawStore from './create-raw-store';
@@ -55,7 +54,7 @@ function createKeyedStoreOf(createStore, ...args) {
   return store;
 }
 
-module.exports = function createKeyedStore(...args) {
+export default function createKeyedStore(...args) {
   return createKeyedStoreOf(createRawStore, ...args);
 };
-module.exports.of = createKeyedStoreOf;
+export var of = createKeyedStoreOf;

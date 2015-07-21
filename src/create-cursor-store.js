@@ -1,10 +1,9 @@
-/* @flow */
 'use strict';
 import immutable from 'immutable';
 import Cursor from 'immutable/contrib/cursor';
 import axn from 'axn';
 
-module.exports = function createCursorStore(emptyValue, prepare) {
+export default function createCursorStore(emptyValue, prepare) {
   var action = axn();
   var state = (function (value) {
     function cursor(data) {
