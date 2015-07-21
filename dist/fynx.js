@@ -65,7 +65,6 @@ var Fynx =
 	  connectVia: __webpack_require__(13)
 	};
 
-
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
