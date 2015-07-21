@@ -1,3 +1,4 @@
+/* @flow */
 'use strict';
 require('core-js');
 import expect from 'expect.js';

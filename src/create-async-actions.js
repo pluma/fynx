@@ -1,3 +1,4 @@
+/* @flow */
 'use strict';
 var axn = require('axn');
 

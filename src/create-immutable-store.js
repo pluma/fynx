@@ -1,8 +1,9 @@
+/* @flow */
 'use strict';
 import immutable from 'immutable';
 import createRawStore from './create-raw-store';
 
-export default function createImmutableStore(
+module.exports = function createImmutableStore(
   emptyValue = null,
   prepare = v => v
 ) {

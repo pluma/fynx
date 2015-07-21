@@ -1,7 +1,8 @@
+/* @flow */
 'use strict';
 import axn from 'axn';
 
-export default function createRawStore(
+module.exports = function createRawStore(
   emptyValue = null,
   prepare = v => v,
   isEmpty = (v, emptyValue) => v === emptyValue
@@ -17,11 +18,11 @@ export default function createRawStore(
     }
     return state;
   }
-  store.listen = ::action.listen;
-  store.unlisten = ::action.unlisten;
+  store.listen = action.listen.bind(action);
+  store.unlisten = action.unlisten.bind(action);
   store.isEmpty = () => isEmpty(state, emptyValue);
-  store.isEmpty.listen = ::emptyAction.listen;
-  store.isEmpty.unlisten = ::emptyAction.unlisten;
+  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
   store.toJSON = () => state && state.toJSON ? state.toJSON() : state;
   return store;
 };
