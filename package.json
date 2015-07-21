@@ -25,9 +25,9 @@
     "test": "npm run lint && mocha --growl -R spec",
     "cover": "npm run lint && istanbul cover --report lcov _mocha -- -R spec",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls ; rm -rf ./coverage",
-    "jsx": "jsxjs --es6 src lib",
-    "dist": "npm run jsx && NODE_ENV=production webpack index.js dist/fynx.js && NODE_ENV=production COMPRESS=1 webpack index.js dist/fynx.min.js",
-    "dist-watch": "dirwatch -c 'npm run dist' src"
+    "babel": "babel -d lib src",
+    "dist": "npm run babel && NODE_ENV=production webpack index.js dist/fynx.js && NODE_ENV=production COMPRESS=1 webpack index.js dist/fynx.min.js",
+    "dist-watch": "watch 'npm run dist' src"
   },
   "repository": {
     "type": "git",
@@ -40,17 +40,17 @@
   },
   "homepage": "https://github.com/foss-haas/fynx",
   "devDependencies": {
+    "babel": "^5.6.23",
     "coveralls": "^2.11.2",
-    "dirwatch": "^1.1.0",
     "expect.js": "^0.3.1",
     "html-document": "^0.3.3",
     "istanbul": "^0.3.2",
     "jshint": "^2.5.6",
-    "jsxjs": "^1.1.0",
     "mocha": "^2.0.1",
     "react": "^0.12.0",
     "rewire": "^2.1.0",
     "sinon": "^1.11.0",
+    "watch": "^0.16.0",
     "webpack": "^1.5.1"
   },
   "dependencies": {
