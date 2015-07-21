@@ -69,7 +69,7 @@ For a usable implementation based on this example [see bevanhunt's login demo ap
 
 We're going to assume the Server API is an object that provides a single method with the following signature that returns a promise which resolves to the user data or is rejected with a descriptive error message that can be presented to the user:
 
-`api.login(username:String, password:String):Promise`
+`api.login(username: string, password: string): Promise`
 
 We'll need at least two actions:
 
@@ -213,7 +213,7 @@ Creates an object providing multiple actions. Convenience wrapper around `create
 
   If `specs` is an object instead, an action will be created for each property with the action name corresponding to the property name and the property value being used as the `axn` spec for the action.
 
-## createAsyncAction([spec]):asyncAction
+## createAsyncAction
 
 Creates an asynchronous action. Returns a function that will pass its argument to all of its listeners in sequence and return a cancellable promise.
 
