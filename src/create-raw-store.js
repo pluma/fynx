@@ -13,7 +13,7 @@ export default function createRawStore(
     if (value !== undefined) {
       state = value === null ? emptyValue : prepare(value);
       action(state);
-      emptyAction(isEmpty(state, emptyValue));
+      emptyAction(Boolean(isEmpty(state, emptyValue)));
     }
     return state;
   }

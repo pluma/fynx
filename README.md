@@ -191,56 +191,82 @@ If you run into a real-world scenario you can't solve with additional actions or
 
 # API
 
-## createAction([spec]):action
+## createAction
 
-Creates an action optionally extended with the given `spec`.
-
-Returns a function that will pass its argument to all of its listeners in sequence and return the result.
+Creates an action. Returns a function that will pass its argument to all of its listeners in sequence and return the result.
 
 For a full documentation of this function, see [the documentation of `axn`](https://github.com/pluma/axn#axnspecfunction).
 
-## createActions(specs):Object
+**Arguments**
 
-Creates actions for the given `specs`. Convenience wrapper around `createAction` for bulk creation of actions.
+* **spec**: *any* (optional)
 
-If `specs` is an array of strings, returns an object mapping the strings to actions.
+  The `axn` spec for this action.
 
-If `specs` is an object, returns an object mapping the object's keys to the result of calling `createAction` with the object's values.
+## createActions
+
+Creates an object providing multiple actions. Convenience wrapper around `createAction` for bulk creation of actions.
+
+**Arguments**
+
+* **specs**: *Array<string>*
+
+  An array of action names to create on the returned object.
+
+  If `specs` is an object instead, an action will be created for each property with the action name corresponding to the property name and the property value being used as the `axn` spec for the action.
 
 ## createAsyncAction([spec]):asyncAction
 
-Creates an asynchronous action optionally extended with the given `spec`.
+Creates an asynchronous action. Returns a function that will pass its argument to all of its listeners in sequence and return a cancellable promise.
 
-Returns a function that will pass its argument to all of its listeners in sequence and return a cancellable promise.
-
-If you want to use async actions in your app, make sure the global `Promise` function is available. If you want to use async actions in environments where this is not the case (such as node and older browsers), make sure to include a polyfill like [es6-promise](https://www.npmjs.com/package/es6-promise) before the async actions are invoked.
-
-Note that `React.renderToString` does not support asynchronous actions, so there is no need to use a polyfill to pre-render your app in node if all your asynchronous actions are only invoked in browser code.
+Note that `React.renderToString` is always synchronous so you should not rely on asynchronous actions being executed in your components during server-side rendering.
 
 For a full documentation of this function, see [the documentation of `axn.async`](https://github.com/pluma/axn#axnasyncspecfunction).
 
-## createAsyncActions(specs):Object
+**Arguments**
 
-Creates asynchronous actions for the given `specs`. Convenience wrapper around `createAction` for bulk creation of actions.
+* **spec**: *any* (optional)
 
-If `specs` is an array of strings, returns an object mapping the strings to async actions.
+  The `axn` spec for this asynchronous action.
 
-If `specs` is an object, returns an object mapping the object's keys to the result of calling `createAsyncAction` with the object's values.
+## createAsyncActions
 
-## createSimpleStore(emptyValue, [prepare]):simpleStore
+Creates an object providing multiple asynchronous actions. Convenience wrapper around `createAsyncAction` for bulk creation of asynchronous actions.
 
-Creates a store for immutable data initialized with the given `emptyValue`.
+**Arguments**
+
+* **specs**: *Array<string>*
+
+  An array of action names to create on the returned object.
+
+  If `specs` is an object instead, an asynchronous action will be created for each property with the action name corresponding to the property name and the property value being used as the `axn` spec for the action.
+
+## createRawStore
+
+Creates a raw store that can hold any value (other than `undefined`).
 
 Returns a function with the following behaviour:
-* when called without arguments, returns the store's content.
-* when called with `null`, resets the store's value to `emptyValue`.
-* when called with any other defined value, sets the store's value to the result of passing that value to `immutable.fromJS`.
-
-If `prepare` is a function, values other than `null` and `undefined` passed to the store will be preprocessed using that function.
+* when called without arguments (or `undefined`), returns the store's content.
+* when called with `null`, resets the store's value to its initial value.
+* when called with any other defined value, sets the store's value to that value
 
 Whenever the store's value changes, the store's content will be passed to its listeners.
 
-### store.listen(listener, [context]):Function
+**Arguments**
+
+* **emptyValue**: *any* (Default: `null`)
+
+  The store's initial value. Note: the store's value can never be `undefined` as passing `undefined` to the store does not modify the store's value.
+
+* **prepare**: *function* (optional)
+
+  If provided, values other than `null` passed into the store will be passed to this function and its return value will be used as the store's new value instead.
+
+* **isEmpty**: *function* (Default: `Object.is`)
+
+  This function will be used to determine whether the store is currently empty. The function is passed exactly two arguments: the store's current value and the store's initial value. A return value that evaluates to the boolean value `true` indicates that the store should be considered empty.
+
+### store.listen
 
 Registers a change listener with the store. The listener will be invoked with the store's new content whenever it is written to.
 
@@ -248,43 +274,95 @@ The listener will be bound to the given `context`.
 
 Returns a function that will remove the listener from the store when called.
 
-### store.unlisten(listener, [context])
+**Arguments**
+
+* **listener**: *function*
+
+* **context**: *any* (optional)
+
+### store.unlisten
 
 Removes a change listener from the store. This has the same effect as calling the function returned by `store.listen`. If the listener was registered with a context, the same context must be used.
 
-### store.isEmpty():Boolean
+**Arguments**
+
+* **listener**: *function*
+
+* **context**: *any* (optional)
+
+### store.isEmpty
 
 Returns `true` if the store's current value is equivalent to its `emptyValue` or `false` otherwise.
 
-### store.isEmpty.listen(listener, [context]):Function
+### store.isEmpty.listen
 
 Like `store.listen`, but receives a boolean value indicating whether the store is empty (i.e. the result of calling `store.isEmpty()`) instead of the store's new content.
 
-### store.isEmpty.unlisten(listener, [context])
+**Arguments**
+
+* **listener**: *function*
+
+* **context**: *any* (optional)
+
+### store.isEmpty
 
 Removes a change listener from `store.isEmpty`. This has the same effect as calling the function returned by `store.isEmpty.listen`. If the listener was registered with a context, the same context must be used.
 
-## createCursorStore(emptyValue, [prepare]):cursorStore
+**Arguments**
 
-Creates a store initialized with the given `emptyValue`.
+* **listener**: *function*
 
-Behaves like `createSimpleStore` with the difference that wherever simple stores would pass an immutable value, an immutable cursor to that value is passed instead.
+* **context**: *any* (optional)
 
-Changes to the cursor will result in the changes being propagated to the store as well.
+## createImmutableStore
 
-## createRawStore(emptyValue, [prepare]):rawStore
+Creates a store for immutable data. The store behaves identically to a raw store except it automatically converts its value using `immutable.fromJS` and emptiness checks are always performed using `immutable.is`.
 
-Creates a store initialized with the given `emptyValue`.
+**Arguments**
 
-Behaves like `createSimpleStore` with the difference that values are not passed to `immutable.fromJS`.
+* **emptyValue**: *any* (Default: `null`)
 
-Raw stores can be useful if you want to store data that can't be meaningfully represented by `immutable`'s data structures.
+  The store's initial value, e.g. `immutable.Map()` for an empty map.
 
-## createKeyedStore(emptyValue, [prepare], [isEmpty]):keyedStore
+* **prepare**: *function* (optional)
+
+  If provided, values other than `null` will be passed through this function before being passed on to `immutable.fromJS`.
+
+## createCursorStore
+
+Creates an immutable cursor store. The store behaves identically to an immutable store except it passes immutable cursors wherever the immutable store would pass an immutable value. Changes to the cursor will result in the changes being propagated to the store as well.
+
+**Arguments**
+
+* **emptyValue**: *any* (Default: `null`)
+
+* **prepare**: *function* (optional)
+
+## createKeyedStore
 
 *TODO*
 
-## createKeyedStore.of(createStore, emptyValue, [prepare], [isEmpty]):keyedStore
+**Arguments**
+
+* **emptyValue**: *any* (optional)
+
+* **prepare**: *function* (optional)
+
+* **isEmpty**: *function* (optional)
+
+## createKeyedStore.of
+
+*TODO*
+
+**Arguments**
+
+* **createStore**: *function*
+
+* **emptyValue**: *any* (optional)
+
+* **prepare**: *function* (optional)
+
+* **isEmpty**: *function* (optional)
 
 *TODO*
 
