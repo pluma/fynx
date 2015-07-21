@@ -45,25 +45,62 @@ var Fynx =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/*jshint browserify: true */
 	'use strict';
-	var axn = __webpack_require__(1);
-	var createCursorStore = __webpack_require__(2);
-	module.exports = {
-	  createAction: axn,
-	  createActions: __webpack_require__(5),
-	  createAsyncAction: axn.async,
-	  createAsyncActions: __webpack_require__(6),
-	  createStore: createCursorStore,
-	  createSimpleStore: __webpack_require__(7),
-	  createCursorStore: createCursorStore,
-	  createRawStore: __webpack_require__(8),
-	  listenTo: __webpack_require__(9),
-	  listenToProp: __webpack_require__(10),
-	  connect: __webpack_require__(11),
-	  connectProp: __webpack_require__(12),
-	  connectVia: __webpack_require__(13)
-	};
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _axn = __webpack_require__(1);
+
+	var _axn2 = _interopRequireDefault(_axn);
+
+	var createAction = _axn2['default'];
+	exports.createAction = createAction;
+	var createAsyncAction = _axn2['default'].async;
+
+	exports.createAsyncAction = createAsyncAction;
+
+	var _createActions2 = __webpack_require__(2);
+
+	var _createActions3 = _interopRequireDefault(_createActions2);
+
+	exports.createActions = _createActions3['default'];
+
+	var _createAsyncActions2 = __webpack_require__(3);
+
+	var _createAsyncActions3 = _interopRequireDefault(_createAsyncActions2);
+
+	exports.createAsyncActions = _createAsyncActions3['default'];
+
+	var _createRawStore2 = __webpack_require__(4);
+
+	var _createRawStore3 = _interopRequireDefault(_createRawStore2);
+
+	exports.createStore = _createRawStore3['default'];
+
+	var _createRawStore4 = _interopRequireDefault(_createRawStore2);
+
+	exports.createRawStore = _createRawStore4['default'];
+
+	var _createImmutableStore2 = __webpack_require__(5);
+
+	var _createImmutableStore3 = _interopRequireDefault(_createImmutableStore2);
+
+	exports.createImmutableStore = _createImmutableStore3['default'];
+
+	var _createKeyedStore2 = __webpack_require__(7);
+
+	var _createKeyedStore3 = _interopRequireDefault(_createKeyedStore2);
+
+	exports.createKeyedStore = _createKeyedStore3['default'];
+
+	var _createCursorStore2 = __webpack_require__(8);
+
+	var _createCursorStore3 = _interopRequireDefault(_createCursorStore2);
+
+	exports.createCursorStore = _createCursorStore3['default'];
 
 /***/ },
 /* 1 */
@@ -147,7 +184,9 @@ var Fynx =
 	  _afterEmit: function (result/*, data */) {
 	    return result;
 	  },
-	  emit: function (data) {
+	  emit: function (/* ...data */) {
+	    var data = Array.prototype.slice.call(arguments);
+	    if (data.length < 2) data = data[0];
 	    data = this.beforeEmit(data);
 	    var initial = this._beforeEmit(data);
 	    var result = initial;
@@ -169,7 +208,7 @@ var Fynx =
 	  _cb: function (fn, ctx) {
 	    return function (data, p, p0) {
 	      return p.then(function (result) {
-	        if (p0._cancelled) return Promise.reject(new Error('rejected'));
+	        if (p0._cancelled) return Promise.reject(new Error(p0._cancelled));
 	        return fn.call(ctx, data, result);
 	      });
 	    };
@@ -181,47 +220,397 @@ var Fynx =
 	  },
 	  _afterEmit: function (p, p0) {
 	    return ext(p.then(function (value) {
-	      if (p0._cancelled) return Promise.reject(new Error('rejected'));
+	      if (p0._cancelled) return Promise.reject(new Error(p0._cancelled));
 	      return value;
 	    }), {
-	      cancel: function () {
-	        p0._cancelled = true;
+	      cancel: function (reason) {
+	        p0._cancelled = reason || 'cancelled';
 	      },
 	      cancelled: function () {
-	        return p0._cancelled;
+	        return Boolean(p0._cancelled);
 	      }
 	    });
 	  }
 	};
 
 	axn.async = aaxn;
-
 	module.exports = axn;
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/*jshint browserify: true, -W014 */
 	'use strict';
-	var immutable = __webpack_require__(3);
-	var Cursor = __webpack_require__(4);
 	var axn = __webpack_require__(1);
-	module.exports = createCursorStore;
+
+	module.exports = function createActions(specs) {
+	  var obj = {};
+	  if (Array.isArray(specs)) {
+	    specs.forEach(function (name) {
+	      obj[name] = axn();
+	    });
+	  } else {
+	    Object.keys(specs).forEach(function (name) {
+	      obj[name] = axn(specs[name]);
+	    });
+	  }
+	  return obj;
+	};
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var axn = __webpack_require__(1);
+
+	module.exports = function createActions(specs) {
+	  var obj = {};
+	  if (Array.isArray(specs)) {
+	    specs.forEach(function (name) {
+	      obj[name] = axn.async();
+	    });
+	  } else {
+	    Object.keys(specs).forEach(function (name) {
+	      obj[name] = axn.async(specs[name]);
+	    });
+	  }
+	  return obj;
+	};
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = createRawStore;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _axn = __webpack_require__(1);
+
+	var _axn2 = _interopRequireDefault(_axn);
+
+	function createRawStore() {
+	  var emptyValue = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+	  var prepare = arguments.length <= 1 || arguments[1] === undefined ? function (v) {
+	    return v;
+	  } : arguments[1];
+	  var isEmpty = arguments.length <= 2 || arguments[2] === undefined ? function (v, emptyValue) {
+	    return v === emptyValue;
+	  } : arguments[2];
+	  return (function () {
+	    var action = (0, _axn2['default'])();
+	    var emptyAction = (0, _axn2['default'])();
+	    var state = emptyValue;
+	    function store(value) {
+	      if (value !== undefined) {
+	        state = value === null ? emptyValue : prepare(value);
+	        action(state);
+	        emptyAction(isEmpty(state, emptyValue));
+	      }
+	      return state;
+	    }
+	    store.listen = action.listen.bind(action);
+	    store.unlisten = action.unlisten.bind(action);
+	    store.isEmpty = function () {
+	      return isEmpty(state, emptyValue);
+	    };
+	    store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+	    store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+	    store.toJSON = function () {
+	      return state && state.toJSON ? state.toJSON() : state;
+	    };
+	    return store;
+	  })();
+	}
+
+	;
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = createImmutableStore;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _immutable = __webpack_require__(6);
+
+	var _immutable2 = _interopRequireDefault(_immutable);
+
+	var _createRawStore = __webpack_require__(4);
+
+	var _createRawStore2 = _interopRequireDefault(_createRawStore);
+
+	function createImmutableStore() {
+	  var emptyValue = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+	  var prepare = arguments.length <= 1 || arguments[1] === undefined ? function (v) {
+	    return v;
+	  } : arguments[1];
+
+	  return (0, _createRawStore2['default'])(emptyValue, function (v) {
+	    return _immutable2['default'].fromJS(prepare(v));
+	  }, _immutable2['default'].is);
+	}
+
+	;
+	module.exports = exports['default'];
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = Immutable;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
+	exports['default'] = createKeyedStore;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _immutable = __webpack_require__(6);
+
+	var _immutable2 = _interopRequireDefault(_immutable);
+
+	var _createRawStore = __webpack_require__(4);
+
+	var _createRawStore2 = _interopRequireDefault(_createRawStore);
+
+	function _map(iterator) {
+	  var fn = arguments.length <= 1 || arguments[1] === undefined ? function (x) {
+	    return x;
+	  } : arguments[1];
+
+	  var arr = [];
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+
+	  try {
+	    for (var _iterator = iterator[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var value = _step.value;
+
+	      arr.push(fn(value));
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator['return']) {
+	        _iterator['return']();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+
+	  return arr;
+	}
+
+	function createKeyedStoreOf(createStore) {
+	  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	    args[_key - 1] = arguments[_key];
+	  }
+
+	  var map = new Map();
+	  function store(newValue) {
+	    var state, key, store, value;
+	    if (newValue === undefined) {
+	      state = _immutable2['default'].OrderedMap(_map(map.entries(), function (_ref) {
+	        var _ref2 = _slicedToArray(_ref, 2);
+
+	        var key = _ref2[0];
+	        var store = _ref2[1];
+	        return store.isEmpty() ? false : [key, store()];
+	      }).filter(Boolean));
+	    } else if (newValue === null) {
+	      state = _immutable2['default'].OrderedMap();
+	      var _iteratorNormalCompletion2 = true;
+	      var _didIteratorError2 = false;
+	      var _iteratorError2 = undefined;
+
+	      try {
+	        for (var _iterator2 = map.entries()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	          var _step2$value = _slicedToArray(_step2.value, 2);
+
+	          key = _step2$value[0];
+	          store = _step2$value[1];
+
+	          store(null);
+	        }
+	      } catch (err) {
+	        _didIteratorError2 = true;
+	        _iteratorError2 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+	            _iterator2['return']();
+	          }
+	        } finally {
+	          if (_didIteratorError2) {
+	            throw _iteratorError2;
+	          }
+	        }
+	      }
+	    } else {
+	      state = _immutable2['default'].OrderedMap(newValue);
+	      var _iteratorNormalCompletion3 = true;
+	      var _didIteratorError3 = false;
+	      var _iteratorError3 = undefined;
+
+	      try {
+	        for (var _iterator3 = state.entries()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	          var _step3$value = _slicedToArray(_step3.value, 2);
+
+	          key = _step3$value[0];
+	          value = _step3$value[1];
+
+	          store = map.get(key);
+	          store(value);
+	        }
+	      } catch (err) {
+	        _didIteratorError3 = true;
+	        _iteratorError3 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion3 && _iterator3['return']) {
+	            _iterator3['return']();
+	          }
+	        } finally {
+	          if (_didIteratorError3) {
+	            throw _iteratorError3;
+	          }
+	        }
+	      }
+
+	      var _iteratorNormalCompletion4 = true;
+	      var _didIteratorError4 = false;
+	      var _iteratorError4 = undefined;
+
+	      try {
+	        for (var _iterator4 = map.entries()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	          var _step4$value = _slicedToArray(_step4.value, 2);
+
+	          key = _step4$value[0];
+	          store = _step4$value[1];
+
+	          if (!state.has(key) && !store.isEmpty()) {
+	            store(null);
+	          }
+	        }
+	      } catch (err) {
+	        _didIteratorError4 = true;
+	        _iteratorError4 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion4 && _iterator4['return']) {
+	            _iterator4['return']();
+	          }
+	        } finally {
+	          if (_didIteratorError4) {
+	            throw _iteratorError4;
+	          }
+	        }
+	      }
+	    }
+	    return state;
+	  }
+	  store.at = function (key) {
+	    return map.get(key);
+	  };
+	  store.has = function (key) {
+	    return map.has(key) && !map.get(key).isEmpty();
+	  };
+	  store.get = function (key) {
+	    if (!map.has(key)) map.set(key, createStore.apply(undefined, args));
+	    return map.get(key)();
+	  };
+	  store.set = function (key, value) {
+	    if (!map.has(key)) map.set(key, createStore.apply(undefined, args));
+	    return map.get(key)(value);
+	  };
+	  store.toJSON = function () {
+	    return _map(map.entries(), function (_ref3) {
+	      var _ref32 = _slicedToArray(_ref3, 2);
+
+	      var key = _ref32[0];
+	      var store = _ref32[1];
+	      return [key, store.toJSON()];
+	    });
+	  };
+	  return store;
+	}
+
+	function createKeyedStore() {
+	  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	    args[_key2] = arguments[_key2];
+	  }
+
+	  return createKeyedStoreOf.apply(undefined, [_createRawStore2['default']].concat(args));
+	}
+
+	;
+	var of = createKeyedStoreOf;
+	exports.of = of;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = createCursorStore;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _immutable = __webpack_require__(6);
+
+	var _immutable2 = _interopRequireDefault(_immutable);
+
+	var _immutableContribCursor = __webpack_require__(9);
+
+	var _immutableContribCursor2 = _interopRequireDefault(_immutableContribCursor);
+
+	var _axn = __webpack_require__(1);
+
+	var _axn2 = _interopRequireDefault(_axn);
 
 	function createCursorStore(emptyValue, prepare) {
-	  var action = axn();
+	  var action = (0, _axn2['default'])();
 	  var state = (function (value) {
 	    function cursor(data) {
-	      return Cursor.from(data, function (rawData) {
-	        var newData = rawData === null ? emptyValue : immutable.fromJS(prepare ? prepare(rawData) : rawData);
+	      return _immutableContribCursor2['default'].from(data, function (rawData) {
+	        var newData = rawData === null ? emptyValue : _immutable2['default'].fromJS(prepare ? prepare(rawData) : rawData);
 	        state = cursor(newData);
 	        action(state);
 	        return newData;
 	      });
 	    }
 	    return cursor(value);
-	  })(emptyValue || immutable.Map());
+	  })(emptyValue || _immutable2['default'].Map());
 	  function store(data) {
 	    if (data !== undefined) {
 	      state.update(function () {
@@ -230,30 +619,30 @@ var Fynx =
 	    }
 	    return state;
 	  }
-	  var emptyAction = axn({
+	  var emptyAction = (0, _axn2['default'])({
 	    beforeEmit: function beforeEmit(value) {
-	      return immutable.is(value, emptyValue);
+	      return _immutable2['default'].is(value, emptyValue);
 	    }
 	  });
 	  action.listen(emptyAction);
 	  store.listen = action.listen.bind(action);
 	  store.unlisten = action.unlisten.bind(action);
 	  store.isEmpty = function () {
-	    return immutable.is(state, emptyValue);
+	    return _immutable2['default'].is(state, emptyValue);
 	  };
 	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
 	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+	  store.toJSON = function () {
+	    return state && state.toJSON ? state.toJSON() : state;
+	  };
 	  return store;
 	}
 
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	module.exports = Immutable;
+	;
+	module.exports = exports['default'];
 
 /***/ },
-/* 4 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -273,7 +662,7 @@ var Fynx =
 	 * If you wish to use it in the browser, please check out Browserify or WebPack!
 	 */
 
-	var Immutable = __webpack_require__(3);
+	var Immutable = __webpack_require__(6);
 	var Iterable = Immutable.Iterable;
 	var Iterator = Iterable.Iterator;
 	var Seq = Immutable.Seq;
@@ -596,300 +985,6 @@ var Fynx =
 
 	exports.from = cursorFrom;
 
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true */
-	'use strict';
-	var axn = __webpack_require__(1);
-	module.exports = createActions;
-
-	function createActions(specs) {
-	  var obj = {};
-	  if (Array.isArray(specs)) {
-	    specs.forEach(function (name) {
-	      obj[name] = axn();
-	    });
-	  } else {
-	    Object.keys(specs).forEach(function (name) {
-	      obj[name] = axn(specs[name]);
-	    });
-	  }
-	  return obj;
-	}
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true */
-	'use strict';
-	var axn = __webpack_require__(1);
-	module.exports = createActions;
-
-	function createActions(specs) {
-	  var obj = {};
-	  if (Array.isArray(specs)) {
-	    specs.forEach(function (name) {
-	      obj[name] = axn.async();
-	    });
-	  } else {
-	    Object.keys(specs).forEach(function (name) {
-	      obj[name] = axn.async(specs[name]);
-	    });
-	  }
-	  return obj;
-	}
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true, -W014 */
-	'use strict';
-	var axn = __webpack_require__(1);
-	var immutable = __webpack_require__(3);
-	module.exports = createSimpleStore;
-
-	function createSimpleStore(emptyValue, prepare) {
-	  emptyValue = emptyValue === undefined ? null : emptyValue;
-	  var action = axn();
-	  var state = emptyValue;
-	  function store(value) {
-	    if (value !== undefined) {
-	      state = value === null ? emptyValue : immutable.fromJS(prepare ? prepare(value) : value);
-	      action(state);
-	    }
-	    return state;
-	  }
-	  var emptyAction = axn({
-	    beforeEmit: function beforeEmit(value) {
-	      return immutable.is(value, emptyValue);
-	    }
-	  });
-	  action.listen(emptyAction);
-	  store.listen = action.listen.bind(action);
-	  store.unlisten = action.unlisten.bind(action);
-	  store.isEmpty = function () {
-	    return immutable.is(state, emptyValue);
-	  };
-	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
-	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
-	  return store;
-	}
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*jshint browserify: true, -W014 */
-	'use strict';
-	var axn = __webpack_require__(1);
-	module.exports = createRawStore;
-
-	function createRawStore(emptyValue, prepare) {
-	  emptyValue = emptyValue === undefined ? null : emptyValue;
-	  var action = axn();
-	  var state = emptyValue;
-	  function store(value) {
-	    if (value !== undefined) {
-	      state = value === null ? emptyValue : prepare ? prepare(value) : value;
-	      action(state);
-	    }
-	    return state;
-	  }
-	  var emptyAction = axn({
-	    beforeEmit: function beforeEmit(value) {
-	      return value === emptyValue;
-	    }
-	  });
-	  action.listen(emptyAction);
-	  store.listen = action.listen.bind(action);
-	  store.unlisten = action.unlisten.bind(action);
-	  store.isEmpty = function () {
-	    return state === emptyValue;
-	  };
-	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
-	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
-	  return store;
-	}
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	/*jshint browserify: true */
-	'use strict';
-	module.exports = listenTo;
-
-	function listenTo(store, fn) {
-	  return {
-	    componentDidMount: function componentDidMount() {
-	      store.listen(typeof fn === 'function' ? fn : this[fn], this);
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	      store.unlisten(typeof fn === 'function' ? fn : this[fn], this);
-	    }
-	  };
-	}
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	/*jshint browserify: true */
-	'use strict';
-	module.exports = listenToProp;
-
-	function listenToProp(prop, fn) {
-	  return {
-	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	      var func = typeof fn === 'function' ? fn : this[fn];
-	      if (nextProps[prop]) {
-	        if (nextProps[prop] === this.props[prop]) return;
-	        nextProps[prop].listen(func, this);
-	        if (this.props[prop]) {
-	          this.props[prop].unlisten(func, this);
-	        }
-	      } else {
-	        if (!this.props[prop]) return;
-	        this.props[prop].unlisten(func, this);
-	      }
-	    },
-	    componentDidMount: function componentDidMount() {
-	      if (!this.props[prop]) return;
-	      var func = typeof fn === 'function' ? fn : this[fn];
-	      this.props[prop].listen(func, this);
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	      if (!this.props[prop]) return;
-	      var func = typeof fn === 'function' ? fn : this[fn];
-	      this.props[prop].unlisten(func, this);
-	    }
-	  };
-	}
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	/*jshint browserify: true */
-	'use strict';
-	module.exports = connect;
-
-	function connect(store, name) {
-	  function update(value) {
-	    /*jshint validthis: true */
-	    var state = {};
-	    state[name] = value;
-	    this.setState(state);
-	  }
-	  return {
-	    getInitialState: function getInitialState() {
-	      var state = {};
-	      state[name] = store();
-	      return state;
-	    },
-	    componentDidMount: function componentDidMount() {
-	      store.listen(update, this);
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	      store.unlisten(update, this);
-	    }
-	  };
-	}
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	/*jshint browserify: true */
-	'use strict';
-	module.exports = connectProp;
-
-	function connectProp(prop, name) {
-	  function update(value) {
-	    /*jshint validthis: true */
-	    var state = {};
-	    state[name] = value;
-	    this.setState(state);
-	  }
-	  return {
-	    getInitialState: function getInitialState() {
-	      var state = {};
-	      if (this.props[prop]) {
-	        state[name] = this.props[prop]();
-	      }
-	      return state;
-	    },
-	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	      if (nextProps[prop]) {
-	        if (nextProps[prop] === this.props[prop]) return;
-	        nextProps[prop].listen(update, this);
-	        update.call(this, nextProps[prop]());
-	        if (this.props[prop]) {
-	          this.props[prop].unlisten(update, this);
-	        }
-	      } else {
-	        if (!this.props[prop]) return;
-	        update.call(this, undefined);
-	        this.props[prop].unlisten(update, this);
-	      }
-	    },
-	    componentDidMount: function componentDidMount() {
-	      if (!this.props[prop]) return;
-	      this.props[prop].listen(update, this);
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	      if (!this.props[prop]) return;
-	      this.props[prop].unlisten(update, this);
-	    }
-	  };
-	}
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-	/*jshint browserify: true */
-	'use strict';
-	module.exports = connectVia;
-
-	function connectVia(stores, fn) {
-	  if (!Array.isArray(stores)) stores = [stores];
-	  function getStateFromStores(self) {
-	    var values = stores.map(function (store) {
-	      return store();
-	    });
-	    var func = typeof fn === 'function' ? fn : self[fn];
-	    return func.apply(self, values);
-	  }
-	  function update() {
-	    /*jshint validthis: true */
-	    this.setState(getStateFromStores(this));
-	  }
-	  return {
-	    getInitialState: function getInitialState() {
-	      return getStateFromStores(this);
-	    },
-	    componentDidMount: function componentDidMount() {
-	      var _this = this;
-
-	      stores.map(function (store) {
-	        return store.listen(update, _this);
-	      });
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	      var _this2 = this;
-
-	      stores.map(function (store) {
-	        return store.unlisten(update, _this2);
-	      });
-	    }
-	  };
-	}
 
 /***/ }
 /******/ ]);
