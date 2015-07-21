@@ -6,7 +6,7 @@ var expect = require('expect.js');
 var connectProp = require('../').connectProp;
 var noop = function () {};
 var deeper = function () {return deeper;};
-var Document = require('html-document/lib/Document').Document;
+var Document = require('html-document');
 
 describe('connectProp (in a browser)', function () {
   afterEach(function () {

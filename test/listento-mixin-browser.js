@@ -6,7 +6,7 @@ var expect = require('expect.js');
 var listenTo = require('../').listenTo;
 var noop = function () {};
 var deeper = function () {return deeper;};
-var Document = require('html-document/lib/Document').Document;
+var Document = require('html-document');
 
 describe('listenTo (in a browser)', function () {
   afterEach(function () {

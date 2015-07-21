@@ -21,7 +21,8 @@
   ],
   "scripts": {
     "lint": "jshint lib test",
-    "test": "npm run lint && mocha --growl -R spec",
+    "test": "npm run lint && npm run test-only",
+    "test-only": "mocha --growl -R spec",
     "cover": "npm run lint && istanbul cover --report lcov _mocha -- -R spec",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls ; rm -rf ./coverage",
     "babel": "babel -d lib src",
@@ -40,20 +41,20 @@
   "homepage": "https://github.com/foss-haas/fynx",
   "devDependencies": {
     "babel": "^5.6.23",
-    "coveralls": "^2.11.2",
+    "coveralls": "^2.11.3",
     "expect.js": "^0.3.1",
-    "html-document": "^0.3.3",
+    "html-document": "^0.8.1",
     "istanbul": "^0.3.2",
     "jshint": "^2.5.6",
     "mocha": "^2.0.1",
-    "react": "^0.12.0",
+    "react": "^0.13.3",
     "rewire": "^2.1.0",
     "sinon": "^1.11.0",
     "watch": "^0.16.0",
     "webpack": "^1.5.1"
   },
   "dependencies": {
-    "axn": "^1.6.0",
+    "axn": "^1.7.0",
     "immutable": "^3.6.2"
   }
 }
