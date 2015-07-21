@@ -280,6 +280,14 @@ Behaves like `createSimpleStore` with the difference that values are not passed 
 
 Raw stores can be useful if you want to store data that can't be meaningfully represented by `immutable`'s data structures.
 
+## createKeyedStore(emptyValue, [prepare], [isEmpty]):keyedStore
+
+*TODO*
+
+## createKeyedStore.of(createStore, emptyValue, [prepare], [isEmpty]):keyedStore
+
+*TODO*
+
 ## listenTo(listenable, listener):Mixin
 
 Creates a React mixin that registers the given listener function with the given `listenable` store or action (or anything that has methods `listen(fn, ctx)` and `unlisten(fn, ctx)`). The listener will be invoked with its context set to the React component.

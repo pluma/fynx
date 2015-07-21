@@ -9,6 +9,7 @@ module.exports = {
   createAsyncActions: require('./create-async-actions'),
   createStore: createCursorStore,
   createSimpleStore: require('./create-simple-store'),
+  createKeyedStore: require('./create-keyed-store'),
   createCursorStore: createCursorStore,
   createRawStore: require('./create-raw-store'),
   listenTo: require('./listento-mixin'),

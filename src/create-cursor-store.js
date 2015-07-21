@@ -37,5 +37,6 @@ function createCursorStore(emptyValue, prepare) {
   store.isEmpty = () => immutable.is(state, emptyValue);
   store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
   store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+  store.toJSON = () => state && state.toJSON ? state.toJSON() : state;
   return store;
 }
