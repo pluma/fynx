@@ -308,7 +308,7 @@ var Fynx =
 	    if (value !== undefined) {
 	      state = value === null ? emptyValue : prepare(value);
 	      action(state);
-	      emptyAction(isEmpty(state, emptyValue));
+	      emptyAction(Boolean(isEmpty(state, emptyValue)));
 	    }
 	    return state;
 	  }
@@ -532,18 +532,17 @@ var Fynx =
 	    return state;
 	  }
 	  store.at = function (key) {
+	    if (!map.has(key)) map.set(key, createStore.apply(undefined, args));
 	    return map.get(key);
 	  };
 	  store.has = function (key) {
-	    return map.has(key) && !map.get(key).isEmpty();
+	    return Boolean(map.has(key) && !map.get(key).isEmpty());
 	  };
 	  store.get = function (key) {
-	    if (!map.has(key)) map.set(key, createStore.apply(undefined, args));
-	    return map.get(key)();
+	    return store.at(key)();
 	  };
 	  store.set = function (key, value) {
-	    if (!map.has(key)) map.set(key, createStore.apply(undefined, args));
-	    return map.get(key)(value);
+	    return store.at(key)(value);
 	  };
 	  store.toJSON = function () {
 	    return _map(map.entries(), function (_ref3) {
