@@ -215,31 +215,33 @@ var Fynx =
 	  var state = (function (value) {
 	    function cursor(data) {
 	      return Cursor.from(data, function (rawData) {
-	        var newData = (
-	          rawData === null
-	          ? emptyValue
-	          : immutable.fromJS(prepare ? prepare(rawData) : rawData)
-	        );
+	        var newData = rawData === null ? emptyValue : immutable.fromJS(prepare ? prepare(rawData) : rawData);
 	        state = cursor(newData);
 	        action(state);
 	        return newData;
 	      });
 	    }
 	    return cursor(value);
-	  }(emptyValue || immutable.Map()));
+	  })(emptyValue || immutable.Map());
 	  function store(data) {
 	    if (data !== undefined) {
-	      state.update(function()  {return data;});
+	      state.update(function () {
+	        return data;
+	      });
 	    }
 	    return state;
 	  }
 	  var emptyAction = axn({
-	    beforeEmit: function(value)  {return immutable.is(value, emptyValue);}
+	    beforeEmit: function beforeEmit(value) {
+	      return immutable.is(value, emptyValue);
+	    }
 	  });
 	  action.listen(emptyAction);
 	  store.listen = action.listen.bind(action);
 	  store.unlisten = action.unlisten.bind(action);
-	  store.isEmpty = function()  {return immutable.is(state, emptyValue);};
+	  store.isEmpty = function () {
+	    return immutable.is(state, emptyValue);
+	  };
 	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
 	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
 	  return store;
@@ -642,7 +644,6 @@ var Fynx =
 	  return obj;
 	}
 
-
 /***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
@@ -659,22 +660,22 @@ var Fynx =
 	  var state = emptyValue;
 	  function store(value) {
 	    if (value !== undefined) {
-	      state = (
-	        value === null
-	        ? emptyValue
-	        : immutable.fromJS(prepare ? prepare(value) : value)
-	      );
+	      state = value === null ? emptyValue : immutable.fromJS(prepare ? prepare(value) : value);
 	      action(state);
 	    }
 	    return state;
 	  }
 	  var emptyAction = axn({
-	    beforeEmit: function(value)  {return immutable.is(value, emptyValue);}
+	    beforeEmit: function beforeEmit(value) {
+	      return immutable.is(value, emptyValue);
+	    }
 	  });
 	  action.listen(emptyAction);
 	  store.listen = action.listen.bind(action);
 	  store.unlisten = action.unlisten.bind(action);
-	  store.isEmpty = function()  {return immutable.is(state, emptyValue);};
+	  store.isEmpty = function () {
+	    return immutable.is(state, emptyValue);
+	  };
 	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
 	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
 	  return store;
@@ -695,22 +696,22 @@ var Fynx =
 	  var state = emptyValue;
 	  function store(value) {
 	    if (value !== undefined) {
-	      state = (
-	        value === null
-	        ? emptyValue
-	        : (prepare ? prepare(value) : value)
-	      );
+	      state = value === null ? emptyValue : prepare ? prepare(value) : value;
 	      action(state);
 	    }
 	    return state;
 	  }
 	  var emptyAction = axn({
-	    beforeEmit: function(value)  {return value === emptyValue;}
+	    beforeEmit: function beforeEmit(value) {
+	      return value === emptyValue;
+	    }
 	  });
 	  action.listen(emptyAction);
 	  store.listen = action.listen.bind(action);
 	  store.unlisten = action.unlisten.bind(action);
-	  store.isEmpty = function()  {return state === emptyValue;};
+	  store.isEmpty = function () {
+	    return state === emptyValue;
+	  };
 	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
 	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
 	  return store;
@@ -726,10 +727,10 @@ var Fynx =
 
 	function listenTo(store, fn) {
 	  return {
-	    componentDidMount:function() {
+	    componentDidMount: function componentDidMount() {
 	      store.listen(typeof fn === 'function' ? fn : this[fn], this);
 	    },
-	    componentWillUnmount:function() {
+	    componentWillUnmount: function componentWillUnmount() {
 	      store.unlisten(typeof fn === 'function' ? fn : this[fn], this);
 	    }
 	  };
@@ -745,7 +746,7 @@ var Fynx =
 
 	function listenToProp(prop, fn) {
 	  return {
-	    componentWillReceiveProps:function(nextProps) {
+	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	      var func = typeof fn === 'function' ? fn : this[fn];
 	      if (nextProps[prop]) {
 	        if (nextProps[prop] === this.props[prop]) return;
@@ -758,12 +759,12 @@ var Fynx =
 	        this.props[prop].unlisten(func, this);
 	      }
 	    },
-	    componentDidMount:function() {
+	    componentDidMount: function componentDidMount() {
 	      if (!this.props[prop]) return;
 	      var func = typeof fn === 'function' ? fn : this[fn];
 	      this.props[prop].listen(func, this);
 	    },
-	    componentWillUnmount:function() {
+	    componentWillUnmount: function componentWillUnmount() {
 	      if (!this.props[prop]) return;
 	      var func = typeof fn === 'function' ? fn : this[fn];
 	      this.props[prop].unlisten(func, this);
@@ -787,15 +788,15 @@ var Fynx =
 	    this.setState(state);
 	  }
 	  return {
-	    getInitialState:function() {
+	    getInitialState: function getInitialState() {
 	      var state = {};
 	      state[name] = store();
 	      return state;
 	    },
-	    componentDidMount:function() {
+	    componentDidMount: function componentDidMount() {
 	      store.listen(update, this);
 	    },
-	    componentWillUnmount:function() {
+	    componentWillUnmount: function componentWillUnmount() {
 	      store.unlisten(update, this);
 	    }
 	  };
@@ -817,14 +818,14 @@ var Fynx =
 	    this.setState(state);
 	  }
 	  return {
-	    getInitialState:function() {
+	    getInitialState: function getInitialState() {
 	      var state = {};
 	      if (this.props[prop]) {
 	        state[name] = this.props[prop]();
 	      }
 	      return state;
 	    },
-	    componentWillReceiveProps:function(nextProps) {
+	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	      if (nextProps[prop]) {
 	        if (nextProps[prop] === this.props[prop]) return;
 	        nextProps[prop].listen(update, this);
@@ -838,11 +839,11 @@ var Fynx =
 	        this.props[prop].unlisten(update, this);
 	      }
 	    },
-	    componentDidMount:function() {
+	    componentDidMount: function componentDidMount() {
 	      if (!this.props[prop]) return;
 	      this.props[prop].listen(update, this);
 	    },
-	    componentWillUnmount:function() {
+	    componentWillUnmount: function componentWillUnmount() {
 	      if (!this.props[prop]) return;
 	      this.props[prop].unlisten(update, this);
 	    }
@@ -860,7 +861,9 @@ var Fynx =
 	function connectVia(stores, fn) {
 	  if (!Array.isArray(stores)) stores = [stores];
 	  function getStateFromStores(self) {
-	    var values = stores.map(function(store)  {return store();});
+	    var values = stores.map(function (store) {
+	      return store();
+	    });
 	    var func = typeof fn === 'function' ? fn : self[fn];
 	    return func.apply(self, values);
 	  }
@@ -869,14 +872,22 @@ var Fynx =
 	    this.setState(getStateFromStores(this));
 	  }
 	  return {
-	    getInitialState:function() {
+	    getInitialState: function getInitialState() {
 	      return getStateFromStores(this);
 	    },
-	    componentDidMount:function() {
-	      stores.map(function(store)  {return store.listen(update, this);}.bind(this));
+	    componentDidMount: function componentDidMount() {
+	      var _this = this;
+
+	      stores.map(function (store) {
+	        return store.listen(update, _this);
+	      });
 	    },
-	    componentWillUnmount:function() {
-	      stores.map(function(store)  {return store.unlisten(update, this);}.bind(this));
+	    componentWillUnmount: function componentWillUnmount() {
+	      var _this2 = this;
+
+	      stores.map(function (store) {
+	        return store.unlisten(update, _this2);
+	      });
 	    }
 	  };
 	}
