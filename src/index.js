@@ -1,15 +1,15 @@
 /*jshint browserify: true */
 'use strict';
 var axn = require('axn');
-var createCursorStore = require('./create-cursor-store');
+var createRawStore = require('./create-raw-store');
 module.exports = {
   createAction: axn,
   createActions: require('./create-actions'),
   createAsyncAction: axn.async,
   createAsyncActions: require('./create-async-actions'),
-  createStore: createCursorStore,
-  createSimpleStore: require('./create-simple-store'),
+  createStore: createRawStore,
+  createRawStore: createRawStore,
+  createImmutableStore: require('./create-immutable-store'),
   createKeyedStore: require('./create-keyed-store'),
-  createCursorStore: createCursorStore,
-  createRawStore: require('./create-raw-store')
+  createCursorStore: require('./create-cursor-store')
 };

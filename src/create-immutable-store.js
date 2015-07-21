@@ -3,7 +3,7 @@
 var immutable = require('immutable');
 var createRawStore = require('./create-raw-store');
 
-module.exports = function createSimpleStore(
+module.exports = function createImmutableStore(
   emptyValue=null,
   prepare=(v => v)
 ) {
