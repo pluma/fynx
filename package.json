@@ -20,7 +20,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "lint": "jshint index.js lib test",
+    "lint": "jshint lib test",
     "test": "npm run lint && mocha --growl -R spec",
     "cover": "npm run lint && istanbul cover --report lcov _mocha -- -R spec",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls ; rm -rf ./coverage",
