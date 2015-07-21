@@ -34,7 +34,7 @@ describe('connectProp (in a browser)', function () {
     store.unlisten = noop;
     store.listen = function (fn, ctx) {
       expect(fn).to.be.a('function');
-      expect(ctx).to.be.a(Component);
+      expect(ctx).to.be.a(Component.type);
       called = true;
     };
     var Component = React.createClass({
@@ -59,7 +59,7 @@ describe('connectProp (in a browser)', function () {
     store.unlisten = function (fn, ctx) {
       expect(listener).not.to.be(null);
       expect(fn).to.equal(listener);
-      expect(ctx).to.be.a(Component);
+      expect(ctx).to.be.a(Component.type);
       called = true;
     };
     var Component = React.createClass({
@@ -168,7 +168,7 @@ describe('connectProp (in a browser)', function () {
       store1.unlisten = function (fn, ctx) {
         expect(listener).not.to.be(null);
         expect(fn).to.equal(listener);
-        expect(ctx).to.be.a(Component);
+        expect(ctx).to.be.a(Component.type);
         called = true;
       };
       var store2 = function () {};
@@ -203,7 +203,7 @@ describe('connectProp (in a browser)', function () {
       var store2 = function () {};
       store2.listen = function (fn, ctx) {
         expect(fn).to.be.a('function');
-        expect(ctx).to.be.a(Component);
+        expect(ctx).to.be.a(Component.type);
         called = true;
       };
       store2.unlisten = noop;
@@ -344,7 +344,7 @@ describe('connectProp (in a browser)', function () {
         var store = function () {};
         store.listen = function (fn, ctx) {
           expect(fn).to.be.a('function');
-          expect(ctx).to.be.a(Component);
+          expect(ctx).to.be.a(Component.type);
           called = true;
         };
         store.unlisten = noop;

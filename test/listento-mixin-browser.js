@@ -36,7 +36,7 @@ describe('listenTo (in a browser)', function () {
         unlisten: noop,
         listen: function (fn, ctx) {
           expect(fn).to.equal(listener);
-          expect(ctx).to.be.a(Component);
+          expect(ctx).to.be.a(Component.type);
           called = true;
         }
       };
@@ -59,7 +59,7 @@ describe('listenTo (in a browser)', function () {
         listen: noop,
         unlisten: function (fn, ctx) {
           expect(fn).to.equal(listener);
-          expect(ctx).to.be.a(Component);
+          expect(ctx).to.be.a(Component.type);
           called = true;
         }
       };
@@ -86,7 +86,7 @@ describe('listenTo (in a browser)', function () {
         unlisten: noop,
         listen: function (fn, ctx) {
           expect(fn()).to.equal(deeper);
-          expect(ctx).to.be.a(Component);
+          expect(ctx).to.be.a(Component.type);
           called = true;
         }
       };
@@ -109,7 +109,7 @@ describe('listenTo (in a browser)', function () {
         listen: noop,
         unlisten: function (fn, ctx) {
           expect(fn()).to.equal(deeper);
-          expect(ctx).to.be.a(Component);
+          expect(ctx).to.be.a(Component.type);
           called = true;
         }
       };

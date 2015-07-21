@@ -34,7 +34,7 @@ describe('connect (in a browser)', function () {
     store.unlisten = noop;
     store.listen = function (fn, ctx) {
       expect(fn).to.be.a('function');
-      expect(ctx).to.be.a(Component);
+      expect(ctx).to.be.a(Component.type);
       called = true;
     };
     var Component = React.createClass({
@@ -59,7 +59,7 @@ describe('connect (in a browser)', function () {
     store.unlisten = function (fn, ctx) {
       expect(listener).not.to.be(null);
       expect(fn).to.equal(listener);
-      expect(ctx).to.be.a(Component);
+      expect(ctx).to.be.a(Component.type);
       called = true;
     };
     var Component = React.createClass({
