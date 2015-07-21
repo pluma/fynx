@@ -299,36 +299,32 @@ var Fynx =
 	  var prepare = arguments.length <= 1 || arguments[1] === undefined ? function (v) {
 	    return v;
 	  } : arguments[1];
-	  var isEmpty = arguments.length <= 2 || arguments[2] === undefined ? function (v, emptyValue) {
-	    return v === emptyValue;
-	  } : arguments[2];
-	  return (function () {
-	    var action = (0, _axn2['default'])();
-	    var emptyAction = (0, _axn2['default'])();
-	    var state = emptyValue;
-	    function store(value) {
-	      if (value !== undefined) {
-	        state = value === null ? emptyValue : prepare(value);
-	        action(state);
-	        emptyAction(isEmpty(state, emptyValue));
-	      }
-	      return state;
+	  var isEmpty = arguments.length <= 2 || arguments[2] === undefined ? Object.is : arguments[2];
+
+	  var action = (0, _axn2['default'])();
+	  var emptyAction = (0, _axn2['default'])();
+	  var state = emptyValue;
+	  function store(value) {
+	    if (value !== undefined) {
+	      state = value === null ? emptyValue : prepare(value);
+	      action(state);
+	      emptyAction(isEmpty(state, emptyValue));
 	    }
-	    store.listen = action.listen.bind(action);
-	    store.unlisten = action.unlisten.bind(action);
-	    store.isEmpty = function () {
-	      return isEmpty(state, emptyValue);
-	    };
-	    store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
-	    store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
-	    store.toJSON = function () {
-	      return state && state.toJSON ? state.toJSON() : state;
-	    };
-	    return store;
-	  })();
+	    return state;
+	  }
+	  store.listen = action.listen.bind(action);
+	  store.unlisten = action.unlisten.bind(action);
+	  store.isEmpty = function () {
+	    return isEmpty(state, emptyValue);
+	  };
+	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+	  store.toJSON = function () {
+	    return state && state.toJSON ? state.toJSON() : state;
+	  };
+	  return store;
 	}
 
-	;
 	module.exports = exports['default'];
 
 /***/ },
@@ -362,7 +358,6 @@ var Fynx =
 	  }, _immutable2['default'].is);
 	}
 
-	;
 	module.exports = exports['default'];
 
 /***/ },
@@ -570,7 +565,6 @@ var Fynx =
 	  return createKeyedStoreOf.apply(undefined, [_createRawStore2['default']].concat(args));
 	}
 
-	;
 	var of = createKeyedStoreOf;
 	exports.of = of;
 
@@ -638,7 +632,6 @@ var Fynx =
 	  return store;
 	}
 
-	;
 	module.exports = exports['default'];
 
 /***/ },
