@@ -278,7 +278,11 @@ Returns a function that will remove the listener from the store when called.
 
 * **listener**: *function*
 
+  *TODO*
+
 * **context**: *any* (optional)
+
+  *TODO*
 
 ### store.unlisten
 
@@ -288,11 +292,15 @@ Removes a change listener from the store. This has the same effect as calling th
 
 * **listener**: *function*
 
+  *TODO*
+
 * **context**: *any* (optional)
+
+  *TODO*
 
 ### store.isEmpty
 
-Returns `true` if the store's current value is equivalent to its `emptyValue` or `false` otherwise.
+Returns `true` if the store's current value is equivalent to its `emptyValue` or `false` otherwise. This function takes no arguments.
 
 ### store.isEmpty.listen
 
@@ -302,7 +310,11 @@ Like `store.listen`, but receives a boolean value indicating whether the store i
 
 * **listener**: *function*
 
+  *TODO*
+
 * **context**: *any* (optional)
+
+  *TODO*
 
 ### store.isEmpty
 
@@ -312,7 +324,11 @@ Removes a change listener from `store.isEmpty`. This has the same effect as call
 
 * **listener**: *function*
 
+  *TODO*
+
 * **context**: *any* (optional)
+
+  *TODO*
 
 ## createImmutableStore
 
@@ -336,7 +352,11 @@ Creates an immutable cursor store. The store behaves identically to an immutable
 
 * **emptyValue**: *any* (Default: `null`)
 
+  *TODO*
+
 * **prepare**: *function* (optional)
+
+  *TODO*
 
 ## createKeyedStore
 
@@ -346,9 +366,15 @@ Creates an immutable cursor store. The store behaves identically to an immutable
 
 * **emptyValue**: *any* (optional)
 
+  *TODO*
+
 * **prepare**: *function* (optional)
 
+  *TODO*
+
 * **isEmpty**: *function* (optional)
+
+  *TODO*
 
 ## createKeyedStore.of
 
@@ -358,13 +384,19 @@ Creates an immutable cursor store. The store behaves identically to an immutable
 
 * **createStore**: *function*
 
+  *TODO*
+
 * **emptyValue**: *any* (optional)
+
+  *TODO*
 
 * **prepare**: *function* (optional)
 
+  *TODO*
+
 * **isEmpty**: *function* (optional)
 
-*TODO*
+  *TODO*
 
 # License
 
