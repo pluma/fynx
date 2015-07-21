@@ -2,7 +2,7 @@
   "name": "fynx",
   "version": "1.7.1",
   "description": "Formerly known as Flox. Not quite Flux.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "keywords": [
     "fynx",
     "flox",
@@ -15,7 +15,6 @@
   ],
   "files": [
     "lib/",
-    "index.js",
     "package.json",
     "README.md",
     "LICENSE"
@@ -26,7 +25,7 @@
     "cover": "npm run lint && istanbul cover --report lcov _mocha -- -R spec",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls ; rm -rf ./coverage",
     "babel": "babel -d lib src",
-    "dist": "npm run babel && NODE_ENV=production webpack index.js dist/fynx.js && NODE_ENV=production COMPRESS=1 webpack index.js dist/fynx.min.js",
+    "dist": "npm run babel && NODE_ENV=production webpack lib/index.js dist/fynx.js && NODE_ENV=production COMPRESS=1 webpack lib/index.js dist/fynx.min.js",
     "dist-watch": "watch 'npm run dist' src"
   },
   "repository": {
