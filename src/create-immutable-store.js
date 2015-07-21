@@ -11,4 +11,4 @@ export default function createImmutableStore(
     v => immutable.fromJS(prepare(v)),
     immutable.is
   );
-};
+}

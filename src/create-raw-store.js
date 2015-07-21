@@ -4,7 +4,7 @@ import axn from 'axn';
 export default function createRawStore(
   emptyValue = null,
   prepare = v => v,
-  isEmpty = (v, emptyValue) => v === emptyValue
+  isEmpty = Object.is
 ) {
   var action = axn();
   var emptyAction = axn();
@@ -24,4 +24,4 @@ export default function createRawStore(
   store.isEmpty.unlisten = ::emptyAction.unlisten;
   store.toJSON = () => state && state.toJSON ? state.toJSON() : state;
   return store;
-};
+}

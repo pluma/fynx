@@ -37,4 +37,4 @@ export default function createCursorStore(emptyValue, prepare) {
   store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
   store.toJSON = () => state && state.toJSON ? state.toJSON() : state;
   return store;
-};
+}

@@ -56,5 +56,5 @@ function createKeyedStoreOf(createStore, ...args) {
 
 export default function createKeyedStore(...args) {
   return createKeyedStoreOf(createRawStore, ...args);
-};
+}
 export var of = createKeyedStoreOf;
