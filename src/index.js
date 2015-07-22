@@ -9,5 +9,5 @@ export createAsyncActions from './create-async-actions';
 export createStore from './create-raw-store';
 export createRawStore from './create-raw-store';
 export createImmutableStore from './create-immutable-store';
-export createKeyedStore from './create-keyed-store';
+export createCollection from './create-collection';
 export createCursorStore from './create-cursor-store';

@@ -286,19 +286,19 @@ Creates an immutable cursor store. The store behaves identically to an immutable
 
 *TODO*
 
-## createKeyedStore
+## createCollection
 
-Creates a keyed store. Keyed scores can not be listened to directly and represent a collection of stores sharing the same definitions.
+Creates a collection. Collections can not be listened to directly and represent a collection of stores sharing the same definitions.
 
-Passing a value to a keyed store will populate or modify the keyed store's store values for each key. A keyed store can be cleared by passing `null` into it. Keyed stores always return an `immutable.OrderedMap` representing the keys and contents of all non-empty stores in the keyed store.
+Passing a value to a collection will populate or modify the collection's stores for each key. A collection can be cleared by passing `null` into it. Collections always return an `immutable.OrderedMap` representing the keys and contents of all non-empty stores in the collection.
 
-This function is a convenience wrapper around `createKeyedStore.of` that uses `createRawStore` to create its stores.
+This function is a convenience wrapper around `createCollection.of` that uses `createRawStore` to create its stores.
 
 **Arguments**
 
 * **emptyValue**: *any* (optional)
 
-  Stores created by the keyed store will be initialized to this value.
+  Stores created by the collection will be initialized to this value.
 
 * **prepare**: *function* (optional)
 
@@ -312,7 +312,7 @@ This function is a convenience wrapper around `createKeyedStore.of` that uses `c
 
 *TODO*
 
-### keyedStore.get
+### collection.get
 
 Returns the current value of the store at the given key. Creates the store if it does not exist yet.
 
@@ -320,13 +320,13 @@ Returns the current value of the store at the given key. Creates the store if it
 
 * **key**: *string*
 
-  The key identifying the store within the keyed store.
+  The key identifying the store within the collection.
 
 **Examples**
 
 *TODO*
 
-### keyedStore.set
+### collection.set
 
 Sets the value of the store at the given key to the given value. Creates the store if it does not exist yet. Returns the store's return value.
 
@@ -334,7 +334,7 @@ Sets the value of the store at the given key to the given value. Creates the sto
 
 * **key**: *string*
 
-  The key identifying the store within the keyed store.
+  The key identifying the store within the collection.
 
 * **value**: *any*
 
@@ -344,7 +344,7 @@ Sets the value of the store at the given key to the given value. Creates the sto
 
 *TODO*
 
-### keyedStore.has
+### collection.has
 
 Returns `true` if a store exists at the given key and that store is not empty, or `false` otherwise.
 
@@ -352,13 +352,13 @@ Returns `true` if a store exists at the given key and that store is not empty, o
 
 * **key**: *string*
 
-  The key identifying the store within the keyed store.
+  The key identifying the store within the collection.
 
 **Examples**
 
 *TODO*
 
-### keyedStore.at
+### collection.at
 
 Returns the store at the given key. Creates the store if it does not exist yet.
 
@@ -366,35 +366,35 @@ Returns the store at the given key. Creates the store if it does not exist yet.
 
 * **key**: *string*
 
-  The key identifying the store within the keyed store.
+  The key identifying the store within the collection.
 
 **Examples**
 
 *TODO*
 
-### keyedStore.toJSON
+### collection.toJSON
 
-Returns a plain object representation of the keyed store with each property name and value representing each key and store value.
+Returns a plain object representation of the collection with each property name and value representing each key and store value.
 
 **Examples**
 
 *TODO*
 
-## createKeyedStore.of
+## createCollection.of
 
-Behaves exactly like `createKeyedStore` but takes a store factory function as additional argument.
+Behaves exactly like `createCollection` but takes a store factory function as additional argument.
 
-Note that all stores of the keyed store will be created using the same function and arguments.
+Note that all stores of the collection will be created using the same function and arguments.
 
 **Arguments**
 
 * **createStore**: *function*
 
-  Function that will be used to create the stores at the keyed store's keys, e.g. `createRawStore`.
+  Function that will be used to create the stores at the collection's keys, e.g. `createRawStore`.
 
 * **emptyValue**: *any* (optional)
 
-  Stores created by the keyed store will be initialized to this value.
+  Stores created by the collection will be initialized to this value.
 
 * **prepare**: *function* (optional)
 
@@ -407,15 +407,15 @@ Note that all stores of the keyed store will be created using the same function 
 **Examples**
 
 ```js
-// Keyed stores can be used with any type of store
-let keyedStore = creatKeyedStore.of(createImmutableStore);
-let value = keyedStore.set('x', {a: [1, 2]});
+// Collections can be used with any type of store
+let collection = creatCollection.of(createImmutableStore);
+let value = collection.set('x', {a: [1, 2]});
 console.log(value); // -> "Map { "a": List [ 1, 2 ] }"
 
-// Keyed stores can even be nested!
-let keyedStore = createKeyedStore.of(createKeyedStore);
-let subStore = keyedStore.at('a'); // a keyed store created by createKeyedStore.of
-let subSubStore = subStore.at('b'); // a raw store created by createKeyedStore
+// Collections can even be nested!
+let collection = createCollection.of(createCollection);
+let subCollection = collection.at('a'); // a collection created by createCollection.of
+let store = subCollection.at('b'); // a raw store created by createCollection
 ```
 
 # License

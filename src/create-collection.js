@@ -10,7 +10,7 @@ function _map(iterator, fn = x => x) {
   return arr;
 }
 
-function createKeyedStoreOf(createStore, ...args) {
+function createCollectionOf(createStore, ...args) {
   var map = new Map();
   function store(newValue) {
     var state, key, store, value;
@@ -51,7 +51,7 @@ function createKeyedStoreOf(createStore, ...args) {
   return store;
 }
 
-export default function createKeyedStore(...args) {
-  return createKeyedStoreOf(createRawStore, ...args);
+export default function createCollection(...args) {
+  return createCollectionOf(createRawStore, ...args);
 }
-export var of = createKeyedStoreOf;
+export var of = createCollectionOf;
