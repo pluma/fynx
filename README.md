@@ -408,7 +408,7 @@ Note that all stores of the collection will be created using the same function a
 
 ```js
 // Collections can be used with any type of store
-let collection = creatCollection.of(createImmutableStore);
+let collection = createCollection.of(createImmutableStore);
 let value = collection.set('x', {a: [1, 2]});
 console.log(value); // -> "Map { "a": List [ 1, 2 ] }"
 
