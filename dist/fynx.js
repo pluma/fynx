@@ -90,11 +90,11 @@ var Fynx =
 
 	exports.createImmutableStore = _createImmutableStore3['default'];
 
-	var _createKeyedStore2 = __webpack_require__(7);
+	var _createCollection2 = __webpack_require__(7);
 
-	var _createKeyedStore3 = _interopRequireDefault(_createKeyedStore2);
+	var _createCollection3 = _interopRequireDefault(_createCollection2);
 
-	exports.createKeyedStore = _createKeyedStore3['default'];
+	exports.createCollection = _createCollection3['default'];
 
 	var _createCursorStore2 = __webpack_require__(8);
 
@@ -377,7 +377,7 @@ var Fynx =
 
 	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
 
-	exports['default'] = createKeyedStore;
+	exports['default'] = createCollection;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -423,7 +423,7 @@ var Fynx =
 	  return arr;
 	}
 
-	function createKeyedStoreOf(createStore) {
+	function createCollectionOf(createStore) {
 	  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 	    args[_key - 1] = arguments[_key];
 	  }
@@ -556,15 +556,15 @@ var Fynx =
 	  return store;
 	}
 
-	function createKeyedStore() {
+	function createCollection() {
 	  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 	    args[_key2] = arguments[_key2];
 	  }
 
-	  return createKeyedStoreOf.apply(undefined, [_createRawStore2['default']].concat(args));
+	  return createCollectionOf.apply(undefined, [_createRawStore2['default']].concat(args));
 	}
 
-	var of = createKeyedStoreOf;
+	var of = createCollectionOf;
 	exports.of = of;
 
 /***/ },
