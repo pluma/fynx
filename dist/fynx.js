@@ -52,29 +52,25 @@ var Fynx =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _axn = __webpack_require__(1);
+	var _axn = __webpack_require__(4);
 
 	var _axn2 = _interopRequireDefault(_axn);
 
+	var _createActions = __webpack_require__(5);
+
+	var _createActions2 = _interopRequireDefault(_createActions);
+
 	var createAction = _axn2['default'];
 	exports.createAction = createAction;
+	var createActions = _createActions2['default'];
+	exports.createActions = createActions;
 	var createAsyncAction = _axn2['default'].async;
-
 	exports.createAsyncAction = createAsyncAction;
+	var createAsyncActions = _createActions2['default'].async;
 
-	var _createActions2 = __webpack_require__(2);
+	exports.createAsyncActions = createAsyncActions;
 
-	var _createActions3 = _interopRequireDefault(_createActions2);
-
-	exports.createActions = _createActions3['default'];
-
-	var _createAsyncActions2 = __webpack_require__(3);
-
-	var _createAsyncActions3 = _interopRequireDefault(_createAsyncActions2);
-
-	exports.createAsyncActions = _createAsyncActions3['default'];
-
-	var _createRawStore2 = __webpack_require__(4);
+	var _createRawStore2 = __webpack_require__(3);
 
 	var _createRawStore3 = _interopRequireDefault(_createRawStore2);
 
@@ -84,19 +80,19 @@ var Fynx =
 
 	exports.createRawStore = _createRawStore4['default'];
 
-	var _createImmutableStore2 = __webpack_require__(5);
+	var _createImmutableStore2 = __webpack_require__(1);
 
 	var _createImmutableStore3 = _interopRequireDefault(_createImmutableStore2);
 
 	exports.createImmutableStore = _createImmutableStore3['default'];
 
-	var _createCollection2 = __webpack_require__(7);
+	var _createCollection2 = __webpack_require__(6);
 
 	var _createCollection3 = _interopRequireDefault(_createCollection2);
 
 	exports.createCollection = _createCollection3['default'];
 
-	var _createCursorStore2 = __webpack_require__(8);
+	var _createCursorStore2 = __webpack_require__(7);
 
 	var _createCursorStore3 = _interopRequireDefault(_createCursorStore2);
 
@@ -104,6 +100,94 @@ var Fynx =
 
 /***/ },
 /* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = createImmutableStore;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _immutable = __webpack_require__(2);
+
+	var _immutable2 = _interopRequireDefault(_immutable);
+
+	var _createRawStore = __webpack_require__(3);
+
+	var _createRawStore2 = _interopRequireDefault(_createRawStore);
+
+	function createImmutableStore() {
+	  var emptyValue = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+	  var prepare = arguments.length <= 1 || arguments[1] === undefined ? function (v) {
+	    return v;
+	  } : arguments[1];
+
+	  return (0, _createRawStore2['default'])(emptyValue, function (v) {
+	    return _immutable2['default'].fromJS(prepare(v));
+	  }, _immutable2['default'].is);
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	module.exports = Immutable;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = createRawStore;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _axn = __webpack_require__(4);
+
+	var _axn2 = _interopRequireDefault(_axn);
+
+	function createRawStore() {
+	  var emptyValue = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+	  var prepare = arguments.length <= 1 || arguments[1] === undefined ? function (v) {
+	    return v;
+	  } : arguments[1];
+	  var isEmpty = arguments.length <= 2 || arguments[2] === undefined ? Object.is : arguments[2];
+
+	  var action = (0, _axn2['default'])();
+	  var emptyAction = (0, _axn2['default'])();
+	  var state = emptyValue;
+	  function store(value) {
+	    if (value !== undefined) {
+	      state = value === null ? emptyValue : prepare(value);
+	      action(state);
+	      emptyAction(Boolean(isEmpty(state, emptyValue)));
+	    }
+	    return state;
+	  }
+	  store.listen = action.listen.bind(action);
+	  store.unlisten = action.unlisten.bind(action);
+	  store.isEmpty = function () {
+	    return isEmpty(state, emptyValue);
+	  };
+	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+	  store.toJSON = function () {
+	    return state && state.toJSON ? state.toJSON() : state;
+	  };
+	  return store;
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 4 */
 /***/ function(module, exports) {
 
 	/*jshint es3: true */
@@ -237,13 +321,13 @@ var Fynx =
 	module.exports = axn;
 
 /***/ },
-/* 2 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var axn = __webpack_require__(1);
+	var axn = __webpack_require__(4);
 
-	module.exports = function createActions(specs) {
+	function _createActions(axn, specs) {
 	  var obj = {};
 	  if (Array.isArray(specs)) {
 	    specs.forEach(function (name) {
@@ -257,117 +341,16 @@ var Fynx =
 	  return obj;
 	};
 
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var aaxn = __webpack_require__(1).async;
-
 	module.exports = function createActions(specs) {
-	  var obj = {};
-	  if (Array.isArray(specs)) {
-	    specs.forEach(function (name) {
-	      obj[name] = aaxn();
-	    });
-	  } else {
-	    Object.keys(specs).forEach(function (name) {
-	      obj[name] = aaxn(specs[name]);
-	    });
-	  }
-	  return obj;
+	  return _createActions(axn, specs);
+	};
+
+	module.exports.async = function createAsyncActions(specs) {
+	  return _createActions(axn.async, specs);
 	};
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports['default'] = createRawStore;
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _axn = __webpack_require__(1);
-
-	var _axn2 = _interopRequireDefault(_axn);
-
-	function createRawStore() {
-	  var emptyValue = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
-	  var prepare = arguments.length <= 1 || arguments[1] === undefined ? function (v) {
-	    return v;
-	  } : arguments[1];
-	  var isEmpty = arguments.length <= 2 || arguments[2] === undefined ? Object.is : arguments[2];
-
-	  var action = (0, _axn2['default'])();
-	  var emptyAction = (0, _axn2['default'])();
-	  var state = emptyValue;
-	  function store(value) {
-	    if (value !== undefined) {
-	      state = value === null ? emptyValue : prepare(value);
-	      action(state);
-	      emptyAction(Boolean(isEmpty(state, emptyValue)));
-	    }
-	    return state;
-	  }
-	  store.listen = action.listen.bind(action);
-	  store.unlisten = action.unlisten.bind(action);
-	  store.isEmpty = function () {
-	    return isEmpty(state, emptyValue);
-	  };
-	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
-	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
-	  store.toJSON = function () {
-	    return state && state.toJSON ? state.toJSON() : state;
-	  };
-	  return store;
-	}
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports['default'] = createImmutableStore;
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _immutable = __webpack_require__(6);
-
-	var _immutable2 = _interopRequireDefault(_immutable);
-
-	var _createRawStore = __webpack_require__(4);
-
-	var _createRawStore2 = _interopRequireDefault(_createRawStore);
-
-	function createImmutableStore() {
-	  var emptyValue = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
-	  var prepare = arguments.length <= 1 || arguments[1] === undefined ? function (v) {
-	    return v;
-	  } : arguments[1];
-
-	  return (0, _createRawStore2['default'])(emptyValue, function (v) {
-	    return _immutable2['default'].fromJS(prepare(v));
-	  }, _immutable2['default'].is);
-	}
-
-	module.exports = exports['default'];
-
-/***/ },
 /* 6 */
-/***/ function(module, exports) {
-
-	module.exports = Immutable;
-
-/***/ },
-/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -381,11 +364,11 @@ var Fynx =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _immutable = __webpack_require__(6);
+	var _immutable = __webpack_require__(2);
 
 	var _immutable2 = _interopRequireDefault(_immutable);
 
-	var _createRawStore = __webpack_require__(4);
+	var _createRawStore = __webpack_require__(3);
 
 	var _createRawStore2 = _interopRequireDefault(_createRawStore);
 
@@ -568,7 +551,7 @@ var Fynx =
 	exports.of = of;
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -579,15 +562,15 @@ var Fynx =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _immutable = __webpack_require__(6);
+	var _immutable = __webpack_require__(2);
 
 	var _immutable2 = _interopRequireDefault(_immutable);
 
-	var _immutableContribCursor = __webpack_require__(9);
+	var _immutableContribCursor = __webpack_require__(8);
 
 	var _immutableContribCursor2 = _interopRequireDefault(_immutableContribCursor);
 
-	var _axn = __webpack_require__(1);
+	var _axn = __webpack_require__(4);
 
 	var _axn2 = _interopRequireDefault(_axn);
 
@@ -634,7 +617,7 @@ var Fynx =
 	module.exports = exports['default'];
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -654,7 +637,7 @@ var Fynx =
 	 * If you wish to use it in the browser, please check out Browserify or WebPack!
 	 */
 
-	var Immutable = __webpack_require__(6);
+	var Immutable = __webpack_require__(2);
 	var Iterable = Immutable.Iterable;
 	var Iterator = Iterable.Iterator;
 	var Seq = Immutable.Seq;
