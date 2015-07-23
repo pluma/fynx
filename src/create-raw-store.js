@@ -6,9 +6,9 @@ export default function createRawStore(
   prepare = v => v,
   isEmpty = Object.is
 ) {
-  var action = axn();
-  var emptyAction = axn();
-  var state = emptyValue;
+  const action = axn();
+  const emptyAction = axn();
+  let state = emptyValue;
   function store(value) {
     if (value !== undefined) {
       state = value === null ? emptyValue : prepare(value);

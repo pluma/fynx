@@ -1,8 +1,8 @@
 'use strict';
-var axn = require('axn');
+const axn = require('axn');
 
 function _createActions(axn, specs) {
-  var obj = {};
+  const obj = {};
   if (Array.isArray(specs)) {
     specs.forEach(function (name) {
       obj[name] = axn();

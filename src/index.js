@@ -1,11 +1,11 @@
 'use strict';
 import axn from 'axn';
-import createAxns from './create-actions';
+import axns from './create-actions';
 
 export var createAction = axn;
-export var createActions = createAxns;
+export var createActions = axns;
 export var createAsyncAction = axn.async;
-export var createAsyncActions = createAxns.async;
+export var createAsyncActions = axns.async;
 
 export createStore from './create-raw-store';
 export createRawStore from './create-raw-store';
