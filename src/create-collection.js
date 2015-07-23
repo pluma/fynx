@@ -3,33 +3,33 @@ import immutable from 'immutable';
 import createRawStore from './create-raw-store';
 
 function _map(iterator, fn = x => x) {
-  var arr = [];
-  for (var value of iterator) {
+  const arr = [];
+  for (let value of iterator) {
     arr.push(fn(value));
   }
   return arr;
 }
 
 function createCollectionOf(createStore, ...args) {
-  var map = new Map();
+  const map = new Map();
   function store(newValue) {
-    var state, key, store, value;
+    let state;
     if (newValue === undefined) {
       state = immutable.OrderedMap(_map(
         map.entries(), ([key, store]) => store.isEmpty() ? false : [key, store()]
       ).filter(Boolean));
     } else if (newValue === null) {
       state = immutable.OrderedMap();
-      for ([key, store] of map.entries()) {
+      for (let [, store] of map.entries()) {
         store(null);
       }
     } else {
       state = immutable.OrderedMap(newValue);
-      for ([key, value] of state.entries()) {
-        store = map.get(key);
+      for (let [key, value] of state.entries()) {
+        let store = map.get(key);
         store(value);
       }
-      for ([key, store] of map.entries()) {
+      for (let [key, store] of map.entries()) {
         if (!state.has(key) && !store.isEmpty()) {
           store(null);
         }

@@ -339,7 +339,7 @@ var Fynx =
 	    });
 	  }
 	  return obj;
-	};
+	}
 
 	module.exports = function createActions(specs) {
 	  return _createActions(axn, specs);
@@ -413,7 +413,7 @@ var Fynx =
 
 	  var map = new Map();
 	  function store(newValue) {
-	    var state, key, store, value;
+	    var state = undefined;
 	    if (newValue === undefined) {
 	      state = _immutable2['default'].OrderedMap(_map(map.entries(), function (_ref) {
 	        var _ref2 = _slicedToArray(_ref, 2);
@@ -432,10 +432,9 @@ var Fynx =
 	        for (var _iterator2 = map.entries()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	          var _step2$value = _slicedToArray(_step2.value, 2);
 
-	          key = _step2$value[0];
-	          store = _step2$value[1];
+	          var _store = _step2$value[1];
 
-	          store(null);
+	          _store(null);
 	        }
 	      } catch (err) {
 	        _didIteratorError2 = true;
@@ -461,11 +460,11 @@ var Fynx =
 	        for (var _iterator3 = state.entries()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
 	          var _step3$value = _slicedToArray(_step3.value, 2);
 
-	          key = _step3$value[0];
-	          value = _step3$value[1];
+	          var key = _step3$value[0];
+	          var value = _step3$value[1];
 
-	          store = map.get(key);
-	          store(value);
+	          var _store2 = map.get(key);
+	          _store2(value);
 	        }
 	      } catch (err) {
 	        _didIteratorError3 = true;
@@ -490,11 +489,11 @@ var Fynx =
 	        for (var _iterator4 = map.entries()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
 	          var _step4$value = _slicedToArray(_step4.value, 2);
 
-	          key = _step4$value[0];
-	          store = _step4$value[1];
+	          var key = _step4$value[0];
+	          var _store3 = _step4$value[1];
 
-	          if (!state.has(key) && !store.isEmpty()) {
-	            store(null);
+	          if (!state.has(key) && !_store3.isEmpty()) {
+	            _store3(null);
 	          }
 	        }
 	      } catch (err) {
