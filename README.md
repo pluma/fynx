@@ -1,6 +1,6 @@
 ![Fynx](https://foss-haas.github.io/fynx/fynx.png)
 
-**Fynx** (formerly known as Flox) is an architecture library for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.com/package/reflux) and [Fluxxor](http://fluxxor.com).
+**Fynx** (formerly known as Flox) is an architecture library for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.com/package/reflux) and [Fluxxor](http://fluxxor.com). If React solves the V of your MVC application, Fynx provides the tools for the M and C.
 
 [![Gitter](https://img.shields.io/badge/gitter-join_chat-1dce73.svg?style=flat-square)](https://gitter.im/foss-haas/fynx)
 [![Slack](https://img.shields.io/badge/slack-fynx%40reactiflux-61dafb.svg?style=flat-square)](https://reactiflux.slack.com/messages/fynx/)
@@ -34,33 +34,21 @@ npm install
 npm run dist
 ```
 
-# Usage
+# Overview
 
-## Obligatory ASCII diagram
-
-```
-  ╔═════════════════╗     ╔════════╗   ┌────────────┐
-  ║ View Components ║<────╢ Stores ║   │ Server API │
-  ╚═══╤════╤════════╝     ╚════════╝   └────────────┘
-      │    │                   ^                ^
-      │    └────────────────┐  └────────────┐   │
-      v                     v               │   │
-  ╔═════════════════╗   ╔═════════╗     ┌───┴───┴───┐
-  ║ Pure Components ║   ║ Actions ║<═══>│ Listeners │
-  ╚═════════════════╝   ╚═════════╝     └───────────┘
-```
+Fynx is loosely based on Flux and shares some of its terminology but differs in several important aspects. Like Flux, Fynx shares the notions of actions and stores, embracing React's unidirectional data flow.
 
 ## Definitions
 
-**View Components** are components that listen to *Stores* and/or invoke *Actions*. According to the philosophy of React, these should usually be the outer most components in an application. They pass (immutable) data from *Stores* as props to the underlying **Pure Components**, the regular self-contained React components. They may also invoke *Actions* as the result of user interaction with those components.
+**Actions** are the core building blocks of every Fynx application. Conceptually actions represent the overarching behavior of your application that may alter the global state or involve requests to the server. Actions are listenable functions that emit to *Listeners* whatever data they are passed and return the processed result.
 
-**Stores** are listenable functions that contain the application state and emit their contents whenenever they are written to. In Fynx, these contents are generally immutable, so modifying them requires updating the store that contains them.
+**Stores** represent the shared state of an application. Like *Actions* they are listenable functions that emit their data to *Listeners* but they retain the data that is written to them and can be read from subsequently. The data contained in stores should generally be treated as immutable, with changes to that data always requiring the store to be updated.
 
-**Actions** are listenable functions that emit to *Listeners* whatever data is passed to them. They provide the core building block of all interactions between *View Components* and *Stores* or the *Server API*.
+**Listeners** are ordinary JavaScript functions listening to *Stores* or *Actions*. They provide the implementation of the behavior actions represent and allow connecting different stores and actions with each other and the outside world.
 
-**Listeners** are arbitrary functions that listen to *Actions* and connect them with each other. They are the only part of the application that communicates directly with the *Server API* or writes to *Stores*. Listeners may also invoke other actions.
+The **Router** resolves URLs to *Views* relative to the application state. To avoid unnecessary coupling, Fynx does not require the use of any particular router and can easily be used alongside your router of choice, such as [react-router](https://github.com/rackt/react-router). However you may want to give the promise-based [Rotunda](https://github.com/foss-haas/rotunda) router a try as it is being developed alongside Fynx.
 
-The **Server API** is the code that directly communicates with the remote server or persistence layer of the application. Its implementation should be entirely orthogonal to the rest of the application. For example, a thin wrapper around `XMLHttpRequest` that takes arguments and a callback or returns a promise.
+**Views** in Fynx are generally assumed to be React components, although nothing about Fynx limits you to using React for your views. Generally views should only contain state directly related to their appearance and propagate changes to the global application state by invoking *Actions*. It's possible to directly link React components to Fynx stores using mixins (for classic React components) or decorators (for ES2015 class-based React components) but views work best when they have no external dependencies.
 
 # API
 
@@ -289,7 +277,7 @@ Creates an immutable cursor store. The store behaves identically to an immutable
 
 ## createCollection
 
-Creates a collection. Collections can not be listened to directly and represent a collection of stores sharing the same definitions.
+Creates a collection. Collections can not be listened to directly and represent a collection of stores sharing the same definitions. If a store were a crate, a collection would be a warehouse.
 
 Passing a value to a collection will populate or modify the collection's stores for each key. A collection can be cleared by passing `null` into it. Collections always return an `immutable.OrderedMap` representing the keys and contents of all non-empty stores in the collection.
 
