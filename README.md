@@ -48,7 +48,7 @@ Fynx is loosely based on Flux and shares some of its terminology but differs in 
 
 The **Router** resolves URLs to *Views* relative to the application state. To avoid unnecessary coupling, Fynx does not require the use of any particular router and can easily be used alongside your router of choice, such as [react-router](https://github.com/rackt/react-router). However you may want to give the promise-based [Rotunda](https://github.com/foss-haas/rotunda) router a try as it is being developed alongside Fynx.
 
-**Views** in Fynx are generally assumed to be React components, although nothing about Fynx limits you to using React for your views. Generally views should only contain state directly related to their appearance and propagate changes to the global application state by invoking *Actions*. It's possible to directly link React components to Fynx stores using mixins (for classic React components) or decorators (for ES2015 class-based React components) but views work best when they have no external dependencies.
+**Views** in Fynx are generally assumed to be React components, although nothing about Fynx limits you to using React for your views. Generally views should only contain state directly related to their appearance and propagate changes to the global application state by invoking *Actions*. It's possible to directly link React components to Fynx stores using [mixins](https://github.com/foss-haas/fynx-mixins) (for classic React components) or [decorators](https://github.com/foss-haas/fynx-decorators) (for ES2015 class-based React components) but views work best when they have no external dependencies.
 
 # API
 
