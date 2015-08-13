@@ -173,11 +173,13 @@ var Fynx =
 	  }
 	  store.isFynxStore = true;
 	  store.listen = action.listen.bind(action);
+	  store.listenOnce = action.listenOnce.bind(action);
 	  store.unlisten = action.unlisten.bind(action);
 	  store.isEmpty = function () {
 	    return isEmpty(state, emptyValue);
 	  };
 	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+	  store.isEmpty.listenOnce = emptyAction.listenOnce.bind(emptyAction);
 	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
 	  store.toJSON = function () {
 	    return state && state.toJSON ? state.toJSON() : state;
@@ -373,6 +375,10 @@ var Fynx =
 
 	var _createRawStore2 = _interopRequireDefault(_createRawStore);
 
+	var _axn = __webpack_require__(4);
+
+	var _axn2 = _interopRequireDefault(_axn);
+
 	function ievery(fn) {
 	  var _iteratorNormalCompletion = true;
 	  var _didIteratorError = false;
@@ -444,8 +450,8 @@ var Fynx =
 	    args[_key - 1] = arguments[_key];
 	  }
 
-	  var action = axn();
-	  var emptyAction = axn();
+	  var action = (0, _axn2['default'])();
+	  var emptyAction = (0, _axn2['default'])();
 	  var map = new Map();
 	  var writing = false;
 	  function collection(newValue) {
@@ -561,6 +567,7 @@ var Fynx =
 	  }
 	  collection.isFynxStore = true;
 	  collection.listen = action.listen.bind(action);
+	  collection.listenOnce = action.listenOnce.bind(action);
 	  collection.unlisten = action.unlisten.bind(action);
 	  collection.isEmpty = function () {
 	    return ievery.call(map, function (store) {
@@ -568,6 +575,7 @@ var Fynx =
 	    });
 	  };
 	  collection.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+	  collection.isEmpty.listenOnce = emptyAction.listenOnce.bind(emptyAction);
 	  collection.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
 	  collection.toJSON = function () {
 	    return imap.call(map, function (store, key) {
@@ -656,11 +664,13 @@ var Fynx =
 	  }
 	  store.isFynxStore = true;
 	  store.listen = action.listen.bind(action);
+	  store.listenOnce = action.listenOnce.bind(action);
 	  store.unlisten = action.unlisten.bind(action);
 	  store.isEmpty = function () {
 	    return _immutable2['default'].is(state, emptyValue);
 	  };
 	  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
+	  store.isEmpty.listenOnce = emptyAction.listenOnce.bind(emptyAction);
 	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
 	  store.toJSON = function () {
 	    return state && state.toJSON ? state.toJSON() : state;
