@@ -4,17 +4,19 @@ import Cursor from 'immutable/contrib/cursor';
 import axn from 'axn';
 
 export default function createCursorStore(emptyValue, prepare) {
-  var action = axn();
-  var state = (function (value) {
+  const action = axn();
+  const emptyAction = axn();
+  let state = (function (value) {
     function cursor(data) {
       return Cursor.from(data, function (rawData) {
-        var newData = (
+        const newData = (
           rawData === null
           ? emptyValue
           : immutable.fromJS(prepare ? prepare(rawData) : rawData)
         );
         state = cursor(newData);
         action(state);
+        emptyAction(immutable.is(state, emptyValue));
         return newData;
       });
     }
@@ -26,15 +28,12 @@ export default function createCursorStore(emptyValue, prepare) {
     }
     return state;
   }
-  var emptyAction = axn({
-    beforeEmit: (value) => immutable.is(value, emptyValue)
-  });
-  action.listen(emptyAction);
-  store.listen = action.listen.bind(action);
-  store.unlisten = action.unlisten.bind(action);
+  store.isFynxStore = true;
+  store.listen = ::action.listen;
+  store.unlisten = ::action.unlisten;
   store.isEmpty = () => immutable.is(state, emptyValue);
-  store.isEmpty.listen = emptyAction.listen.bind(emptyAction);
-  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
+  store.isEmpty.listen = ::emptyAction.listen;
+  store.isEmpty.unlisten = ::emptyAction.unlisten;
   store.toJSON = () => state && state.toJSON ? state.toJSON() : state;
   return store;
 }

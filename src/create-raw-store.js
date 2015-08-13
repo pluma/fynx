@@ -13,10 +13,11 @@ export default function createRawStore(
     if (value !== undefined) {
       state = value === null ? emptyValue : prepare(value);
       action(state);
-      emptyAction(Boolean(isEmpty(state, emptyValue)));
+      emptyAction(store.isEmpty());
     }
     return state;
   }
+  store.isFynxStore = true;
   store.listen = ::action.listen;
   store.unlisten = ::action.unlisten;
   store.isEmpty = () => isEmpty(state, emptyValue);

@@ -149,9 +149,7 @@ Whenever the store's value changes, the store's content will be passed to its li
 
 ### store.listen
 
-Registers a change listener with the store. The listener will be invoked with the store's new content whenever it is written to.
-
-The listener will be bound to the given `context`.
+Registers a change listener with the store.
 
 Returns a function that will remove the listener from the store when called.
 
@@ -159,11 +157,13 @@ Returns a function that will remove the listener from the store when called.
 
 * **listener**: *function*
 
-  *TODO*
+  A function that will be invoked whenever the store is written to.
+
+  The listener will receive the store's new value whenever it is written to.
 
 * **context**: *any* (optional)
 
-  *TODO*
+  The `this` context to which the listener will be bound when it is invoked.
 
 **Examples**
 
@@ -213,7 +213,7 @@ Like `store.listen`, but receives a boolean value indicating whether the store i
 
 *TODO*
 
-### store.isEmpty
+### store.isEmpty.unlisten
 
 Removes a change listener from `store.isEmpty`. This has the same effect as calling the function returned by `store.isEmpty.listen`. If the listener was registered with a context, the same context must be used.
 
@@ -233,7 +233,7 @@ Removes a change listener from `store.isEmpty`. This has the same effect as call
 
 ### store.toJSON
 
-*TODO*
+Returns a JSON-serializable representation of the store's current value by returning the result of the value's `toJSON` method if it exists or the value itself otherwise.
 
 **Examples**
 
@@ -296,6 +296,98 @@ This function is a convenience wrapper around `createCollection.of` that uses `c
 * **isEmpty**: *function* (optional)
 
   The *isEmpty* function that will be used to create the stores.
+
+**Examples**
+
+*TODO*
+
+### collection.listen
+
+Registers a change listener with the collection.
+
+Returns a function that will remove the listener from the collection when called.
+
+**Arguments**
+
+* **listener**: *function*
+
+  A function that will be invoked whenever the collection or any of its stores is written to.
+
+  If a store is written to, the listener will receive an array consisting of the key of the store and the store's new value. If the collection itself was written to directly, the first element of the array will be `undefined` and the second element will contain the new value of the collection.
+
+* **context**: *any* (optional)
+
+  The `this` context to which the listener will be bound when it is invoked.
+
+**Examples**
+
+*TODO*
+
+### collection.unlisten
+
+Removes a change listener from the collection. This has the same effect as calling the function returned by `collection.listen`. If the listener was registered with a context, the same context must be used.
+
+**Arguments**
+
+* **listener**: *function*
+
+  *TODO*
+
+* **context**: *any* (optional)
+
+  *TODO*
+
+**Examples**
+
+*TODO*
+
+### collection.isEmpty
+
+Returns `true` if the current value of each of the collection's stores is equivalent to its `emptyValue`, or `false` otherwise. This function takes no arguments.
+
+**Examples**
+
+*TODO*
+
+### collection.isEmpty.listen
+
+Like `collection.listen`, but receives a boolean value indicating whether all of the collection's stores are empty (i.e. the result of calling `collection.isEmpty()`) instead of the collection's value.
+
+**Arguments**
+
+* **listener**: *function*
+
+  *TODO*
+
+* **context**: *any* (optional)
+
+  *TODO*
+
+**Examples**
+
+*TODO*
+
+### collection.isEmpty.unlisten
+
+Removes a change listener from `collection.isEmpty`. This has the same effect as calling the function returned by `collection.isEmpty.listen`. If the listener was registered with a context, the same context must be used.
+
+**Arguments**
+
+* **listener**: *function*
+
+  *TODO*
+
+* **context**: *any* (optional)
+
+  *TODO*
+
+**Examples**
+
+*TODO*
+
+### collection.toJSON
+
+Returns a JSON-serializable representation of the collection's current value by returning an array where each element is an array consisting of each store's key and the result of calling that store's `toJSON` method.
 
 **Examples**
 
