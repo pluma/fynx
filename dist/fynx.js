@@ -184,6 +184,9 @@ var Fynx =
 	  store.toJSON = function () {
 	    return state && state.toJSON ? state.toJSON() : state;
 	  };
+	  store.fromJSON = function (data) {
+	    store(data);
+	  };
 	  return store;
 	}
 
@@ -582,6 +585,17 @@ var Fynx =
 	      return [key, store.toJSON()];
 	    });
 	  };
+	  collection.fromJSON = function (data) {
+	    if (Array.isArray(data)) imap.call(data, function (_ref) {
+	      var _ref2 = _slicedToArray(_ref, 2);
+
+	      var value = _ref2[0];
+	      var key = _ref2[1];
+	      return collection.at(key).fromJSON(value);
+	    });else if (!data || typeof data !== 'object') collection(null);else imap.call(data, function (value, key) {
+	      return collection.at(key).fromJSON(value);
+	    });
+	  };
 	  collection.at = function (key) {
 	    if (!map.has(key)) {
 	      var store = createStore.apply(undefined, args);
@@ -674,6 +688,9 @@ var Fynx =
 	  store.isEmpty.unlisten = emptyAction.unlisten.bind(emptyAction);
 	  store.toJSON = function () {
 	    return state && state.toJSON ? state.toJSON() : state;
+	  };
+	  store.fromJSON = function (data) {
+	    store(data);
 	  };
 	  return store;
 	}
