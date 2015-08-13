@@ -37,5 +37,8 @@ export default function createCursorStore(emptyValue, prepare) {
   store.isEmpty.listenOnce = ::emptyAction.listenOnce;
   store.isEmpty.unlisten = ::emptyAction.unlisten;
   store.toJSON = () => state && state.toJSON ? state.toJSON() : state;
+  store.fromJSON = data => {
+    store(data);
+  };
   return store;
 }

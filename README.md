@@ -277,6 +277,20 @@ Returns a JSON-serializable representation of the store's current value by retur
 
 *TODO*
 
+### store.fromJSON
+
+Sets the store's value from a JSON-serializable representation.
+
+**Arguments**
+
+* **value**: *any*
+
+  A JSON-serializable representation of the store's value. By default this value is simply passed to the store itself.
+
+**Examples**
+
+*TODO*
+
 ## createImmutableStore
 
 Creates a store for immutable data. The store behaves identically to a raw store except it automatically converts its value using `immutable.fromJS` and emptiness checks are always performed using `immutable.is`.
@@ -464,6 +478,20 @@ Removes a change listener from `collection.isEmpty`. This has the same effect as
 ### collection.toJSON
 
 Returns a JSON-serializable representation of the collection's current value by returning an array where each element is an array consisting of each store's key and the result of calling that store's `toJSON` method.
+
+**Examples**
+
+*TODO*
+
+### collection.fromJSON
+
+Sets the collection's value from a JSON-serializable representation.
+
+**Arguments**
+
+* **value**: *any*
+
+  A JSON-serializable representation of the collection's value. If the value is an object, a store will be created for each of its keys and each value will be passed to that store's `fromJSON` method. If the value is an array, its elements are expected to be arrays consisting of each store's key and value to be passed to that store's `fromJSON` method. If the value is anything else it will be treated as `null` and clear the collection.
 
 **Examples**
 

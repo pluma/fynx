@@ -72,6 +72,11 @@ function createCollectionOf(createStore, ...args) {
   collection.isEmpty.listenOnce = ::emptyAction.listenOnce;
   collection.isEmpty.unlisten = ::emptyAction.unlisten;
   collection.toJSON = () => map::imap((store, key) => [key, store.toJSON()]);
+  collection.fromJSON = data => {
+    if (Array.isArray(data)) data::imap(([value, key]) => collection.at(key).fromJSON(value));
+    else if (!data || typeof data !== 'object') collection(null);
+    else data::imap((value, key) => collection.at(key).fromJSON(value));
+  };
   collection.at = key => {
     if (!map.has(key)) {
       const store = createStore(...args);
