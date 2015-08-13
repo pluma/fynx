@@ -159,7 +159,27 @@ Returns a function that will remove the listener from the store when called.
 
   A function that will be invoked whenever the store is written to.
 
-  The listener will receive the store's new value whenever it is written to.
+  The listener will receive the store's new value.
+
+* **context**: *any* (optional)
+
+  The `this` context to which the listener will be bound when it is invoked.
+
+**Examples**
+
+*TODO*
+
+### store.listenOnce
+
+Like `store.listen` but the listener will be automatically removed the first time it is invoked.
+
+**Arguments**
+
+* **listener**: *function*
+
+  A function that will be invoked the next time the store is written to.
+
+  The listener will receive the store's new value.
 
 * **context**: *any* (optional)
 
@@ -197,7 +217,25 @@ Returns `true` if the store's current value is equivalent to its `emptyValue` or
 
 ### store.isEmpty.listen
 
-Like `store.listen`, but receives a boolean value indicating whether the store is empty (i.e. the result of calling `store.isEmpty()`) instead of the store's new content.
+Like `store.listen` but receives a boolean value indicating whether the store is empty (i.e. the result of calling `store.isEmpty()`) instead of the store's new content.
+
+**Arguments**
+
+* **listener**: *function*
+
+  *TODO*
+
+* **context**: *any* (optional)
+
+  *TODO*
+
+**Examples**
+
+*TODO*
+
+### store.isEmpty.listenOnce
+
+Like `store.isEmpty.listen` but the listener will be automatically removed the first time it is invoked.
 
 **Arguments**
 
@@ -323,6 +361,26 @@ Returns a function that will remove the listener from the collection when called
 
 *TODO*
 
+### collection.listenOnce
+
+Like `collection.listen` but the listener will be automatically removed the first time it is invoked.
+
+**Arguments**
+
+* **listener**: *function*
+
+  A function that will be invoked the next time the collection or any of its stores is written to.
+
+  If a store is written to, the listener will receive an array consisting of the key of the store and the store's new value. If the collection itself was written to directly, the first element of the array will be `undefined` and the second element will contain the new value of the collection.
+
+* **context**: *any* (optional)
+
+  The `this` context to which the listener will be bound when it is invoked.
+
+**Examples**
+
+*TODO*
+
 ### collection.unlisten
 
 Removes a change listener from the collection. This has the same effect as calling the function returned by `collection.listen`. If the listener was registered with a context, the same context must be used.
@@ -351,7 +409,25 @@ Returns `true` if the current value of each of the collection's stores is equiva
 
 ### collection.isEmpty.listen
 
-Like `collection.listen`, but receives a boolean value indicating whether all of the collection's stores are empty (i.e. the result of calling `collection.isEmpty()`) instead of the collection's value.
+Like `collection.listen` but receives a boolean value indicating whether all of the collection's stores are empty (i.e. the result of calling `collection.isEmpty()`) instead of the collection's value.
+
+**Arguments**
+
+* **listener**: *function*
+
+  *TODO*
+
+* **context**: *any* (optional)
+
+  *TODO*
+
+**Examples**
+
+*TODO*
+
+### collection.isEmpty.listenOnce
+
+Like `collection.isEmpty.listen` but the listener will be automatically removed the first time it is invoked.
 
 **Arguments**
 

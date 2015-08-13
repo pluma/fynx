@@ -64,9 +64,11 @@ function createCollectionOf(createStore, ...args) {
   }
   collection.isFynxStore = true;
   collection.listen = ::action.listen;
+  collection.listenOnce = ::action.listenOnce;
   collection.unlisten = ::action.unlisten;
   collection.isEmpty = () => map::ievery(store => store.isEmpty());
   collection.isEmpty.listen = ::emptyAction.listen;
+  collection.isEmpty.listenOnce = ::emptyAction.listenOnce;
   collection.isEmpty.unlisten = ::emptyAction.unlisten;
   collection.toJSON = () => map::imap((store, key) => [key, store.toJSON()]);
   collection.at = key => {

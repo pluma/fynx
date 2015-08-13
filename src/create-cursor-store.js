@@ -30,9 +30,11 @@ export default function createCursorStore(emptyValue, prepare) {
   }
   store.isFynxStore = true;
   store.listen = ::action.listen;
+  store.listenOnce = ::action.listenOnce;
   store.unlisten = ::action.unlisten;
   store.isEmpty = () => immutable.is(state, emptyValue);
   store.isEmpty.listen = ::emptyAction.listen;
+  store.isEmpty.listenOnce = ::emptyAction.listenOnce;
   store.isEmpty.unlisten = ::emptyAction.unlisten;
   store.toJSON = () => state && state.toJSON ? state.toJSON() : state;
   return store;
