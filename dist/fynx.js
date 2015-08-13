@@ -586,14 +586,14 @@ var Fynx =
 	    });
 	  };
 	  collection.fromJSON = function (data) {
-	    if (Array.isArray(data)) imap.call(data, function (_ref) {
+	    if (Array.isArray(data)) data.forEach(function (_ref) {
 	      var _ref2 = _slicedToArray(_ref, 2);
 
-	      var value = _ref2[0];
-	      var key = _ref2[1];
+	      var key = _ref2[0];
+	      var value = _ref2[1];
 	      return collection.at(key).fromJSON(value);
-	    });else if (!data || typeof data !== 'object') collection(null);else imap.call(data, function (value, key) {
-	      return collection.at(key).fromJSON(value);
+	    });else if (!data || typeof data !== 'object') collection(null);else Object.keys(data).forEach(function (key) {
+	      return collection.at(key).fromJSON(data[key]);
 	    });
 	  };
 	  collection.at = function (key) {
