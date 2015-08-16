@@ -94,4 +94,5 @@ function createCollectionOf(createStore, ...args) {
 export default function createCollection(...args) {
   return createCollectionOf(createRawStore, ...args);
 }
-export var of = createCollectionOf;
+
+createCollection.of = createCollectionOf;

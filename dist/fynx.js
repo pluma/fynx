@@ -626,8 +626,8 @@ var Fynx =
 	  return createCollectionOf.apply(undefined, [_createRawStore2['default']].concat(args));
 	}
 
-	var of = createCollectionOf;
-	exports.of = of;
+	createCollection.of = createCollectionOf;
+	module.exports = exports['default'];
 
 /***/ },
 /* 7 */
