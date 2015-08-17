@@ -1,6 +1,6 @@
 {
   "name": "fynx",
-  "version": "2.0.0-alpha6",
+  "version": "2.0.0-alpha7",
   "description": "Formerly known as Flox. Not quite Flux.",
   "main": "lib/index.js",
   "keywords": [
