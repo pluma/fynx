@@ -513,7 +513,7 @@ var Fynx =
 	            var key = _step4$value[0];
 	            var value = _step4$value[1];
 
-	            var store = map.get(key);
+	            var store = collection.at(key);
 	            store(value);
 	          }
 	        } catch (err) {

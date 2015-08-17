@@ -47,7 +47,7 @@ function createCollectionOf(createStore, ...args) {
       try {
         writing = true;
         for (let [key, value] of state.entries()) {
-          let store = map.get(key);
+          let store = collection.at(key);
           store(value);
         }
         for (let [key, store] of map.entries()) {
