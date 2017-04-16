@@ -11,6 +11,8 @@
 
 [![Build status](https://img.shields.io/travis/foss-haas/fynx.svg?style=flat-square)](https://travis-ci.org/foss-haas/fynx) [![Coverage status](https://img.shields.io/coveralls/foss-haas/fynx.svg?style=flat-square)](https://coveralls.io/r/foss-haas/fynx?branch=master)
 
+[![Package quality](http://npm.packagequality.com/badge/fynx.png)](http://packagequality.com/#?package=fynx)
+
 # Install
 
 ## With NPM
