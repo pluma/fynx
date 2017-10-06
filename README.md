@@ -1,3 +1,5 @@
+**NOTE:** This package is no longer being maintained. If you are interested in taking over as maintainer or are interested in the npm package name, get in touch by creating an issue. If you are looking for a React state managament library try [Redux](http://redux.js.org) or [MobX](https://mobx.js.org) (or simply using [React state](https://reactjs.org/docs/state-and-lifecycle.html)).
+
 ![Fynx](https://foss-haas.github.io/fynx/fynx.png)
 
 **Fynx** (formerly known as Flox) is an architecture library for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.com/package/reflux) and [Fluxxor](http://fluxxor.com). If React solves the V of your MVC application, Fynx provides the tools for the M and C.
