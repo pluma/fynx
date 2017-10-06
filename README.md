@@ -4,9 +4,6 @@
 
 **Fynx** (formerly known as Flox) is an architecture library for [React](http://facebook.github.io/react) loosely based on the [Flux architecture](http://facebook.github.io/flux) and inspired by [Reflux](https://www.npmjs.com/package/reflux) and [Fluxxor](http://fluxxor.com). If React solves the V of your MVC application, Fynx provides the tools for the M and C.
 
-[![Gitter](https://img.shields.io/badge/gitter-join_chat-1dce73.svg?style=flat-square)](https://gitter.im/foss-haas/fynx)
-[![Slack](https://img.shields.io/badge/slack-fynx%40reactiflux-61dafb.svg?style=flat-square)](https://reactiflux.slack.com/messages/fynx/)
-
 [![license - MIT](https://img.shields.io/npm/l/fynx.svg?style=flat-square)](http://foss-haas.mit-license.org) [![Dependencies](https://img.shields.io/david/foss-haas/fynx.svg?style=flat-square)](https://david-dm.org/foss-haas/fynx)
 
 [![NPM status](https://nodei.co/npm/fynx.png?compact=true)](https://www.npmjs.com/package/fynx)
